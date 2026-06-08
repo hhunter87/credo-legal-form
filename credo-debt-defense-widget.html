@@ -797,6 +797,163 @@
     margin-bottom: 6px;
   }
 
+  #credo-debt-defense-widget .cl-loader-screen {
+    border: 1px solid var(--cl-line);
+    border-radius: var(--cl-radius);
+    background: linear-gradient(180deg, #fff 0%, #fff8f9 100%);
+    padding: 26px;
+    text-align: center;
+    box-shadow: 0 14px 34px rgba(16, 24, 40, 0.08);
+  }
+
+  #credo-debt-defense-widget .cl-loader-logo {
+    height: 36px;
+    width: auto;
+    max-width: 170px;
+    object-fit: contain;
+    margin-bottom: 16px;
+  }
+
+  #credo-debt-defense-widget .cl-loader-card {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  #credo-debt-defense-widget .cl-loader-card h2 {
+    color: var(--cl-navy);
+    font-size: 34px;
+    line-height: 1.12;
+    letter-spacing: 0;
+    margin-bottom: 12px;
+  }
+
+  #credo-debt-defense-widget .cl-loader-card p {
+    color: var(--cl-muted);
+    font-size: 16px;
+    line-height: 1.58;
+    margin-bottom: 18px;
+  }
+
+  #credo-debt-defense-widget .cl-loader-status {
+    color: var(--cl-navy);
+    font-weight: 850;
+    line-height: 1.4;
+    min-height: 22px;
+    margin: 16px 0 12px;
+  }
+
+  #credo-debt-defense-widget .cl-loader-progress {
+    height: 10px;
+    width: 100%;
+    background: #f2f4f7;
+    border-radius: 999px;
+    overflow: hidden;
+    margin: 18px 0 4px;
+  }
+
+  #credo-debt-defense-widget .cl-loader-progress > span {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, var(--cl-red), var(--cl-red-dark));
+    border-radius: 999px;
+    transform: scaleX(0);
+    transform-origin: left center;
+    animation: cl-loader-fill var(--cl-loader-duration, 4600ms) linear forwards;
+  }
+
+  #credo-debt-defense-widget .cl-loader-steps {
+    display: grid;
+    gap: 10px;
+    margin: 18px 0 0;
+    padding: 0;
+    list-style: none;
+    text-align: left;
+  }
+
+  #credo-debt-defense-widget .cl-loader-step {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 10px;
+    align-items: start;
+    border: 1px solid var(--cl-line);
+    border-radius: var(--cl-radius);
+    background: #fff;
+    padding: 12px;
+    color: var(--cl-muted);
+    line-height: 1.45;
+    transition: border-color 180ms ease, background 180ms ease, color 180ms ease;
+  }
+
+  #credo-debt-defense-widget .cl-loader-step.is-active {
+    border-color: rgba(185, 31, 45, 0.28);
+    background: var(--cl-soft-red);
+    color: var(--cl-navy);
+  }
+
+  #credo-debt-defense-widget .cl-loader-step.is-complete {
+    border-color: #abefc6;
+    background: var(--cl-green-bg);
+    color: var(--cl-navy);
+  }
+
+  #credo-debt-defense-widget .cl-loader-check {
+    width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    border: 1px solid var(--cl-line);
+    background: #fff;
+    color: var(--cl-muted);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 950;
+    line-height: 1;
+  }
+
+  #credo-debt-defense-widget .cl-loader-step.is-active .cl-loader-check {
+    border-color: rgba(185, 31, 45, 0.35);
+    color: var(--cl-red);
+  }
+
+  #credo-debt-defense-widget .cl-loader-step.is-complete .cl-loader-check {
+    border-color: var(--cl-green);
+    background: var(--cl-green);
+    color: #fff;
+  }
+
+  #credo-debt-defense-widget .cl-loader-note {
+    margin-top: 16px;
+    padding: 12px;
+    border: 1px solid #b2ddff;
+    border-radius: var(--cl-radius);
+    background: var(--cl-blue-bg);
+    color: #184e77;
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  @keyframes cl-loader-fill {
+    from {
+      transform: scaleX(0);
+    }
+
+    to {
+      transform: scaleX(1);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #credo-debt-defense-widget .cl-loader-progress > span {
+      animation: none;
+      transform: scaleX(1);
+    }
+
+    #credo-debt-defense-widget .cl-loader-step {
+      transition: none;
+    }
+  }
+
   #credo-debt-defense-widget .cl-meter {
     width: 100%;
     height: 10px;
@@ -946,6 +1103,15 @@
       line-height: 1.12;
     }
 
+    #credo-debt-defense-widget .cl-loader-screen {
+      padding: 18px;
+    }
+
+    #credo-debt-defense-widget .cl-loader-card h2 {
+      font-size: 28px;
+      line-height: 1.16;
+    }
+
     #credo-debt-defense-widget .cl-side-cta-card {
       position: static;
     }
@@ -995,7 +1161,7 @@
   "use strict";
 
   var CONFIG = {
-    widgetVersion: "1.4.0",
+    widgetVersion: "1.5.0",
 
     // Replace this with the deployed Google Apps Script Web App URL.
     googleScriptUrl: "PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE",
@@ -1015,6 +1181,9 @@
     maxDebtCards: 12,
     maxDescriptionChars: 2000,
     actualDeliveryEnabled: false,
+    reportLoaderEnabled: true,
+    reportLoaderDurationMs: 4600,
+    reportLoaderMaxDurationMs: 7000,
 
     // Optional tracking hook. This does nothing unless enabled and a dataLayer is present.
     tracking: {
@@ -1240,7 +1409,13 @@
     error: "",
     fieldErrors: {},
     submitting: false,
-    submittedInDemoMode: false
+    submittedInDemoMode: false,
+    reportLoaderActive: false,
+    reportLoaderStepIndex: 0,
+    reportLoaderSteps: [],
+    reportLoaderTimer: null,
+    reportLoaderFallbackTimer: null,
+    reportLoaderStepTimers: []
   };
 
   var data = makeInitialData();
@@ -1315,6 +1490,8 @@
       callCtaClicked: false,
       callbackCtaClicked: false,
       sendSnapshotCtaClicked: false,
+      reportLoaderShown: false,
+      scores: null,
       report: null
     };
   }
@@ -1412,11 +1589,15 @@
   }
 
   function resetWidget() {
+    cancelReportLoaderTimers();
     ui.step = 0;
     ui.error = "";
     ui.fieldErrors = {};
     ui.submitting = false;
     ui.submittedInDemoMode = false;
+    ui.reportLoaderActive = false;
+    ui.reportLoaderStepIndex = 0;
+    ui.reportLoaderSteps = [];
     data = makeInitialData();
     trackEvent("reset", {});
     render();
@@ -1450,10 +1631,14 @@
   }
 
   function startFlow(entryPath) {
+    cancelReportLoaderTimers();
     var leadId = data.leadId;
     data = makeInitialData();
     data.leadId = leadId;
     data.entryPath = entryPath;
+    ui.reportLoaderActive = false;
+    ui.reportLoaderStepIndex = 0;
+    ui.reportLoaderSteps = [];
     ui.step = 1;
     ui.error = "";
     ui.fieldErrors = {};
@@ -1564,6 +1749,8 @@
     }
 
     if (action === "prev") {
+      cancelReportLoaderTimers();
+      ui.reportLoaderActive = false;
       ui.step = Math.max(0, ui.step - 1);
       trackEvent("previous_step", { step: ui.step, step_id: currentStepId(), entry_path: data.entryPath });
       render();
@@ -1577,6 +1764,9 @@
         ui.error = validationError;
         render();
         return;
+      }
+      if (isAssessmentToResultsTransition(currentId)) {
+        prepareReportData(true);
       }
       if (currentId === STEP.URGENT_RESULTS || currentId === STEP.OPTIONS_RESULTS) {
         data.fullSnapshotRequested = true;
@@ -2312,9 +2502,21 @@
   }
 
   function renderResults() {
-    var calc = getCalculations();
-    var report = generateDebtDefenseReport(calc);
-    data.report = report;
+    var prepared;
+    try {
+      prepared = prepareReportData(false);
+    } catch (error) {
+      console.error(error);
+      cancelReportLoaderTimers();
+      ui.reportLoaderActive = false;
+      return renderReportPreparationFallback();
+    }
+    var calc = prepared.calc;
+    var report = prepared.report;
+    if (shouldShowReportLoader()) {
+      startReportLoaderThenRenderReport(calc);
+      return renderReportLoader(ui.reportLoaderSteps, calc);
+    }
     if (!data.reportScreenViewed) {
       data.reportScreenViewed = true;
       trackEvent("report_screen_viewed", {
@@ -2325,6 +2527,259 @@
       });
     }
     return renderReportScreen(report, calc);
+  }
+
+  function renderReportPreparationFallback() {
+    return [
+      '<section class="cl-report-screen" aria-label="Debt Defense Snapshot preparation issue">',
+        '<div class="cl-report-section-card">',
+          '<div class="cl-eyebrow">Snapshot preparation</div>',
+          '<h2 class="cl-title">We had trouble preparing the full Snapshot view.</h2>',
+          '<p class="cl-subtitle">Your answers are still available in this widget. You can continue to contact details, request a callback, or call Credo Legal for help walking through the information you provided.</p>',
+          '<div class="cl-report-actions">',
+            renderSendSnapshotButton("Continue to Contact Details", "cl-btn cl-btn-primary"),
+            renderCallbackButton("Request a Callback", "cl-btn cl-btn-secondary", callbackFollowUpKey()),
+            renderCallLink("Call Now", "cl-btn cl-btn-call"),
+          '</div>',
+          '<div class="cl-disclaimer">This is for general intake and informational purposes only. It is not legal advice and does not create an attorney-client relationship.</div>',
+        '</div>',
+      '</section>'
+    ].join("");
+  }
+
+  function isAssessmentToResultsTransition(stepId) {
+    return stepId === STEP.URGENT_COMPACT_QUALIFICATION || stepId === STEP.OPTIONS_URGENCY_DETAILS;
+  }
+
+  function prepareReportData(force) {
+    if (force || !data.report || !data.scores) {
+      var calc = getCalculations();
+      data.scores = calc;
+      data.report = generateDebtDefenseReport(calc);
+    }
+    return {
+      calc: data.scores || getCalculations(),
+      report: data.report || generateDebtDefenseReport(data.scores || getCalculations())
+    };
+  }
+
+  function shouldShowReportLoader() {
+    if (!CONFIG.reportLoaderEnabled) return false;
+    if (data.reportLoaderShown) return ui.reportLoaderActive;
+    return currentStepId() === STEP.URGENT_RESULTS || currentStepId() === STEP.OPTIONS_RESULTS;
+  }
+
+  function startReportLoaderThenRenderReport(calc) {
+    if (ui.reportLoaderActive) return;
+    var duration = getReportLoaderDuration();
+    var maxDuration = getReportLoaderMaxDuration();
+    ui.reportLoaderActive = true;
+    ui.reportLoaderStepIndex = 0;
+    ui.reportLoaderSteps = getReportLoaderSteps(calc);
+    data.reportLoaderShown = true;
+    trackEvent("report_loader_start", {
+      entry_path: data.entryPath,
+      urgency_level: calc.urgencyLevel,
+      qualification_status: calc.qualificationStatus
+    });
+    scheduleReportLoaderStepUpdates(duration);
+    ui.reportLoaderTimer = setSafeTimeout(completeReportLoader, duration);
+    ui.reportLoaderFallbackTimer = setSafeTimeout(completeReportLoader, maxDuration);
+  }
+
+  function completeReportLoader() {
+    if (!ui.reportLoaderActive) return;
+    cancelReportLoaderTimers();
+    ui.reportLoaderActive = false;
+    ui.reportLoaderStepIndex = Math.max(0, (ui.reportLoaderSteps || []).length - 1);
+    trackEvent("report_loader_complete", {
+      entry_path: data.entryPath,
+      snapshot_id: data.snapshotId
+    });
+    render();
+  }
+
+  function scheduleReportLoaderStepUpdates(duration) {
+    var steps = ui.reportLoaderSteps || [];
+    if (!steps.length) return;
+    var stepMs = Math.max(300, Math.floor(duration / steps.length));
+    ui.reportLoaderStepTimers = [];
+    steps.forEach(function (_step, index) {
+      if (index === 0) return;
+      ui.reportLoaderStepTimers.push(setSafeTimeout(function () {
+        if (!ui.reportLoaderActive) return;
+        ui.reportLoaderStepIndex = index;
+        updateReportLoaderStep(index);
+      }, stepMs * index));
+    });
+  }
+
+  function updateReportLoaderStep(index) {
+    if (!root || typeof root.querySelector !== "function") return;
+    var steps = root.querySelectorAll("[data-loader-step]");
+    var status = root.querySelector("[data-loader-status]");
+    var progress = root.querySelector("[data-loader-progress]");
+    var progressValue = Math.round(((index + 1) / Math.max(1, steps.length)) * 100);
+    steps.forEach(function (item, itemIndex) {
+      item.classList.toggle("is-complete", itemIndex < index);
+      item.classList.toggle("is-active", itemIndex === index);
+      item.classList.toggle("is-pending", itemIndex > index);
+      var icon = item.querySelector("[data-loader-icon]");
+      if (icon) icon.innerHTML = itemIndex < index ? "&#10003;" : itemIndex === index ? "..." : "";
+    });
+    if (status && ui.reportLoaderSteps[index]) status.textContent = ui.reportLoaderSteps[index];
+    if (progress) progress.setAttribute("aria-valuenow", String(progressValue));
+  }
+
+  function cancelReportLoaderTimers() {
+    if (ui.reportLoaderTimer) clearSafeTimeout(ui.reportLoaderTimer);
+    if (ui.reportLoaderFallbackTimer) clearSafeTimeout(ui.reportLoaderFallbackTimer);
+    (ui.reportLoaderStepTimers || []).forEach(clearSafeTimeout);
+    ui.reportLoaderTimer = null;
+    ui.reportLoaderFallbackTimer = null;
+    ui.reportLoaderStepTimers = [];
+  }
+
+  function setSafeTimeout(callback, delay) {
+    var timerFn = typeof window !== "undefined" && window.setTimeout ? window.setTimeout.bind(window) : setTimeout;
+    return timerFn(callback, delay);
+  }
+
+  function clearSafeTimeout(timer) {
+    var clearFn = typeof window !== "undefined" && window.clearTimeout ? window.clearTimeout.bind(window) : clearTimeout;
+    clearFn(timer);
+  }
+
+  function getReportLoaderDuration() {
+    var duration = Number(CONFIG.reportLoaderDurationMs) || 4600;
+    return Math.max(1000, Math.min(duration, getReportLoaderMaxDuration()));
+  }
+
+  function getReportLoaderMaxDuration() {
+    return Math.max(1500, Number(CONFIG.reportLoaderMaxDurationMs) || 7000);
+  }
+
+  function renderReportLoader(steps, calc) {
+    var list = steps && steps.length ? steps : getReportLoaderSteps(calc);
+    var activeIndex = Math.min(ui.reportLoaderStepIndex || 0, list.length - 1);
+    var activeStep = list[activeIndex] || "Preparing your Debt Defense Snapshot...";
+    var progressValue = Math.round(((activeIndex + 1) / Math.max(1, list.length)) * 100);
+    return [
+      '<section class="cl-loader-screen" aria-label="Debt Defense Snapshot preparation">',
+        '<div class="cl-loader-card">',
+          '<img class="cl-loader-logo" src="' + h(CONFIG.logoUrl) + '" alt="Credo Legal" onerror="this.style.display=\'none\';">',
+          '<div class="cl-eyebrow">Debt Defense Snapshot</div>',
+          '<h2>Preparing Your Debt Defense Snapshot</h2>',
+          '<p>' + h(getReportLoaderSubtitle(calc)) + '</p>',
+          '<div class="cl-loader-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + h(progressValue) + '" data-loader-progress>',
+            '<span style="--cl-loader-duration:' + h(getReportLoaderDuration()) + 'ms;"></span>',
+          '</div>',
+          '<div class="cl-loader-status" aria-live="polite" data-loader-status>' + h(activeStep) + '</div>',
+          '<ul class="cl-loader-steps">',
+            list.map(function (step, index) {
+              var state = index < activeIndex ? "is-complete" : index === activeIndex ? "is-active" : "is-pending";
+              var icon = index < activeIndex ? "&#10003;" : index === activeIndex ? "..." : "";
+              return '<li class="cl-loader-step ' + state + '" data-loader-step><span class="cl-loader-check" data-loader-icon>' + icon + '</span><span>' + h(step) + '</span></li>';
+            }).join(""),
+          '</ul>',
+          '<div class="cl-loader-note">' + h(getReportLoaderNote(calc)) + '</div>',
+          '<div class="cl-disclaimer">This is for general intake and informational purposes only. It is not legal advice and does not create an attorney-client relationship.</div>',
+        '</div>',
+      '</section>'
+    ].join("");
+  }
+
+  function getReportLoaderSteps(calc) {
+    if (calc.qualificationStatus === "Not a Fit") {
+      return [
+        "Reviewing your intake answers...",
+        "Checking debt type and intake fit...",
+        "Organizing the information you provided...",
+        "Preparing a summary of the information you provided...",
+        "Finalizing your Debt Defense Snapshot..."
+      ];
+    }
+    if (calc.hasGarnishment || calc.hasWagesOrBankAffected) {
+      return [
+        "Reviewing your urgent debt-help answers...",
+        "Checking wage, bank, or garnishment indicators...",
+        "Identifying time-sensitive red flags...",
+        "Building your priority level...",
+        "Preparing your document checklist...",
+        "Finalizing your Debt Defense Snapshot..."
+      ];
+    }
+    if (calc.hasLawsuit) {
+      return [
+        "Reviewing your urgent debt-help answers...",
+        "Checking for court paper and deadline indicators...",
+        "Identifying time-sensitive red flags...",
+        "Building your priority level...",
+        "Preparing your document checklist...",
+        "Finalizing your Debt Defense Snapshot..."
+      ];
+    }
+    if (calc.hasHarassment) {
+      return [
+        "Reviewing collector contact patterns...",
+        "Checking debt type and collection stage...",
+        "Identifying possible contact-related risk flags...",
+        "Building your Case Readiness Score...",
+        "Preparing your call log checklist...",
+        "Finalizing your Debt Defense Snapshot..."
+      ];
+    }
+    if (data.entryPath === FLOW_ENTRY.URGENT) {
+      if (calc.urgentBranch === "not_sure_document_review") {
+        return [
+          "Reviewing your urgent debt-help answers...",
+          "Organizing your document-review checklist...",
+          "Identifying possible risk flags based on your answers...",
+          "Building your priority level...",
+          "Preparing your document checklist...",
+          "Finalizing your Debt Defense Snapshot..."
+        ];
+      }
+      return [
+        "Reviewing your urgent debt-help answers...",
+        "Checking for lawsuit, judgment, garnishment, or deadline indicators...",
+        "Identifying time-sensitive red flags...",
+        "Building your priority level...",
+        "Preparing your document checklist...",
+        "Finalizing your Debt Defense Snapshot..."
+      ];
+    }
+    return [
+      "Reviewing your intake answers...",
+      "Checking debt type and collection stage...",
+      "Identifying possible risk flags...",
+      "Building your Case Readiness Score...",
+      "Preparing your document checklist...",
+      "Finalizing your Debt Defense Snapshot..."
+    ];
+  }
+
+  function getReportLoaderSubtitle(calc) {
+    if (calc.qualificationStatus === "Not a Fit") {
+      return "We're organizing your answers and checking whether this appears to fit Credo Legal's current intake criteria.";
+    }
+    if (calc.hasHarassment) {
+      return "We're organizing your collector-contact details, possible red flags, and document checklist.";
+    }
+    if (data.entryPath === FLOW_ENTRY.URGENT || calc.urgencyLevel === "Critical" || calc.urgencyLevel === "High") {
+      return "Your answers suggest your situation may be time-sensitive. We're organizing your priority level, possible red flags, and next-step checklist.";
+    }
+    return "Based on your answers, we're organizing your debt situation, priority level, and next-step checklist.";
+  }
+
+  function getReportLoaderNote(calc) {
+    if (calc.hasLawsuit || calc.hasGarnishment || calc.hasDefaultJudgment) {
+      return "Your exact options depend on your documents, facts, state law, and other circumstances.";
+    }
+    if (calc.hasHarassment) {
+      return "Keep any call logs, texts, voicemails, letters, names, phone numbers, and dates together when possible.";
+    }
+    return "Your Snapshot may include risk flags, a document checklist, readiness score, and suggested next steps.";
   }
 
   function renderReportScreen(report, calc) {
@@ -2814,6 +3269,7 @@
 
   function renderActions() {
     var stepId = currentStepId();
+    if (ui.reportLoaderActive) return "";
     if (stepId === STEP.THANK_YOU || stepId === STEP.ENTRY) return "";
     if (stepId === STEP.URGENT_RESULTS || stepId === STEP.OPTIONS_RESULTS) {
       return [

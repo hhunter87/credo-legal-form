@@ -141,6 +141,28 @@ Use this checklist on a staging page before production launch. Record browser, d
 
 ## Quick Summary Before Contact
 
+- [ ] With `CONFIG.reportLoaderEnabled = true`, completing the last assessment question shows `Preparing Your Debt Defense Snapshot` before the report screen.
+- [ ] Loader remains visible for about 4-5 seconds.
+- [ ] Loader shows Credo Legal branding and `Debt Defense Snapshot` label.
+- [ ] Loader subtitle uses cautious intake-safe language.
+- [ ] Loader shows sequential preparation steps with completed checkmarks.
+- [ ] Loader shows a progress bar with `role="progressbar"`.
+- [ ] Loader status text uses `aria-live="polite"`.
+- [ ] Loader includes disclaimer language that it is not legal advice and does not create an attorney-client relationship.
+- [ ] Urgent lawsuit path loader mentions court paper/deadline indicators without panic language.
+- [ ] Garnishment path loader mentions wage, bank, or garnishment indicators.
+- [ ] Collector harassment path loader mentions collector contact patterns.
+- [ ] Not-sure/document review path loader mentions document-review checklist.
+- [ ] Unsupported/not-a-fit path loader uses neutral intake-fit language.
+- [ ] Loader does not say attorney reviewed, legal analysis complete, legal deadline calculated, violations found, or case guaranteed.
+- [ ] Loader does not submit the lead or ask for contact details.
+- [ ] Normal Previous/Continue navigation is hidden while loader is active.
+- [ ] Loader transitions automatically to the report screen.
+- [ ] Loader appears once per completed assessment before the report, not on every step.
+- [ ] With `CONFIG.reportLoaderEnabled = false`, report appears immediately after the assessment.
+- [ ] Mobile loader is centered, readable, and has no horizontal scroll.
+- [ ] Reduced-motion environments do not get flashing or excessive animation.
+
 - [ ] `Your Quick Debt Defense Summary` appears before name, phone, email, consent, or follow-up capture.
 - [ ] Snapshot ID appears in `CL-DF-12345` format.
 - [ ] Generated date/time appears.

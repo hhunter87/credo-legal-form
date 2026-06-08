@@ -76,6 +76,16 @@ Report CTAs:
 
 The call copy is intentionally framed as a free explanation or free intake service, not free legal advice or a guaranteed legal outcome.
 
+Before the report screen appears, the widget can show a branded simulated preparation loader for about 4.6 seconds. This is controlled by `CONFIG.reportLoaderEnabled`, `CONFIG.reportLoaderDurationMs`, and `CONFIG.reportLoaderMaxDurationMs`. The loader prepares the already-generated Snapshot view, shows sequential intake-safe steps, and does not submit data or imply attorney review, AI legal analysis, violations, guaranteed outcomes, or legal advice.
+
+Loader copy adapts by branch where possible:
+
+- Urgent paths mention urgent debt-help answers and possible lawsuit, judgment, garnishment, deadline, or document-review indicators.
+- Lawsuit/summons paths mention court paper and deadline indicators.
+- Garnishment paths mention wage, bank, or garnishment indicators.
+- Collector-contact paths mention collector contact patterns and call log preparation.
+- Not-a-fit paths use neutral intake-fit language.
+
 The Full Debt Defense Snapshot includes:
 
 - Snapshot Header.
@@ -130,7 +140,8 @@ urgent_debt_help
    - Secured/unsecured status
    - Approximate amount
    - One debt, multiple debts, or not sure
-6. Quick Summary before contact capture:
+6. Snapshot preparation loader, if enabled.
+7. Quick Summary before contact capture:
    - Snapshot ID
    - Situation Type
    - Debt Defense Priority Level
@@ -138,9 +149,9 @@ urgent_debt_help
    - Top 3 Findings
    - Full Snapshot preview
    - Urgent CTA ordering for Critical/High Quick Summaries
-7. Full Snapshot delivery and contact capture.
-8. Follow-up preference.
-9. Submit to Google Sheets through Google Apps Script.
+8. Full Snapshot delivery and contact capture.
+9. Follow-up preference.
+10. Submit to Google Sheets through Google Apps Script.
 
 ### Debt Defense Options Check
 
@@ -175,30 +186,31 @@ debt_defense_options_check
    - Debt validation notice status
    - Collector behavior selections
    - Simulated upload placeholder
-6. Quick Summary before contact capture:
+6. Snapshot preparation loader, if enabled.
+7. Quick Summary before contact capture:
    - Snapshot ID
    - Situation Type
    - Debt Defense Priority Level
    - Case Readiness Scorecard
    - Top 3 Findings
    - Full Snapshot preview
-7. Full Snapshot delivery:
+8. Full Snapshot delivery:
    - Text/SMS
    - Email
    - WhatsApp
    - Call
-8. Contact and consent:
+9. Contact and consent:
    - Phone is shown only when the selected delivery or follow-up choice needs it.
    - Email is shown only when the selected delivery or follow-up choice needs it.
    - SMS consent appears only for SMS delivery.
    - WhatsApp consent appears only for WhatsApp delivery.
-9. Follow-up preference:
+10. Follow-up preference:
    - Call me now
    - Call me today
    - Schedule a call
    - Message me first
    - Email me first
-10. Submit to Google Sheets through Google Apps Script.
+11. Submit to Google Sheets through Google Apps Script.
 
 If a normal options-check user later selects lawsuit, judgment, garnishment, or bank/wage impact, the urgency score can still become High or Critical. The user remains in the normal assessment path unless a future product decision adds an explicit jump-to-urgent transition.
 
@@ -208,7 +220,7 @@ Open `credo-debt-defense-widget.html` and edit the `CONFIG` block:
 
 ```js
 var CONFIG = {
-  widgetVersion: "1.4.0",
+  widgetVersion: "1.5.0",
   googleScriptUrl: "PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE",
   phoneDisplay: "(718) 865-8350",
   phoneHref: "tel:+17188658350",
@@ -219,6 +231,9 @@ var CONFIG = {
   maxDebtCards: 12,
   maxDescriptionChars: 2000,
   actualDeliveryEnabled: false,
+  reportLoaderEnabled: true,
+  reportLoaderDurationMs: 4600,
+  reportLoaderMaxDurationMs: 7000,
   tracking: {
     enabled: false,
     dataLayerName: "dataLayer",
@@ -236,6 +251,8 @@ Optional edits:
 - Update phone number, privacy URL, terms URL, or logo URL.
 - Update `excludedStates` only if business rules change.
 - Keep `actualDeliveryEnabled` as `false` until real SMS/email/WhatsApp delivery is connected and approved.
+- Set `reportLoaderEnabled` to `false` if the report should appear immediately after the assessment.
+- Adjust `reportLoaderDurationMs` only if product wants a shorter or longer simulated preparation moment; keep `reportLoaderMaxDurationMs` as a safe cap.
 - Leave `tracking.enabled` as `false` unless the website already has an approved `dataLayer` plan.
 
 ## Google Sheets Setup
@@ -339,6 +356,9 @@ Use `MANUAL_QA_CHECKLIST.md` for the full checklist. Minimum launch smoke tests:
 - Unsupported-only debt routes to `Not a Fit`.
 - Supported debt with unsure security routes to `Needs Review`.
 - Lawsuit, judgment, and garnishment branches appear in the Quick Summary and Full Snapshot.
+- Snapshot preparation loader appears before the report when enabled.
+- Loader copy is branch-aware, intake-safe, and does not imply legal advice or attorney review.
+- Loader transitions automatically to the report and does not submit the lead.
 - Report screen shows the sticky CTA bar, hero, overview cards, top findings, primary risk flag, Full Snapshot preview, What to Prepare card, side CTA, and bottom CTA.
 - Call CTA uses the configured `tel:` link and does not submit the form.
 - Send Snapshot CTA routes to `Where should we send your Full Debt Defense Snapshot?`.
@@ -362,6 +382,7 @@ The widget uses cautious language and does not promise outcomes, provide legal a
 - Final legal and advertising disclaimer copy.
 - Final SMS and WhatsApp consent language.
 - Final Quick Summary and Full Debt Defense Snapshot legal/disclaimer language.
+- Final Snapshot preparation loader copy.
 - Whether the excluded-state list is current.
 - Whether auto-repossession wording accurately reflects Credo Legal intake criteria.
 - Whether a real secure upload provider should replace the simulated upload placeholder.
