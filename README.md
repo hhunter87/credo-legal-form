@@ -1,26 +1,25 @@
 # Credo Legal Debt Defense Options Check Widget
 
-This package contains a plain embed widget and a Google Apps Script endpoint for a Google Sheet MVP.
+Plain HTML/CSS/JS embeddable intake widget for Credo Legal, plus a Google Apps Script endpoint that writes lead submissions to Google Sheets.
+
+The widget is designed to be pasted into a normal website. It does not require React, Next.js, a bundler, or third-party tracking.
 
 ## Files
 
-- `credo-debt-defense-widget.html` — self-contained HTML/CSS/JS widget. Paste this into the website where the form should appear.
-- `google-apps-script.gs` — Google Apps Script endpoint that writes submissions into Google Sheets.
+- `credo-debt-defense-widget.html` - self-contained widget embed.
+- `google-apps-script.gs` - Google Apps Script web app endpoint for Google Sheets.
+- `MANUAL_QA_CHECKLIST.md` - manual test paths for launch review.
+- `CODEX_TASK_PROMPT.md` and `AGENTS.md` - implementation context and guardrails.
 
-## Current business logic included
+## Business Logic Included
 
-- Two-entry gate:
-  - `I Need Urgent Debt Help`
-  - `Check My Debt Defense Options`
-- Early state eligibility check with excluded states kept as configuration:
-  - `DC, DE, ID, OK, WV, WY`
-- Individuals only / business debt disqualification logic.
+- Individuals only. Business debt is marked as not a fit.
 - Supported debt types:
   - Credit Card
   - Medical
   - Payday Loans
   - Utilities
-  - Auto Repossession
+  - Auto Repossession, only when it appears to be a post-repossession deficiency or unsecured balance
 - Unsupported debt types:
   - Student Loans
   - Tax
@@ -28,67 +27,202 @@ This package contains a plain embed widget and a Google Apps Script endpoint for
   - Tribal Debts
   - Child Support
   - Court Related
-- Unsecured debt qualification gate.
-- Multiple debt capture with type, amount, security, stage, document status, and creditor/collector name for each debt.
-- Urgency scoring based on:
-  - lawsuit/summons
-  - default judgment
-  - garnishment
-  - wage/bank impact
-  - deadlines/court dates
-  - validation notice status
-  - collector behavior
-  - debt amount
-  - number of debts
-- Case Readiness Scorecard.
-- Simulated upload-first prompt.
-- Results-before-contact flow.
-- SMS consent appears only when SMS delivery is selected.
-- WhatsApp consent appears only when WhatsApp delivery is selected.
+- Unsecured debt qualification is preserved.
+- Excluded-state configuration is centralized in `CONFIG.excludedStates` and defaults to:
+  - `DC`
+  - `DE`
+  - `ID`
+  - `OK`
+  - `WV`
+  - `WY`
 
-## Google Sheets setup
+The widget does not hard-block users from submitting. It routes unsupported, excluded-state, secured, or business-debt answers to `Not a Fit`, `Needs Review`, or `Partially Qualified` as appropriate.
 
-1. Create a new Google Sheet.
-2. Click `Extensions → Apps Script`.
-3. Paste the contents of `google-apps-script.gs` into `Code.gs`.
-4. Save the project.
-5. Click `Deploy → New deployment`.
-6. Select type: `Web app`.
-7. Set `Execute as` to `Me`.
-8. Set `Who has access` to `Anyone`.
-9. Deploy and copy the Web App URL.
-10. Open `credo-debt-defense-widget.html`.
-11. Replace:
+## User Flow
 
-```js
-const CONFIG = {
-  googleScriptUrl: "PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE",
-  ...
-}
-```
+1. Entry gate:
+   - `I Need Urgent Debt Help`
+   - `Check My Debt Defense Options`
+2. Eligibility:
+   - State
+   - ZIP, optional
+   - Individual/family/business routing
+3. Debt inventory:
+   - One or multiple debts
+   - Debt type
+   - Amount range
+   - Secured/unsecured status
+   - Stage
+   - Document status
+   - Creditor/collector name
+4. Urgency and collector behavior:
+   - Deadline/court/judgment/garnishment indicators
+   - Debt validation notice status
+   - Collector behavior selections
+   - Simulated upload placeholder
+5. Results before contact capture:
+   - Qualification status
+   - Debt Defense Priority Level
+   - Case Readiness Scorecard
+   - Recommended next step
+   - Missing information checklist
+6. Results delivery:
+   - Text/SMS
+   - Email
+   - WhatsApp
+   - Call
+7. Contact and consent:
+   - Phone is shown only when the selected delivery or follow-up choice needs it.
+   - Email is shown only when the selected delivery or follow-up choice needs it.
+   - SMS consent appears only for SMS delivery.
+   - WhatsApp consent appears only for WhatsApp delivery.
+8. Follow-up preference:
+   - Call me now
+   - Call me today
+   - Schedule a call
+   - Message me first
+   - Email me first
+9. Submit to Google Sheets through Google Apps Script.
 
-with your deployed Web App URL.
+## Configure the Widget
 
-## Important production notes
-
-- The widget uses `fetch(..., { mode: "no-cors" })` for Google Apps Script compatibility. The browser cannot read the response, so successful posting is assumed if the network request does not throw.
-- The upload step is intentionally simulated. Replace the upload placeholder with your real upload tool later.
-- Disclaimer, SMS consent, WhatsApp consent, and attorney-advertising copy are placeholders and should be reviewed before production.
-- The excluded-state list is stored in one place inside `CONFIG.excludedStates`.
-- Tracking events are not included because they were not required for this MVP.
-
-## Main configuration block
-
-Inside `credo-debt-defense-widget.html`:
+Open `credo-debt-defense-widget.html` and edit the `CONFIG` block:
 
 ```js
 var CONFIG = {
+  widgetVersion: "1.1.0",
   googleScriptUrl: "PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE",
   phoneDisplay: "(718) 865-8350",
   phoneHref: "tel:+17188658350",
   privacyUrl: "https://credolegal.com/privacy-policy",
   termsUrl: "https://credolegal.com/term-of-service",
   excludedStates: ["DC", "DE", "ID", "OK", "WV", "WY"],
-  logoUrl: "https://cdn.prod.website-files.com/6903ad8d7b4674d0123baecd/6903af5ee5e121af84994b38_Credo%20Logo%20Red.png"
+  logoUrl: "https://cdn.prod.website-files.com/6903ad8d7b4674d0123baecd/6903af5ee5e121af84994b38_Credo%20Logo%20Red.png",
+  maxDebtCards: 12,
+  maxDescriptionChars: 2000,
+  tracking: {
+    enabled: false,
+    dataLayerName: "dataLayer",
+    eventPrefix: "credo_debt_widget_"
+  }
 };
 ```
+
+Required production edit:
+
+- Replace `googleScriptUrl` with the deployed Google Apps Script web app URL.
+
+Optional edits:
+
+- Update phone number, privacy URL, terms URL, or logo URL.
+- Update `excludedStates` only if business rules change.
+- Leave `tracking.enabled` as `false` unless the website already has an approved `dataLayer` plan.
+
+## Google Sheets Setup
+
+1. Create a Google Sheet.
+2. Open `Extensions > Apps Script`.
+3. Paste the contents of `google-apps-script.gs` into `Code.gs`.
+4. Leave `SPREADSHEET_ID` blank if the script is bound to that sheet.
+5. If using a standalone Apps Script project, set:
+
+```js
+const SPREADSHEET_ID = "YOUR_GOOGLE_SHEET_ID";
+```
+
+6. Save the project.
+7. Click `Deploy > New deployment`.
+8. Select `Web app`.
+9. Set `Execute as` to `Me`.
+10. Set `Who has access` to `Anyone`.
+11. Deploy and copy the web app URL.
+12. Paste that URL into `CONFIG.googleScriptUrl`.
+
+The script creates or reuses a tab named `Credo Debt Leads`, writes headers, appends missing headers if the payload changes, and aligns each row to the current sheet headers.
+
+## Embed Instructions
+
+1. Open `credo-debt-defense-widget.html`.
+2. Confirm `CONFIG.googleScriptUrl` is set.
+3. Paste the full file contents into the target page where the widget should appear.
+4. If the website has a CMS custom-code block, paste the whole block into that block.
+5. Publish to a staging page first.
+6. Run the manual QA checklist before launch.
+
+## Local Testing
+
+Because the widget is plain HTML/CSS/JS, it can be opened directly in a browser:
+
+```bash
+open credo-debt-defense-widget.html
+```
+
+For a local web-server test:
+
+```bash
+python3 -m http.server 8080
+```
+
+Then open:
+
+```text
+http://localhost:8080/credo-debt-defense-widget.html
+```
+
+If `googleScriptUrl` is still the placeholder, submissions run in demo mode and log the payload to the browser console instead of posting to Google Sheets.
+
+## Google Apps Script Testing
+
+1. Deploy the Apps Script web app.
+2. Open the web app URL in a browser.
+3. Confirm it returns JSON similar to:
+
+```json
+{ "ok": true, "service": "Credo Debt Leads endpoint" }
+```
+
+4. Submit a test lead from the widget.
+5. Confirm a row appears in the `Credo Debt Leads` sheet.
+6. Confirm these fields are populated:
+   - `lead_id`
+   - `qualification_status`
+   - `urgency_level`
+   - `readiness_score`
+   - `delivery_channel`
+   - `follow_up_preference`
+   - `debts_json`
+   - `raw_answers_json`
+
+Important: the widget uses `fetch(..., { mode: "no-cors" })` for Google Apps Script compatibility. The browser cannot read the Apps Script response, so the widget treats the request as submitted if the network request does not throw.
+
+## Manual QA
+
+Use `MANUAL_QA_CHECKLIST.md` for the full checklist. Minimum launch smoke tests:
+
+- Mobile and desktop layout.
+- Excluded state routes to `Not a Fit`.
+- Business debt routes to `Not a Fit`.
+- Supported unsecured debt routes to `Qualified`.
+- Unsupported-only debt routes to `Not a Fit`.
+- Supported debt with unsure security routes to `Needs Review`.
+- Lawsuit, judgment, and garnishment branches appear on results.
+- Upload placeholder appears for letters/notices, court papers, garnishment documents, or unsure documents.
+- Results appear before name/contact capture.
+- SMS consent appears only for SMS.
+- WhatsApp consent appears only for WhatsApp.
+- Google Sheet receives a complete payload.
+
+## Compliance Notes
+
+Current legal/disclaimer, SMS consent, WhatsApp consent, attorney-advertising, and privacy/terms copy are placeholders and should be reviewed by counsel before production launch.
+
+The widget uses cautious language and does not promise outcomes, provide legal advice, claim a collector can definitely be stopped, or say the user definitely has or does not have a claim.
+
+## Production Risks To Review
+
+- Final legal and advertising disclaimer copy.
+- Final SMS and WhatsApp consent language.
+- Whether the excluded-state list is current.
+- Whether auto-repossession wording accurately reflects Credo Legal intake criteria.
+- Whether a real secure upload provider should replace the simulated upload placeholder.
+- Whether Google Sheets remains sufficient for lead handling, access control, retention, and privacy requirements.

@@ -12,11 +12,15 @@
  * 8) Copy the Web App URL and paste it into CONFIG.googleScriptUrl in the widget.
  */
 
+const SPREADSHEET_ID = '';
 const SHEET_NAME = 'Credo Debt Leads';
 
 const FIELDS = [
   'created_at',
   'lead_id',
+  'widget_version',
+  'page_url',
+  'referrer',
   'entry_path',
   'first_name',
   'last_name',
@@ -71,32 +75,29 @@ const FIELDS = [
 
 function doPost(e) {
   const lock = LockService.getScriptLock();
-  lock.waitLock(10000);
+  let hasLock = false;
 
   try {
+    lock.waitLock(10000);
+    hasLock = true;
+
     const payload = parsePayload_(e);
     const sheet = getOrCreateSheet_();
-    ensureHeaders_(sheet);
+    const headers = ensureHeaders_(sheet);
 
-    const row = FIELDS.map((field) => normalizeCellValue_(payload[field]));
-    sheet.appendRow(row);
+    const row = headers.map((field) => normalizeCellValue_(payload[field]));
+    sheet.getRange(sheet.getLastRow() + 1, 1, 1, row.length).setValues([row]);
 
-    return ContentService
-      .createTextOutput(JSON.stringify({ ok: true, lead_id: payload.lead_id || '' }))
-      .setMimeType(ContentService.MimeType.JSON);
+    return json_({ ok: true, lead_id: payload.lead_id || '' });
   } catch (err) {
-    return ContentService
-      .createTextOutput(JSON.stringify({ ok: false, error: String(err && err.message ? err.message : err) }))
-      .setMimeType(ContentService.MimeType.JSON);
+    return json_({ ok: false, error: String(err && err.message ? err.message : err) });
   } finally {
-    lock.releaseLock();
+    if (hasLock) lock.releaseLock();
   }
 }
 
 function doGet() {
-  return ContentService
-    .createTextOutput(JSON.stringify({ ok: true, service: 'Credo Debt Leads endpoint' }))
-    .setMimeType(ContentService.MimeType.JSON);
+  return json_({ ok: true, service: 'Credo Debt Leads endpoint' });
 }
 
 function parsePayload_(e) {
@@ -105,11 +106,22 @@ function parsePayload_(e) {
   }
 
   try {
-    return JSON.parse(e.postData.contents);
+    const payload = JSON.parse(e.postData.contents);
+    if (!payload || typeof payload !== 'object' || Array.isArray(payload)) {
+      throw new Error('POST body must be a JSON object.');
+    }
+    return payload;
   } catch (jsonErr) {
     // Fallback for form-encoded tests.
     const obj = {};
     if (e.parameter) {
+      if (e.parameter.payload) {
+        const nestedPayload = JSON.parse(e.parameter.payload);
+        if (!nestedPayload || typeof nestedPayload !== 'object' || Array.isArray(nestedPayload)) {
+          throw new Error('payload parameter must be a JSON object.');
+        }
+        return nestedPayload;
+      }
       Object.keys(e.parameter).forEach((key) => {
         obj[key] = e.parameter[key];
       });
@@ -120,33 +132,51 @@ function parsePayload_(e) {
 }
 
 function getOrCreateSheet_() {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const ss = getSpreadsheet_();
   let sheet = ss.getSheetByName(SHEET_NAME);
   if (!sheet) sheet = ss.insertSheet(SHEET_NAME);
   return sheet;
 }
 
+function getSpreadsheet_() {
+  if (SPREADSHEET_ID) return SpreadsheetApp.openById(SPREADSHEET_ID);
+
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  if (!ss) {
+    throw new Error('No active spreadsheet found. Bind this script to a Google Sheet or set SPREADSHEET_ID.');
+  }
+  return ss;
+}
+
 function ensureHeaders_(sheet) {
-  const lastColumn = Math.max(sheet.getLastColumn(), FIELDS.length);
-  const currentHeaders = sheet.getRange(1, 1, 1, lastColumn).getValues()[0];
+  const headerWidth = Math.max(sheet.getLastColumn(), 1);
+  const currentHeaders = sheet.getRange(1, 1, 1, headerWidth).getValues()[0]
+    .map((value) => String(value || '').trim());
   const hasHeaders = currentHeaders.some((value) => String(value || '').trim());
 
   if (!hasHeaders) {
     sheet.getRange(1, 1, 1, FIELDS.length).setValues([FIELDS]);
     sheet.setFrozenRows(1);
-    return;
+    return FIELDS.slice();
   }
 
   // If headers exist but differ, leave existing data intact and append any missing fields to the end.
-  const existing = currentHeaders.map((value) => String(value || '').trim()).filter(Boolean);
+  const existing = currentHeaders.filter(Boolean);
   const missing = FIELDS.filter((field) => existing.indexOf(field) === -1);
   if (missing.length) {
-    sheet.getRange(1, existing.length + 1, 1, missing.length).setValues([missing]);
+    sheet.getRange(1, currentHeaders.length + 1, 1, missing.length).setValues([missing]);
   }
+  return currentHeaders.concat(missing);
 }
 
 function normalizeCellValue_(value) {
   if (value === null || value === undefined) return '';
   if (typeof value === 'object') return JSON.stringify(value);
   return String(value);
+}
+
+function json_(obj) {
+  return ContentService
+    .createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON);
 }
