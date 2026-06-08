@@ -38,6 +38,41 @@ The widget is designed to be pasted into a normal website. It does not require R
 
 The widget does not hard-block users from submitting. It routes unsupported, excluded-state, secured, or business-debt answers to `Not a Fit`, `Needs Review`, or `Partially Qualified` as appropriate.
 
+## Debt Defense Snapshot Reporting
+
+The widget now produces a two-level `Debt Defense Snapshot` experience:
+
+- `Your Quick Debt Defense Summary` appears on the website before name, phone, email, consent, or follow-up capture.
+- `Your Full Debt Defense Snapshot` is generated client-side after the assessment and submitted to Google Sheets with the lead payload.
+
+The Quick Summary includes:
+
+- Snapshot ID in `CL-DF-12345` format.
+- Generated date/time.
+- Entry path.
+- Debt Defense Priority Level.
+- Situation Type.
+- Case Readiness Score.
+- Top 3 Findings.
+- Recommended next step.
+- Preview of the full Snapshot sections.
+
+The Full Debt Defense Snapshot includes:
+
+- Snapshot Header.
+- Situation Summary.
+- Debt Defense Priority Level.
+- Credo Legal Fit Check.
+- Potential Risk Flags.
+- Collector Behavior Review with call log template.
+- Document Checklist.
+- Case Readiness Scorecard.
+- Suggested Next 3 Steps.
+- Common Mistakes to Avoid.
+- Important Disclaimer.
+
+The full report is generated in the browser and captured in Google Sheets as both text and JSON. The widget does not send real SMS, email, or WhatsApp messages by default. `CONFIG.actualDeliveryEnabled` defaults to `false`, so confirmation copy says the request was submitted and the Snapshot is saved for follow-up. To add real delivery later, connect an approved SMS/email/WhatsApp provider on the server side or through a secure backend workflow, then update `actualDeliveryEnabled` and related delivery copy only after compliance review.
+
 ## User Flows
 
 The entry buttons intentionally route into different flows. They share validation, scoring, contact capture, consent logic, and Google Sheets submission utilities, but they do not share the same main step sequence.
@@ -76,14 +111,15 @@ urgent_debt_help
    - Secured/unsecured status
    - Approximate amount
    - One debt, multiple debts, or not sure
-6. Results before contact capture:
-   - Qualification status
+6. Quick Summary before contact capture:
+   - Snapshot ID
+   - Situation Type
    - Debt Defense Priority Level
    - Case Readiness Scorecard
-   - Recommended next step
-   - Missing information checklist
-   - Urgent CTA ordering for Critical/High results
-7. Results delivery and contact capture.
+   - Top 3 Findings
+   - Full Snapshot preview
+   - Urgent CTA ordering for Critical/High Quick Summaries
+7. Full Snapshot delivery and contact capture.
 8. Follow-up preference.
 9. Submit to Google Sheets through Google Apps Script.
 
@@ -120,13 +156,14 @@ debt_defense_options_check
    - Debt validation notice status
    - Collector behavior selections
    - Simulated upload placeholder
-6. Results before contact capture:
-   - Qualification status
+6. Quick Summary before contact capture:
+   - Snapshot ID
+   - Situation Type
    - Debt Defense Priority Level
    - Case Readiness Scorecard
-   - Recommended next step
-   - Missing information checklist
-7. Results delivery:
+   - Top 3 Findings
+   - Full Snapshot preview
+7. Full Snapshot delivery:
    - Text/SMS
    - Email
    - WhatsApp
@@ -152,7 +189,7 @@ Open `credo-debt-defense-widget.html` and edit the `CONFIG` block:
 
 ```js
 var CONFIG = {
-  widgetVersion: "1.2.0",
+  widgetVersion: "1.3.0",
   googleScriptUrl: "PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE",
   phoneDisplay: "(718) 865-8350",
   phoneHref: "tel:+17188658350",
@@ -162,6 +199,7 @@ var CONFIG = {
   logoUrl: "https://cdn.prod.website-files.com/6903ad8d7b4674d0123baecd/6903af5ee5e121af84994b38_Credo%20Logo%20Red.png",
   maxDebtCards: 12,
   maxDescriptionChars: 2000,
+  actualDeliveryEnabled: false,
   tracking: {
     enabled: false,
     dataLayerName: "dataLayer",
@@ -178,6 +216,7 @@ Optional edits:
 
 - Update phone number, privacy URL, terms URL, or logo URL.
 - Update `excludedStates` only if business rules change.
+- Keep `actualDeliveryEnabled` as `false` until real SMS/email/WhatsApp delivery is connected and approved.
 - Leave `tracking.enabled` as `false` unless the website already has an approved `dataLayer` plan.
 
 ## Google Sheets Setup
@@ -247,11 +286,18 @@ If `googleScriptUrl` is still the placeholder, submissions run in demo mode and 
 5. Confirm a row appears in the `Credo Debt Leads` sheet.
 6. Confirm these fields are populated:
    - `lead_id`
+   - `snapshot_id`
    - `entry_path`
    - `urgent_branch`
+   - `situation_type`
    - `qualification_status`
    - `urgency_level`
    - `readiness_score`
+   - `quick_summary_text`
+   - `full_report_text`
+   - `risk_flags_json`
+   - `document_checklist_json`
+   - `suggested_next_steps_json`
    - `delivery_channel`
    - `follow_up_preference`
    - `debts_json`
@@ -269,9 +315,11 @@ Use `MANUAL_QA_CHECKLIST.md` for the full checklist. Minimum launch smoke tests:
 - Supported unsecured debt routes to `Qualified`.
 - Unsupported-only debt routes to `Not a Fit`.
 - Supported debt with unsure security routes to `Needs Review`.
-- Lawsuit, judgment, and garnishment branches appear on results.
+- Lawsuit, judgment, and garnishment branches appear in the Quick Summary and Full Snapshot.
 - Upload placeholder appears for letters/notices, court papers, garnishment documents, or unsure documents.
-- Results appear before name/contact capture.
+- Quick Summary appears before name/contact capture.
+- Full Snapshot preview appears before contact capture.
+- Full report text and JSON are submitted to Google Sheets.
 - SMS consent appears only for SMS.
 - WhatsApp consent appears only for WhatsApp.
 - Google Sheet receives a complete payload.
@@ -286,6 +334,7 @@ The widget uses cautious language and does not promise outcomes, provide legal a
 
 - Final legal and advertising disclaimer copy.
 - Final SMS and WhatsApp consent language.
+- Final Quick Summary and Full Debt Defense Snapshot legal/disclaimer language.
 - Whether the excluded-state list is current.
 - Whether auto-repossession wording accurately reflects Credo Legal intake criteria.
 - Whether a real secure upload provider should replace the simulated upload placeholder.

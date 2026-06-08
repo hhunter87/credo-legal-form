@@ -139,24 +139,60 @@ Use this checklist on a staging page before production launch. Record browser, d
 - [ ] Upload button records upload intent.
 - [ ] Placeholder copy clearly states no file is uploaded.
 
-## Results Before Contact
+## Quick Summary Before Contact
 
-- [ ] Results appear before name, phone, email, consent, or follow-up capture.
+- [ ] `Your Quick Debt Defense Summary` appears before name, phone, email, consent, or follow-up capture.
+- [ ] Snapshot ID appears in `CL-DF-12345` format.
+- [ ] Generated date/time appears.
+- [ ] Entry path appears.
 - [ ] Qualification status appears.
 - [ ] Debt Defense Priority Level appears.
 - [ ] Case Readiness Scorecard appears.
+- [ ] Situation Type appears.
+- [ ] Top 3 Findings appear.
 - [ ] Recommended next step appears.
-- [ ] Missing information checklist appears.
+- [ ] Full Snapshot preview appears.
+- [ ] Full Snapshot preview includes priority level, risk flags, document checklist, collector behavior review, case readiness breakdown, suggested next steps, and Snapshot ID.
+- [ ] Main CTA says `Send Me My Full Debt Defense Snapshot` or a channel-specific Full Snapshot variant.
 - [ ] Copy avoids legal advice and outcome guarantees.
 - [ ] Disclaimer says the tool does not create an attorney-client relationship.
 - [ ] Critical urgent result shows `Call Credo Legal Now` before lower-priority CTAs.
 - [ ] Critical urgent result shows `Request an Immediate Callback`.
+- [ ] Critical urgent result shows `Text Me My Full Snapshot` and `Email Me My Full Snapshot`.
 - [ ] High urgent result shows `Request a Callback Today`.
-- [ ] Moderate/Low urgent result prioritizes sending results, scheduling a call, or message-first follow-up.
+- [ ] Moderate/Low urgent result prioritizes sending the Full Snapshot, scheduling a call, message-first, or email-first follow-up.
 - [ ] Business or otherwise `Not a Fit` urgent result does not show aggressive urgent legal CTAs.
+
+## Full Debt Defense Snapshot Report
+
+- [ ] Full report is generated client-side after assessment.
+- [ ] Full report includes Snapshot Header.
+- [ ] Full report includes Situation Summary.
+- [ ] Full report includes Debt Defense Priority Level.
+- [ ] Full report includes Credo Legal Fit Check.
+- [ ] Full report includes Potential Risk Flags.
+- [ ] Full report includes Collector Behavior Review.
+- [ ] Full report includes Document Checklist.
+- [ ] Full report includes Case Readiness Scorecard.
+- [ ] Full report includes Suggested Next 3 Steps.
+- [ ] Full report includes Common Mistakes to Avoid.
+- [ ] Full report includes Important Disclaimer.
+- [ ] Lawsuit path risk flags include lawsuit/court papers and deadline when selected.
+- [ ] Lawsuit path document checklist includes summons, complaint, court name, date served, response deadline, and hearing date.
+- [ ] Garnishment path risk flags include garnishment or wage/bank impact.
+- [ ] Garnishment path document checklist includes garnishment notice, employer notice, bank notice, court order if available, and date affected.
+- [ ] Collector harassment path risk flags include workplace calls and/or threats when selected.
+- [ ] Collector Behavior Review includes selected behaviors when collector behavior was reported.
+- [ ] Collector Call Log Template is included.
+- [ ] Unsupported-only path still produces useful fit explanation without aggressive legal CTAs.
 
 ## Delivery And Consent
 
+- [ ] Delivery screen asks `Where should we send your Full Debt Defense Snapshot?`
+- [ ] Delivery option says `Text me my full snapshot`.
+- [ ] Delivery option says `Email me my full snapshot`.
+- [ ] Delivery option says `Send it via WhatsApp`.
+- [ ] Delivery option says `Call me with my results`.
 - [ ] Text/SMS delivery shows phone and SMS consent.
 - [ ] SMS delivery does not show WhatsApp consent.
 - [ ] Email delivery shows email and does not show phone unless later follow-up requires it.
@@ -188,6 +224,22 @@ Use this checklist on a staging page before production launch. Record browser, d
 - [ ] Google Sheet writes headers if missing.
 - [ ] Google Sheet appends missing headers without deleting existing data.
 - [ ] Submitted row includes `lead_id`, contact fields, qualification, urgency, readiness, debt details, and raw JSON.
+- [ ] Submitted row includes `snapshot_id`.
+- [ ] Submitted row includes `situation_type`.
+- [ ] Submitted row includes `quick_summary_text`.
+- [ ] Submitted row includes `quick_summary_json`.
+- [ ] Submitted row includes `full_report_text`.
+- [ ] Submitted row includes `full_report_json`.
+- [ ] Submitted row includes `risk_flags_json`.
+- [ ] Submitted row includes `document_checklist_json`.
+- [ ] Submitted row includes `suggested_next_steps_json`.
+- [ ] Submitted row includes `common_mistakes_json`.
+- [ ] Submitted row includes `readiness_helped_json`.
+- [ ] Submitted row includes `readiness_missing_json`.
+- [ ] Submitted row includes `collector_call_log_template_included`.
+- [ ] Submitted row includes `full_snapshot_requested`.
+- [ ] Submitted row includes `full_snapshot_delivery_channel`.
+- [ ] Submitted row includes `actual_delivery_enabled`.
 - [ ] Submitted row includes `entry_path`.
 - [ ] Submitted row includes `urgent_branch`.
 - [ ] Submitted row includes `urgent_events`.
@@ -200,6 +252,18 @@ Use this checklist on a staging page before production launch. Record browser, d
 - [ ] `whatsapp_consent` is `Yes` only for WhatsApp delivery with consent checked.
 - [ ] `debts_json` is valid JSON.
 - [ ] `raw_answers_json` is valid JSON.
+- [ ] `quick_summary_json`, `full_report_json`, `risk_flags_json`, `document_checklist_json`, and `suggested_next_steps_json` are valid JSON.
+
+## Confirmation Screen
+
+- [ ] Confirmation screen says `Your Full Debt Defense Snapshot has been created.`
+- [ ] Confirmation screen shows Snapshot ID.
+- [ ] Confirmation screen shows selected delivery channel.
+- [ ] Confirmation screen shows follow-up preference.
+- [ ] Confirmation screen shows priority level.
+- [ ] Confirmation screen shows recommended next step.
+- [ ] When `CONFIG.actualDeliveryEnabled = false`, confirmation does not claim SMS, email, or WhatsApp was successfully sent.
+- [ ] When `CONFIG.actualDeliveryEnabled = false`, confirmation says the request was submitted and the Snapshot is saved for follow-up.
 
 ## Regression Smoke Paths
 
@@ -210,5 +274,7 @@ Use this checklist on a staging page before production launch. Record browser, d
 - [ ] Urgent lawsuit path: NY, individual, lawsuit/summons selected, deadline within 7 days, unsecured credit-card debt, Critical result, immediate callback CTA.
 - [ ] Urgent garnishment path: NY, individual, wage garnishment selected, unsecured debt, Critical result, call-now/immediate callback CTA.
 - [ ] Urgent harassment path: NY, individual, workplace calls/threats selected, harassment branch, collector behavior review recommendation.
+- [ ] Normal collection Snapshot path: NY, individual, unsecured credit-card debt in collections, Quick Summary before contact, Full Snapshot preview, email delivery.
+- [ ] Unsupported Snapshot path: NY, individual, student loan only, `Not a Fit for Credo Legal Intake`, useful fit explanation, no aggressive legal CTAs.
 - [ ] Normal options lawsuit escalation: options path, full debt inventory, lawsuit stage, High/Critical urgency while remaining visibly different from urgent triage path.
 - [ ] WhatsApp path: NY, individual, unsecured medical debt, WhatsApp delivery, WhatsApp consent.
