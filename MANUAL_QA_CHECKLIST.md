@@ -156,12 +156,47 @@ Use this checklist on a staging page before production launch. Record browser, d
 - [ ] Main CTA says `Send Me My Full Debt Defense Snapshot` or a channel-specific Full Snapshot variant.
 - [ ] Copy avoids legal advice and outcome guarantees.
 - [ ] Disclaimer says the tool does not create an attorney-client relationship.
-- [ ] Critical urgent result shows `Call Credo Legal Now` before lower-priority CTAs.
+- [ ] Critical urgent result shows `Call Now for a Free Explanation` before lower-priority CTAs.
 - [ ] Critical urgent result shows `Request an Immediate Callback`.
-- [ ] Critical urgent result shows `Text Me My Full Snapshot` and `Email Me My Full Snapshot`.
+- [ ] Critical urgent result still provides a clear `Send Me My Full Snapshot` route to delivery capture.
 - [ ] High urgent result shows `Request a Callback Today`.
-- [ ] Moderate/Low urgent result prioritizes sending the Full Snapshot, scheduling a call, message-first, or email-first follow-up.
+- [ ] Moderate/Low result still shows call, send Snapshot, and callback/schedule options without panic language.
 - [ ] Business or otherwise `Not a Fit` urgent result does not show aggressive urgent legal CTAs.
+
+## Conversion Report Screen
+
+- [ ] Report screen visually follows the branded mockup while keeping dynamic widget data.
+- [ ] Sticky top report bar shows `Debt Defense Snapshot ID: CL-DF-12345`.
+- [ ] Sticky top report bar shows `Call Now - Free Explanation`.
+- [ ] Sticky top report bar shows `Send My Full Snapshot`.
+- [ ] Top report call button uses the configured `tel:` link.
+- [ ] Top report send button routes to `Where should we send your Full Debt Defense Snapshot?`.
+- [ ] Hero shows `Your Quick Debt Defense Summary`.
+- [ ] Hero headline changes by urgency level or `Not a Fit` status.
+- [ ] Hero copy uses cautious language and does not promise outcomes.
+- [ ] Hero priority card shows `Debt Defense Priority Level`.
+- [ ] Snapshot Overview shows dynamic Situation Type.
+- [ ] Snapshot Overview shows dynamic Readiness Score.
+- [ ] Snapshot Overview shows dynamic Status.
+- [ ] Top Findings card shows dynamic findings from the report generator.
+- [ ] Risk Flag card prioritizes lawsuit/court papers when lawsuit answers exist.
+- [ ] Risk Flag card prioritizes garnishment or wage/bank impact when garnishment answers exist.
+- [ ] Risk Flag card shows collector contact pressure when harassment/workplace/threat answers exist.
+- [ ] Unsupported-only path shows a fit warning instead of urgent legal pressure.
+- [ ] Full Snapshot preview says `Your Full Debt Defense Snapshot is ready`.
+- [ ] Full Snapshot preview includes priority level, risk flags, document checklist, collector behavior review, case readiness breakdown, and suggested next steps.
+- [ ] Full Snapshot preview `Send Me My Full Debt Defense Snapshot` routes to delivery capture.
+- [ ] Full Snapshot preview call button uses the configured `tel:` link.
+- [ ] What to Prepare card shows 4-6 dynamic checklist items.
+- [ ] Lawsuit path What to Prepare includes summons or complaint, court name, date served, and response deadline or hearing date.
+- [ ] Garnishment path What to Prepare includes garnishment notice, employer notice, bank notice, and court order if available.
+- [ ] Desktop shows sticky side CTA card beside report content.
+- [ ] Mobile turns the side CTA into a normal stacked card.
+- [ ] Bottom CTA repeats call and send Snapshot actions.
+- [ ] Calling or submitting disclaimer appears near the side CTA.
+- [ ] Mobile report screen has no horizontal scroll.
+- [ ] Mobile report buttons are full-width or easy to tap.
+- [ ] Report CTA clicks do not submit the lead before contact/follow-up capture.
 
 ## Full Debt Defense Snapshot Report
 
@@ -240,6 +275,10 @@ Use this checklist on a staging page before production launch. Record browser, d
 - [ ] Submitted row includes `full_snapshot_requested`.
 - [ ] Submitted row includes `full_snapshot_delivery_channel`.
 - [ ] Submitted row includes `actual_delivery_enabled`.
+- [ ] Submitted row includes `report_screen_viewed`.
+- [ ] Submitted row includes `call_cta_clicked`.
+- [ ] Submitted row includes `callback_cta_clicked`.
+- [ ] Submitted row includes `send_snapshot_cta_clicked`.
 - [ ] Submitted row includes `entry_path`.
 - [ ] Submitted row includes `urgent_branch`.
 - [ ] Submitted row includes `urgent_events`.

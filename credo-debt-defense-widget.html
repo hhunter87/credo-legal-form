@@ -147,7 +147,7 @@
     background: var(--cl-soft-red);
     font-size: 12px;
     font-weight: 800;
-    letter-spacing: 0.04em;
+    letter-spacing: 0;
     text-transform: uppercase;
     margin-bottom: 12px;
   }
@@ -444,11 +444,166 @@
     letter-spacing: 0;
   }
 
-  #credo-debt-defense-widget .cl-result-layout {
+  #credo-debt-defense-widget .cl-report-screen {
+    background: var(--cl-soft);
+    border: 1px solid var(--cl-line);
+    border-radius: var(--cl-radius);
+    margin: -2px;
+    padding: 18px;
+  }
+
+  #credo-debt-defense-widget .cl-report-shell {
     display: grid;
-    grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
     gap: 18px;
+  }
+
+  #credo-debt-defense-widget .cl-report-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(248, 250, 252, 0.97);
+    border: 1px solid var(--cl-line);
+    border-radius: var(--cl-radius);
+    padding: 12px;
+    box-shadow: 0 10px 30px rgba(16, 24, 40, 0.08);
+  }
+
+  #credo-debt-defense-widget .cl-report-topbar-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+  }
+
+  #credo-debt-defense-widget .cl-report-topbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+  }
+
+  #credo-debt-defense-widget .cl-report-logo {
+    height: 30px;
+    width: auto;
+    max-width: 136px;
+    object-fit: contain;
+    flex: 0 0 auto;
+  }
+
+  #credo-debt-defense-widget .cl-report-topbar-title {
+    color: var(--cl-navy);
+    font-size: 14px;
+    font-weight: 850;
+    line-height: 1.3;
+  }
+
+  #credo-debt-defense-widget .cl-report-topbar-actions,
+  #credo-debt-defense-widget .cl-report-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+  }
+
+  #credo-debt-defense-widget .cl-btn-call {
+    background: var(--cl-green);
+    color: #fff;
+    box-shadow: 0 12px 22px rgba(6, 118, 71, 0.22);
+  }
+
+  #credo-debt-defense-widget .cl-btn-call:hover {
+    filter: brightness(0.96);
+  }
+
+  #credo-debt-defense-widget .cl-report-hero {
+    background: linear-gradient(135deg, var(--cl-navy) 0%, #1f2937 65%, var(--cl-red-dark) 100%);
+    border-radius: var(--cl-radius);
+    padding: 28px;
+    color: #fff;
+    box-shadow: 0 18px 45px rgba(16, 24, 40, 0.18);
+  }
+
+  #credo-debt-defense-widget .cl-report-kicker-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 999px;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.13);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 850;
+    margin-bottom: 16px;
+  }
+
+  #credo-debt-defense-widget .cl-report-hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(240px, 0.7fr);
+    gap: 22px;
     align-items: stretch;
+  }
+
+  #credo-debt-defense-widget .cl-report-hero h2 {
+    color: #fff;
+    font-size: 40px;
+    line-height: 1.08;
+    letter-spacing: 0;
+    margin: 0 0 12px;
+  }
+
+  #credo-debt-defense-widget .cl-report-hero p {
+    color: rgba(255, 255, 255, 0.84);
+    font-size: 17px;
+    line-height: 1.58;
+    margin: 0;
+  }
+
+  #credo-debt-defense-widget .cl-report-hero .cl-disclaimer {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.18);
+    color: rgba(255, 255, 255, 0.78);
+  }
+
+  #credo-debt-defense-widget .cl-hero-priority-card {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--cl-radius);
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.11);
+  }
+
+  #credo-debt-defense-widget .cl-priority-label {
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 12px;
+    font-weight: 850;
+    letter-spacing: 0;
+    text-transform: uppercase;
+    margin-bottom: 9px;
+  }
+
+  #credo-debt-defense-widget .cl-priority-value {
+    font-size: 36px;
+    font-weight: 950;
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+
+  #credo-debt-defense-widget .cl-priority-note {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  #credo-debt-defense-widget .cl-report-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 18px;
+    align-items: start;
+  }
+
+  #credo-debt-defense-widget .cl-report-main {
+    display: grid;
+    gap: 18px;
   }
 
   #credo-debt-defense-widget .cl-report-grid {
@@ -458,13 +613,31 @@
     margin: 18px 0;
   }
 
+  #credo-debt-defense-widget .cl-overview-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+
   #credo-debt-defense-widget .cl-score-card,
   #credo-debt-defense-widget .cl-summary-card,
-  #credo-debt-defense-widget .cl-report-card {
+  #credo-debt-defense-widget .cl-report-card,
+  #credo-debt-defense-widget .cl-report-section-card,
+  #credo-debt-defense-widget .cl-side-cta-card {
     border: 1px solid var(--cl-line);
     border-radius: var(--cl-radius);
-    padding: 18px;
+    padding: 20px;
     background: #fff;
+    box-shadow: 0 12px 28px rgba(16, 24, 40, 0.06);
+  }
+
+  #credo-debt-defense-widget .cl-report-section-card h3,
+  #credo-debt-defense-widget .cl-side-cta-card h3 {
+    color: var(--cl-navy);
+    font-size: 22px;
+    line-height: 1.2;
+    letter-spacing: 0;
+    margin-bottom: 14px;
   }
 
   #credo-debt-defense-widget .cl-summary-card {
@@ -484,7 +657,7 @@
     color: var(--cl-muted);
     font-size: 12px;
     font-weight: 800;
-    letter-spacing: 0.04em;
+    letter-spacing: 0;
     text-transform: uppercase;
     margin-bottom: 8px;
   }
@@ -500,34 +673,128 @@
     display: grid;
     gap: 10px;
     margin: 12px 0 0;
+    padding: 0;
+    list-style: none;
   }
 
-  #credo-debt-defense-widget .cl-finding-item {
+  #credo-debt-defense-widget .cl-finding-item,
+  #credo-debt-defense-widget .cl-finding-list li {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 10px;
+    align-items: start;
     border: 1px solid var(--cl-line);
     border-radius: var(--cl-radius);
     padding: 12px;
-    background: #fff;
+    background: var(--cl-soft);
     line-height: 1.45;
   }
 
-  #credo-debt-defense-widget .cl-locked-card {
-    border: 1px solid #b2ddff;
-    border-radius: var(--cl-radius);
-    padding: 18px;
-    background: var(--cl-blue-bg);
-    margin-top: 18px;
+  #credo-debt-defense-widget .cl-check {
+    width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    background: var(--cl-green-bg);
+    color: var(--cl-green);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 950;
+    line-height: 1;
+  }
+
+  #credo-debt-defense-widget .cl-risk-card {
+    border-left: 4px solid var(--cl-red);
+    background: #fff;
+  }
+
+  #credo-debt-defense-widget .cl-risk-badge {
+    display: inline-flex;
+    border-radius: 999px;
+    padding: 5px 9px;
+    background: var(--cl-yellow-bg);
+    color: var(--cl-orange);
+    font-size: 12px;
+    font-weight: 850;
+    margin-bottom: 10px;
+  }
+
+  #credo-debt-defense-widget .cl-snapshot-preview-card {
+    border-style: dashed;
+    border-color: #f2a7ae;
+    background: #fff8f9;
   }
 
   #credo-debt-defense-widget .cl-preview-list {
     display: grid;
-    gap: 8px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
     margin: 14px 0;
+    padding: 0;
+    list-style: none;
     color: var(--cl-ink);
     line-height: 1.45;
   }
 
-  #credo-debt-defense-widget .cl-preview-list span {
+  #credo-debt-defense-widget .cl-preview-list span,
+  #credo-debt-defense-widget .cl-preview-list li {
     display: block;
+    border: 1px solid var(--cl-line);
+    border-radius: var(--cl-radius);
+    background: #fff;
+    color: var(--cl-navy);
+    font-size: 14px;
+    font-weight: 750;
+    padding: 10px;
+  }
+
+  #credo-debt-defense-widget .cl-side-cta-card {
+    position: sticky;
+    top: 14px;
+  }
+
+  #credo-debt-defense-widget .cl-side-cta-card p {
+    color: var(--cl-muted);
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+
+  #credo-debt-defense-widget .cl-side-actions {
+    display: grid;
+    gap: 10px;
+  }
+
+  #credo-debt-defense-widget .cl-phone {
+    display: inline-flex;
+    color: var(--cl-navy);
+    font-size: 22px;
+    font-weight: 950;
+    text-decoration: none;
+    margin: 2px 0 4px;
+  }
+
+  #credo-debt-defense-widget .cl-free-note {
+    color: var(--cl-green);
+    font-size: 13px;
+    font-weight: 850;
+    margin-bottom: 14px;
+  }
+
+  #credo-debt-defense-widget .cl-bottom-cta {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 18px;
+    align-items: center;
+    border: 1px solid #f2a7ae;
+    border-radius: var(--cl-radius);
+    background: var(--cl-soft-red);
+    padding: 22px;
+  }
+
+  #credo-debt-defense-widget .cl-bottom-cta h3 {
+    color: var(--cl-navy);
+    font-size: 24px;
+    margin-bottom: 6px;
   }
 
   #credo-debt-defense-widget .cl-meter {
@@ -635,9 +902,56 @@
     #credo-debt-defense-widget .cl-grid-2,
     #credo-debt-defense-widget .cl-grid-3,
     #credo-debt-defense-widget .cl-form-grid,
-    #credo-debt-defense-widget .cl-result-layout,
-    #credo-debt-defense-widget .cl-report-grid {
+    #credo-debt-defense-widget .cl-report-grid,
+    #credo-debt-defense-widget .cl-overview-grid,
+    #credo-debt-defense-widget .cl-report-hero-grid,
+    #credo-debt-defense-widget .cl-report-layout,
+    #credo-debt-defense-widget .cl-bottom-cta,
+    #credo-debt-defense-widget .cl-preview-list {
       grid-template-columns: 1fr;
+    }
+
+    #credo-debt-defense-widget .cl-report-screen {
+      margin: 0;
+      padding: 12px;
+    }
+
+    #credo-debt-defense-widget .cl-report-topbar {
+      position: static;
+    }
+
+    #credo-debt-defense-widget .cl-report-topbar-inner,
+    #credo-debt-defense-widget .cl-report-topbar-actions,
+    #credo-debt-defense-widget .cl-report-actions {
+      display: grid;
+      grid-template-columns: 1fr;
+      align-items: stretch;
+    }
+
+    #credo-debt-defense-widget .cl-report-topbar-brand {
+      justify-content: space-between;
+    }
+
+    #credo-debt-defense-widget .cl-report-logo {
+      height: 28px;
+      max-width: 128px;
+    }
+
+    #credo-debt-defense-widget .cl-report-hero {
+      padding: 22px;
+    }
+
+    #credo-debt-defense-widget .cl-report-hero h2 {
+      font-size: 30px;
+      line-height: 1.12;
+    }
+
+    #credo-debt-defense-widget .cl-side-cta-card {
+      position: static;
+    }
+
+    #credo-debt-defense-widget .cl-bottom-cta .cl-report-actions {
+      width: 100%;
     }
 
     #credo-debt-defense-widget .cl-header {
@@ -681,7 +995,7 @@
   "use strict";
 
   var CONFIG = {
-    widgetVersion: "1.3.0",
+    widgetVersion: "1.4.0",
 
     // Replace this with the deployed Google Apps Script Web App URL.
     googleScriptUrl: "PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE",
@@ -997,6 +1311,10 @@
       whatsappConsent: false,
       followUpPreference: "",
       fullSnapshotRequested: false,
+      reportScreenViewed: false,
+      callCtaClicked: false,
+      callbackCtaClicked: false,
+      sendSnapshotCtaClicked: false,
       report: null
     };
   }
@@ -1179,8 +1497,32 @@
       if (followUp) data.followUpPreference = followUp;
       if (delivery) setDataField("deliveryChannel", delivery);
       data.fullSnapshotRequested = true;
+      data.callbackCtaClicked = !!followUp || data.callbackCtaClicked;
+      data.sendSnapshotCtaClicked = !!delivery || data.sendSnapshotCtaClicked;
       goToStep(STEP.DELIVERY);
       trackEvent("urgent_cta", { follow_up_preference: followUp || "", delivery_channel: delivery || "" });
+      render();
+      return;
+    }
+
+    if (action === "report-call") {
+      trackReportCtaClick("call_now");
+      return;
+    }
+
+    if (action === "send-snapshot") {
+      scrollToDeliveryCapture();
+      render();
+      return;
+    }
+
+    if (action === "request-callback") {
+      var requestedFollowUp = el.getAttribute("data-follow-up") || callbackFollowUpKey();
+      data.followUpPreference = requestedFollowUp;
+      setDataField("deliveryChannel", "call");
+      data.fullSnapshotRequested = true;
+      trackReportCtaClick("request_callback");
+      goToStep(STEP.DELIVERY);
       render();
       return;
     }
@@ -1973,37 +2315,403 @@
     var calc = getCalculations();
     var report = generateDebtDefenseReport(calc);
     data.report = report;
+    if (!data.reportScreenViewed) {
+      data.reportScreenViewed = true;
+      trackEvent("report_screen_viewed", {
+        snapshot_id: report.snapshotId,
+        entry_path: data.entryPath,
+        urgency_level: calc.urgencyLevel,
+        qualification_status: calc.qualificationStatus
+      });
+    }
+    return renderReportScreen(report, calc);
+  }
+
+  function renderReportScreen(report, calc) {
     return [
-      '<div class="cl-eyebrow">Debt Defense Snapshot</div>',
-      '<h2 class="cl-title">Your Quick Debt Defense Summary</h2>',
-      '<p class="cl-subtitle">Based on your answers, this quick summary highlights where your debt situation may stand, what red flags may be present, and what information may be useful to prepare. It is not legal advice and does not create an attorney-client relationship.</p>',
-      '<div class="cl-report-grid">',
-        reportMiniCard("Snapshot ID", h(report.snapshotId) + '<br><span class="cl-help">' + h(report.generatedAtDisplay) + '</span>'),
-        reportMiniCard("Priority Level", '<span class="cl-pill ' + h(calc.urgencyClass) + '">' + h(report.quickSummary.priorityLevel) + '</span>'),
-        reportMiniCard("Situation Type", h(report.situationType)),
-        reportMiniCard("Case Readiness", h(report.quickSummary.readinessScore) + '/100<br><span class="cl-help">Status: ' + h(report.quickSummary.readinessLevel) + '</span>'),
-      '</div>',
-      '<div class="cl-result-layout">',
-        '<div class="cl-summary-card">',
-          '<div class="cl-pill-row">',
-            '<span class="cl-pill ' + h(calc.qualificationClass) + '">' + h(calc.qualificationStatus) + '</span>',
-            '<span class="cl-pill">' + h(getEntryPathLabel(data.entryPath)) + '</span>',
+      '<section class="cl-report-screen" aria-label="Debt Defense Snapshot report">',
+        '<div class="cl-report-shell">',
+          renderReportTopbar(report),
+          renderReportHero(report, calc),
+          '<div class="cl-report-layout">',
+            '<main class="cl-report-main">',
+              renderSnapshotOverviewCards(report, calc),
+              renderTopFindingsCard(report),
+              renderPrimaryRiskFlagCard(report, calc),
+              renderFullSnapshotPreviewCard(report),
+              renderWhatToPrepareCard(report, calc),
+              renderBottomCta(calc),
+            '</main>',
+            renderReportSideCta(calc),
           '</div>',
-          '<h3 style="margin-top:18px;">Top 3 Findings</h3>',
-          '<div class="cl-finding-list">',
-            report.quickSummary.topFindings.map(function (item) { return '<div class="cl-finding-item">' + h(item) + '</div>'; }).join(""),
-          '</div>',
-          '<h4>Recommended next step</h4>',
-          '<p style="line-height:1.6;color:var(--cl-ink);">' + h(report.quickSummary.recommendedNextAction) + '</p>',
-          renderResultCtas(calc),
         '</div>',
-        '<div class="cl-grid">',
-          scoreCard("Debt Defense Priority Level", calc.urgencyScore, calc.urgencyLevel + " Priority", "This score prioritizes lawsuits, judgments, garnishment, deadlines, collector behavior, debt amount, and number of debts."),
-          scoreCard("Case Readiness Score", calc.readinessScore, calc.readinessLevel, "This score measures how ready your information is for an initial intake review."),
-        '</div>',
-      '</div>',
-      renderFullSnapshotPreview(report)
+      '</section>'
     ].join("");
+  }
+
+  function renderReportTopbar(report) {
+    return [
+      '<div class="cl-report-topbar">',
+        '<div class="cl-report-topbar-inner">',
+          '<div class="cl-report-topbar-brand">',
+            '<img class="cl-report-logo" src="' + h(CONFIG.logoUrl) + '" alt="Credo Legal" onerror="this.style.display=\'none\';">',
+            '<div class="cl-report-topbar-title">Debt Defense Snapshot ID: ' + h(report.snapshotId) + '</div>',
+          '</div>',
+          '<div class="cl-report-topbar-actions">',
+            renderCallLink("Call Now - Free Explanation", "cl-btn cl-btn-call"),
+            renderSendSnapshotButton("Send My Full Snapshot", "cl-btn cl-btn-primary"),
+          '</div>',
+        '</div>',
+      '</div>'
+    ].join("");
+  }
+
+  function renderReportHero(report, calc) {
+    var copy = getReportHeroCopy(calc);
+    return [
+      '<section class="cl-report-hero">',
+        '<div class="cl-report-kicker-pill">Your Quick Debt Defense Summary</div>',
+        '<div class="cl-report-hero-grid">',
+          '<div>',
+            '<h2>' + h(copy.headline) + '</h2>',
+            '<p>' + h(copy.body) + '</p>',
+            renderHeroCtas(calc),
+            '<div class="cl-disclaimer">This is for general intake and informational purposes only. It is not legal advice and does not create an attorney-client relationship.</div>',
+          '</div>',
+          '<div class="cl-hero-priority-card">',
+            '<div class="cl-priority-label">Debt Defense Priority Level</div>',
+            '<div class="cl-priority-value">' + h(report.quickSummary.priorityLevel) + '</div>',
+            '<div class="cl-priority-note">' + h(getPriorityShortExplanation(calc)) + '</div>',
+          '</div>',
+        '</div>',
+      '</section>'
+    ].join("");
+  }
+
+  function renderHeroCtas(calc) {
+    var callbackLabel = getCallbackLabel(calc);
+    var callbackKey = callbackFollowUpKey(calc);
+    if (calc.qualificationStatus === "Not a Fit") {
+      return [
+        '<div class="cl-report-actions" style="margin-top:22px;">',
+          renderSendSnapshotButton("Send Me My Full Snapshot", "cl-btn cl-btn-primary"),
+          renderCallLink("Call Now for a Free Explanation", "cl-btn cl-btn-secondary"),
+          renderCallbackButton("Request a Callback", "cl-btn cl-btn-secondary", callbackKey),
+        '</div>'
+      ].join("");
+    }
+    if (calc.urgencyLevel === "Critical") {
+      return [
+        '<div class="cl-report-actions" style="margin-top:22px;">',
+          renderCallLink("Call Now for a Free Explanation", "cl-btn cl-btn-call"),
+          renderCallbackButton("Request an Immediate Callback", "cl-btn cl-btn-primary", "call_now"),
+          renderSendSnapshotButton("Send Me My Full Snapshot", "cl-btn cl-btn-secondary"),
+        '</div>'
+      ].join("");
+    }
+    if (calc.urgencyLevel === "High") {
+      return [
+        '<div class="cl-report-actions" style="margin-top:22px;">',
+          renderCallLink("Call Now for a Free Explanation", "cl-btn cl-btn-call"),
+          renderCallbackButton("Request a Callback Today", "cl-btn cl-btn-primary", "call_today"),
+          renderSendSnapshotButton("Send Me My Full Snapshot", "cl-btn cl-btn-secondary"),
+        '</div>'
+      ].join("");
+    }
+    return [
+      '<div class="cl-report-actions" style="margin-top:22px;">',
+        renderCallLink("Call Now for a Free Explanation", "cl-btn cl-btn-call"),
+        renderSendSnapshotButton("Send Me My Full Snapshot", "cl-btn cl-btn-primary"),
+        renderCallbackButton(callbackLabel, "cl-btn cl-btn-secondary", callbackKey),
+      '</div>'
+    ].join("");
+  }
+
+  function renderSnapshotOverviewCards(report, calc) {
+    return [
+      '<section class="cl-report-section-card">',
+        '<h3>Snapshot Overview</h3>',
+        '<div class="cl-overview-grid">',
+          reportMiniCard("Situation Type", h(report.situationType)),
+          reportMiniCard("Readiness Score", h(calc.readinessScore) + '/100'),
+          reportMiniCard("Status", h(calc.readinessLevel)),
+        '</div>',
+      '</section>'
+    ].join("");
+  }
+
+  function renderTopFindingsCard(report) {
+    return [
+      '<section class="cl-report-section-card">',
+        '<h3>Top Findings</h3>',
+        '<ul class="cl-finding-list">',
+          report.quickSummary.topFindings.map(function (item) { return renderFindingRow(item, "&#10003;"); }).join(""),
+        '</ul>',
+      '</section>'
+    ].join("");
+  }
+
+  function renderPrimaryRiskFlagCard(report, calc) {
+    var risk = getPrimaryRiskFlag(report, calc);
+    return [
+      '<section class="cl-report-section-card cl-risk-card">',
+        '<span class="cl-risk-badge">' + h(risk.badge) + '</span>',
+        '<h3>' + h(risk.title) + '</h3>',
+        '<p class="cl-help" style="font-size:15px;color:var(--cl-ink);">' + h(risk.explanation) + '</p>',
+      '</section>'
+    ].join("");
+  }
+
+  function renderFullSnapshotPreviewCard(report) {
+    var items = ["Priority level", "Risk flags", "Document checklist", "Collector behavior review", "Case readiness breakdown", "Suggested next steps"];
+    return [
+      '<section class="cl-report-section-card cl-snapshot-preview-card">',
+        '<h3>Your Full Debt Defense Snapshot is ready</h3>',
+        '<p class="cl-help" style="font-size:15px;">Get a more complete summary with your risk flags, document checklist, collector behavior review, case readiness breakdown, and suggested next steps.</p>',
+        '<ul class="cl-preview-list">',
+          items.map(function (item) { return '<li>&#10003; ' + h(item) + '</li>'; }).join(""),
+        '</ul>',
+        '<div class="cl-inline-note"><strong>Snapshot ID:</strong> ' + h(report.snapshotId) + '. Choose where we should send your Full Debt Defense Snapshot next.</div>',
+        '<div class="cl-report-actions" style="margin-top:16px;">',
+          renderSendSnapshotButton("Send Me My Full Debt Defense Snapshot", "cl-btn cl-btn-primary"),
+          renderCallLink("Call Now and Review It for Free", "cl-btn cl-btn-call"),
+        '</div>',
+      '</section>'
+    ].join("");
+  }
+
+  function renderWhatToPrepareCard(report, calc) {
+    var items = getQuickPrepareItems(report, calc);
+    var fullListNote = report.fullSnapshot.documentChecklist.length > items.length ? '<p class="cl-help" style="margin-top:12px;">Your Full Snapshot includes the complete checklist.</p>' : '';
+    return [
+      '<section class="cl-report-section-card">',
+        '<h3>What to Prepare</h3>',
+        '<ul class="cl-finding-list">',
+          items.map(function (item) { return renderFindingRow(item, "&#9633;"); }).join(""),
+        '</ul>',
+        fullListNote,
+      '</section>'
+    ].join("");
+  }
+
+  function renderReportSideCta(calc) {
+    var callbackLabel = getCallbackLabel(calc);
+    return [
+      '<aside class="cl-side-cta-card">',
+        '<h3>Want us to explain this?</h3>',
+        '<p>Your Snapshot is ready. Credo Legal can walk you through your results as a free intake service.</p>',
+        '<a class="cl-phone" href="' + h(getCallNowHref()) + '" data-action="report-call">' + h(CONFIG.phoneDisplay) + '</a>',
+        '<div class="cl-free-note">Free Snapshot explanation call</div>',
+        '<div class="cl-side-actions">',
+          renderCallLink("Call Now", "cl-btn cl-btn-call"),
+          renderCallbackButton(callbackLabel, "cl-btn cl-btn-primary", callbackFollowUpKey(calc)),
+          renderSendSnapshotButton("Send Me the Full Snapshot", "cl-btn cl-btn-secondary"),
+        '</div>',
+        '<div class="cl-disclaimer">Calling or submitting information does not create an attorney-client relationship.</div>',
+      '</aside>'
+    ].join("");
+  }
+
+  function renderBottomCta(calc) {
+    return [
+      '<section class="cl-bottom-cta">',
+        '<div>',
+          '<h3>Want help understanding your Snapshot?</h3>',
+          '<p class="cl-help" style="font-size:15px;">Call Credo Legal now and the team can walk you through what your results may mean and what information may be useful to review.</p>',
+        '</div>',
+        '<div class="cl-report-actions">',
+          renderCallLink("Call Now", "cl-btn cl-btn-call"),
+          renderSendSnapshotButton("Send Snapshot", "cl-btn cl-btn-primary"),
+        '</div>',
+      '</section>'
+    ].join("");
+  }
+
+  function renderCallLink(label, className) {
+    return '<a class="' + h(className) + '" href="' + h(getCallNowHref()) + '" data-action="report-call">' + h(label) + '</a>';
+  }
+
+  function renderSendSnapshotButton(label, className) {
+    return '<button type="button" class="' + h(className) + '" data-action="send-snapshot">' + h(label) + '</button>';
+  }
+
+  function renderCallbackButton(label, className, followUpKey) {
+    return '<button type="button" class="' + h(className) + '" data-action="request-callback" data-follow-up="' + h(followUpKey) + '">' + h(label) + '</button>';
+  }
+
+  function renderFindingRow(text, iconHtml) {
+    var parts = splitFindingText(text);
+    return [
+      '<li>',
+        '<div class="cl-check">' + iconHtml + '</div>',
+        '<div>',
+          '<strong>' + h(parts.lead) + '</strong>',
+          parts.body ? '<br><span>' + h(parts.body) + '</span>' : '',
+        '</div>',
+      '</li>'
+    ].join("");
+  }
+
+  function splitFindingText(text) {
+    var value = String(text || "");
+    var splitAt = value.indexOf(". ");
+    if (splitAt === -1) return { lead: value, body: "" };
+    return {
+      lead: value.slice(0, splitAt + 1),
+      body: value.slice(splitAt + 2)
+    };
+  }
+
+  function getReportHeroCopy(calc) {
+    if (calc.qualificationStatus === "Not a Fit") {
+      return {
+        headline: "Your Snapshot is ready, but this may not fit Credo Legal's current intake criteria.",
+        body: "Based on your answers, this may involve an excluded state, business debt, unsupported debt type, or secured debt. This Snapshot can still help organize information that may be useful when seeking the right type of help."
+      };
+    }
+    if (calc.urgencyLevel === "Critical") {
+      return {
+        headline: "Your debt situation may be time-sensitive.",
+        body: "Based on your answers, your situation may involve a lawsuit, judgment, garnishment, deadline, or wage/bank impact. Credo Legal can walk you through this Snapshot and explain what information may matter."
+      };
+    }
+    if (calc.urgencyLevel === "High") {
+      return {
+        headline: "Your debt situation may need a prompt review.",
+        body: "Based on your answers, your situation appears to involve active collection pressure or documents that may need review. Credo Legal can walk you through this Snapshot and explain what information may matter."
+      };
+    }
+    if (calc.urgencyLevel === "Moderate") {
+      return {
+        headline: "Your debt situation appears to be active.",
+        body: "Based on your answers, your debt appears to be active or moving through collections. Your Snapshot can help organize the information before speaking with the team."
+      };
+    }
+    return {
+      headline: "Your debt situation appears to be in an earlier stage.",
+      body: "Based on your answers, your debt situation may still be in an earlier stage. Your Snapshot can help you organize debt details before the situation escalates."
+    };
+  }
+
+  function getPriorityShortExplanation(calc) {
+    if (calc.qualificationStatus === "Not a Fit") return "This may not fit Credo Legal's current intake criteria, but the Snapshot can still organize the information you provided.";
+    if (calc.urgencyLevel === "Critical") return "Your answers suggest a lawsuit, judgment, garnishment, deadline, or wage/bank issue may require prompt review.";
+    if (calc.urgencyLevel === "High") return "Your answers suggest collectors may be escalating contact or important documents may need review.";
+    if (calc.urgencyLevel === "Moderate") return "Your debt appears active or moving through collections based on the information selected.";
+    return "Your answers suggest an earlier-stage concern that may still benefit from organized documents and next-step review.";
+  }
+
+  function getPrimaryRiskFlag(report, calc) {
+    if (calc.qualificationStatus === "Not a Fit") {
+      return {
+        badge: "Fit Warning",
+        title: "Not a Fit for Credo Legal Intake",
+        explanation: "Based on your answers, this may not fit the type of debt matters Credo Legal currently reviews. This Snapshot can still help organize the information you may need when seeking the right type of help."
+      };
+    }
+    if (calc.hasLawsuit) {
+      return {
+        badge: "Court Paper Warning",
+        title: "Lawsuit or Court Papers",
+        explanation: "You indicated that a lawsuit, summons, or court papers may be involved. Court papers should not be ignored. A response deadline may apply, depending on the documents and court."
+      };
+    }
+    if (calc.hasGarnishment) {
+      return {
+        badge: "Garnishment Warning",
+        title: "Garnishment or Wage/Bank Impact",
+        explanation: "You indicated that wages or bank funds may already be affected. This may be an active collection enforcement issue and may require prompt review."
+      };
+    }
+    if (calc.hasDefaultJudgment) {
+      return {
+        badge: "Potential Risk Flag",
+        title: "Default Judgment Mentioned",
+        explanation: "A judgment may give collectors stronger collection tools depending on the court order and state law. The judgment document and any collection notices may need review."
+      };
+    }
+    if (calc.hasHarassment) {
+      return {
+        badge: "Collector Contact Pressure",
+        title: "Collector Contact Pressure",
+        explanation: "You indicated that collectors may be calling repeatedly, contacting your workplace, contacting other people, or using pressure tactics. Certain abusive, deceptive, or unfair collection practices may be restricted. The details may matter."
+      };
+    }
+    if (report.situationType === "Document Review Recommended") {
+      return {
+        badge: "Document Review Recommended",
+        title: "Documents May Need Review",
+        explanation: "You indicated that documents may exist but the situation may be hard to classify. Letters, notices, summons, judgments, or garnishment papers may change the assessment."
+      };
+    }
+    var validationFlag = findRiskFlag(report, "Validation Notice Window");
+    if (validationFlag) {
+      return {
+        badge: "Potential Risk Flag",
+        title: validationFlag.title,
+        explanation: validationFlag.explanation
+      };
+    }
+    var firstFlag = (report.fullSnapshot.riskFlags || [])[0];
+    return {
+      badge: firstFlag && firstFlag.severity !== "Low" ? "Potential Risk Flag" : "No Major Risk Flag",
+      title: firstFlag ? firstFlag.title : "No major red flags were identified from your answers",
+      explanation: firstFlag ? firstFlag.explanation : "No major red flags were identified from your answers, but your documents and exact facts may change the assessment."
+    };
+  }
+
+  function findRiskFlag(report, title) {
+    return (report.fullSnapshot.riskFlags || []).find(function (flag) { return flag.title === title; });
+  }
+
+  function getQuickPrepareItems(report, calc) {
+    var items = [];
+    if (calc.hasLawsuit) items = items.concat(["Summons or complaint", "Court name", "Date served", "Response deadline or hearing date"]);
+    if (calc.hasGarnishment || calc.hasWagesOrBankAffected) items = items.concat(["Garnishment notice", "Employer notice", "Bank notice", "Court order, if available"]);
+    if (calc.hasDefaultJudgment) items = items.concat(["Judgment document", "Court name", "Date judgment was entered", "Any notice from court or collector"]);
+    if (calc.hasHarassment) items = items.concat(["Call logs, voicemails, texts, or letters", "Call dates, phone numbers, and names of anyone contacted"]);
+    items = items.concat([
+      "Collector or creditor name",
+      "Approximate balance and account details",
+      "Any collection letters, notices, texts, voicemails, or emails",
+      "Call dates, phone numbers, and names of anyone contacted"
+    ]);
+    return unique(items).slice(0, 6);
+  }
+
+  function getCallNowHref() {
+    return CONFIG.phoneHref;
+  }
+
+  function scrollToDeliveryCapture() {
+    data.fullSnapshotRequested = true;
+    trackReportCtaClick("send_snapshot");
+    goToStep(STEP.DELIVERY);
+  }
+
+  function trackReportCtaClick(type) {
+    if (type === "call_now") data.callCtaClicked = true;
+    if (type === "request_callback") data.callbackCtaClicked = true;
+    if (type === "send_snapshot") data.sendSnapshotCtaClicked = true;
+    trackEvent("report_cta_click", {
+      cta_type: type,
+      entry_path: data.entryPath,
+      snapshot_id: data.snapshotId
+    });
+  }
+
+  function callbackFollowUpKey(calc) {
+    var c = calc || getCalculations();
+    if (c.urgencyLevel === "Critical") return "call_now";
+    if (c.urgencyLevel === "High") return "call_today";
+    return "schedule_call";
+  }
+
+  function getCallbackLabel(calc) {
+    if (calc.urgencyLevel === "Critical") return "Request an Immediate Callback";
+    if (calc.urgencyLevel === "High") return "Request a Callback Today";
+    if (calc.urgencyLevel === "Low") return "Schedule a Call";
+    return "Request a Callback";
   }
 
   function reportMiniCard(kicker, valueHtml) {
@@ -2011,57 +2719,6 @@
       '<div class="cl-report-card">',
         '<div class="cl-report-kicker">' + h(kicker) + '</div>',
         '<div class="cl-report-value">' + valueHtml + '</div>',
-      '</div>'
-    ].join("");
-  }
-
-  function renderFullSnapshotPreview(report) {
-    var items = ["Priority level", "Risk flags", "Document checklist", "Collector behavior review", "Case readiness breakdown", "Suggested next steps", "Snapshot ID"];
-    return [
-      '<div class="cl-locked-card">',
-        '<h3>Your full Debt Defense Snapshot is ready.</h3>',
-        '<p class="cl-help">Get a more complete summary with your risk flags, document checklist, collector behavior review, case readiness breakdown, and suggested next steps.</p>',
-        '<div class="cl-preview-list">',
-          items.map(function (item) { return '<span>&#10003; ' + h(item) + '</span>'; }).join(""),
-        '</div>',
-        '<div class="cl-inline-note"><strong>Snapshot ID:</strong> ' + h(report.snapshotId) + '. Choose where we should send your Full Debt Defense Snapshot next.</div>',
-      '</div>'
-    ].join("");
-  }
-
-  function renderResultCtas(calc) {
-    if (data.entryPath !== FLOW_ENTRY.URGENT || calc.qualificationStatus === "Not a Fit") {
-      return '<div class="cl-small-row" style="margin-top:16px;"><button type="button" class="cl-btn cl-btn-primary" data-action="next">Send Me My Full Debt Defense Snapshot</button><button type="button" class="cl-btn cl-btn-secondary" data-action="choose-urgent-cta" data-follow-up="schedule_call">Schedule a Call</button><button type="button" class="cl-btn cl-btn-secondary" data-action="choose-urgent-cta" data-follow-up="message_first">Message Me First</button><button type="button" class="cl-btn cl-btn-secondary" data-action="choose-urgent-cta" data-follow-up="email_first" data-delivery="email">Email Me First</button></div>';
-    }
-
-    if (calc.urgencyLevel === "Critical") {
-      return [
-        '<div class="cl-small-row" style="margin-top:16px;">',
-          '<a class="cl-btn cl-btn-primary" href="' + h(CONFIG.phoneHref) + '">Call Credo Legal Now</a>',
-          '<button type="button" class="cl-btn cl-btn-secondary" data-action="choose-urgent-cta" data-follow-up="call_now" data-delivery="call">Request an Immediate Callback</button>',
-          '<button type="button" class="cl-btn cl-btn-secondary" data-action="choose-urgent-cta" data-delivery="sms">Text Me My Full Snapshot</button>',
-          '<button type="button" class="cl-btn cl-btn-secondary" data-action="choose-urgent-cta" data-delivery="email">Email Me My Full Snapshot</button>',
-        '</div>'
-      ].join("");
-    }
-
-    if (calc.urgencyLevel === "High") {
-      return [
-        '<div class="cl-small-row" style="margin-top:16px;">',
-          '<button type="button" class="cl-btn cl-btn-primary" data-action="choose-urgent-cta" data-follow-up="call_today" data-delivery="call">Request a Callback Today</button>',
-          '<button type="button" class="cl-btn cl-btn-secondary" data-action="choose-urgent-cta" data-delivery="sms">Text Me My Full Snapshot</button>',
-          '<button type="button" class="cl-btn cl-btn-secondary" data-action="choose-urgent-cta" data-delivery="email">Email Me My Full Snapshot</button>',
-          '<button type="button" class="cl-btn cl-btn-secondary" data-action="choose-urgent-cta" data-follow-up="message_first">Message Me First</button>',
-        '</div>'
-      ].join("");
-    }
-
-    return [
-      '<div class="cl-small-row" style="margin-top:16px;">',
-        '<button type="button" class="cl-btn cl-btn-primary" data-action="next">Send Me My Full Snapshot</button>',
-        '<button type="button" class="cl-btn cl-btn-secondary" data-action="choose-urgent-cta" data-follow-up="schedule_call">Schedule a Call</button>',
-        '<button type="button" class="cl-btn cl-btn-secondary" data-action="choose-urgent-cta" data-follow-up="message_first">Message Me First</button>',
-        '<button type="button" class="cl-btn cl-btn-secondary" data-action="choose-urgent-cta" data-follow-up="email_first" data-delivery="email">Email Me First</button>',
       '</div>'
     ].join("");
   }
@@ -2966,6 +3623,10 @@
       full_snapshot_requested: data.fullSnapshotRequested || !!data.deliveryChannel ? "Yes" : "No",
       full_snapshot_delivery_channel: data.deliveryChannel === "sms" ? "sms/text" : data.deliveryChannel,
       actual_delivery_enabled: CONFIG.actualDeliveryEnabled ? "Yes" : "No",
+      report_screen_viewed: data.reportScreenViewed ? "Yes" : "No",
+      call_cta_clicked: data.callCtaClicked ? "Yes" : "No",
+      callback_cta_clicked: data.callbackCtaClicked ? "Yes" : "No",
+      send_snapshot_cta_clicked: data.sendSnapshotCtaClicked ? "Yes" : "No",
       first_name: data.firstName.trim(),
       last_name: data.lastName.trim(),
       phone: isValidPhone(data.phone) ? phoneForPayload(data.phone) : "",

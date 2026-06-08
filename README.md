@@ -57,6 +57,25 @@ The Quick Summary includes:
 - Recommended next step.
 - Preview of the full Snapshot sections.
 
+The report screen now uses a conversion-focused layout based on the branded report-screen mockup. It is still fully dynamic and uses the generated Snapshot data, scores, situation type, risk flags, and document checklist. The screen includes:
+
+- Sticky report CTA bar with Snapshot ID, `Call Now - Free Explanation`, and `Send My Full Snapshot`.
+- Hero summary with dynamic urgency/situation copy.
+- Snapshot overview cards for Situation Type, Readiness Score, and Status.
+- Top Findings and highest-priority Risk Flag cards.
+- Full Snapshot preview card.
+- What to Prepare document checklist card.
+- Desktop sticky side CTA card.
+- Bottom CTA section.
+
+Report CTAs:
+
+- `Call Now for a Free Explanation` uses `CONFIG.phoneHref`.
+- `Request a Callback` routes to contact capture with phone/call delivery selected.
+- `Send Me My Full Snapshot` routes to the Full Snapshot delivery capture screen.
+
+The call copy is intentionally framed as a free explanation or free intake service, not free legal advice or a guaranteed legal outcome.
+
 The Full Debt Defense Snapshot includes:
 
 - Snapshot Header.
@@ -189,7 +208,7 @@ Open `credo-debt-defense-widget.html` and edit the `CONFIG` block:
 
 ```js
 var CONFIG = {
-  widgetVersion: "1.3.0",
+  widgetVersion: "1.4.0",
   googleScriptUrl: "PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE",
   phoneDisplay: "(718) 865-8350",
   phoneHref: "tel:+17188658350",
@@ -298,6 +317,10 @@ If `googleScriptUrl` is still the placeholder, submissions run in demo mode and 
    - `risk_flags_json`
    - `document_checklist_json`
    - `suggested_next_steps_json`
+   - `report_screen_viewed`
+   - `call_cta_clicked`
+   - `callback_cta_clicked`
+   - `send_snapshot_cta_clicked`
    - `delivery_channel`
    - `follow_up_preference`
    - `debts_json`
@@ -316,6 +339,10 @@ Use `MANUAL_QA_CHECKLIST.md` for the full checklist. Minimum launch smoke tests:
 - Unsupported-only debt routes to `Not a Fit`.
 - Supported debt with unsure security routes to `Needs Review`.
 - Lawsuit, judgment, and garnishment branches appear in the Quick Summary and Full Snapshot.
+- Report screen shows the sticky CTA bar, hero, overview cards, top findings, primary risk flag, Full Snapshot preview, What to Prepare card, side CTA, and bottom CTA.
+- Call CTA uses the configured `tel:` link and does not submit the form.
+- Send Snapshot CTA routes to `Where should we send your Full Debt Defense Snapshot?`.
+- Request Callback CTA routes to contact capture with phone/call delivery selected.
 - Upload placeholder appears for letters/notices, court papers, garnishment documents, or unsure documents.
 - Quick Summary appears before name/contact capture.
 - Full Snapshot preview appears before contact capture.
@@ -339,3 +366,4 @@ The widget uses cautious language and does not promise outcomes, provide legal a
 - Whether auto-repossession wording accurately reflects Credo Legal intake criteria.
 - Whether a real secure upload provider should replace the simulated upload placeholder.
 - Whether Google Sheets remains sufficient for lead handling, access control, retention, and privacy requirements.
+- Whether the `Call Now for a Free Explanation` and `free intake service` phrasing is approved for production use.
