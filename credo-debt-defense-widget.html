@@ -622,7 +622,7 @@
   "use strict";
 
   var CONFIG = {
-    widgetVersion: "1.1.0",
+    widgetVersion: "1.2.0",
 
     // Replace this with the deployed Google Apps Script Web App URL.
     googleScriptUrl: "PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE",
@@ -649,6 +649,68 @@
       eventPrefix: "credo_debt_widget_"
     }
   };
+
+  var FLOW_ENTRY = {
+    URGENT: "urgent_debt_help",
+    OPTIONS: "debt_defense_options_check"
+  };
+
+  var STEP = {
+    ENTRY: "entry",
+    URGENT_ELIGIBILITY: "urgentEligibility",
+    URGENT_TRIAGE: "urgentTriage",
+    URGENT_BRANCH_DETAILS: "urgentBranchDetails",
+    URGENT_COMPACT_QUALIFICATION: "urgentCompactQualification",
+    URGENT_RESULTS: "urgentResults",
+    OPTIONS_ELIGIBILITY: "optionsEligibility",
+    OPTIONS_DEBT_COUNT: "optionsDebtCount",
+    OPTIONS_DEBT_DETAILS: "optionsDebtDetails",
+    OPTIONS_URGENCY_DETAILS: "optionsUrgencyDetails",
+    OPTIONS_RESULTS: "optionsResults",
+    DELIVERY: "delivery",
+    FOLLOW_UP: "followUp",
+    THANK_YOU: "thankYou"
+  };
+
+  var FLOW_STEPS = {};
+  FLOW_STEPS[FLOW_ENTRY.URGENT] = [
+    STEP.ENTRY,
+    STEP.URGENT_ELIGIBILITY,
+    STEP.URGENT_TRIAGE,
+    STEP.URGENT_BRANCH_DETAILS,
+    STEP.URGENT_COMPACT_QUALIFICATION,
+    STEP.URGENT_RESULTS,
+    STEP.DELIVERY,
+    STEP.FOLLOW_UP,
+    STEP.THANK_YOU
+  ];
+  FLOW_STEPS[FLOW_ENTRY.OPTIONS] = [
+    STEP.ENTRY,
+    STEP.OPTIONS_ELIGIBILITY,
+    STEP.OPTIONS_DEBT_COUNT,
+    STEP.OPTIONS_DEBT_DETAILS,
+    STEP.OPTIONS_URGENCY_DETAILS,
+    STEP.OPTIONS_RESULTS,
+    STEP.DELIVERY,
+    STEP.FOLLOW_UP,
+    STEP.THANK_YOU
+  ];
+
+  var STEP_LABELS = {};
+  STEP_LABELS[STEP.ENTRY] = "Start";
+  STEP_LABELS[STEP.URGENT_ELIGIBILITY] = "Basic Check";
+  STEP_LABELS[STEP.URGENT_TRIAGE] = "Urgent Triage";
+  STEP_LABELS[STEP.URGENT_BRANCH_DETAILS] = "Urgent Details";
+  STEP_LABELS[STEP.URGENT_COMPACT_QUALIFICATION] = "Debt Snapshot";
+  STEP_LABELS[STEP.URGENT_RESULTS] = "Urgent Results";
+  STEP_LABELS[STEP.OPTIONS_ELIGIBILITY] = "Eligibility";
+  STEP_LABELS[STEP.OPTIONS_DEBT_COUNT] = "Debt Count";
+  STEP_LABELS[STEP.OPTIONS_DEBT_DETAILS] = "Debt Details";
+  STEP_LABELS[STEP.OPTIONS_URGENCY_DETAILS] = "Priority";
+  STEP_LABELS[STEP.OPTIONS_RESULTS] = "Results";
+  STEP_LABELS[STEP.DELIVERY] = "Delivery";
+  STEP_LABELS[STEP.FOLLOW_UP] = "Follow-up";
+  STEP_LABELS[STEP.THANK_YOU] = "Submitted";
 
   var STATES = [
     ["AL", "Alabama"], ["AK", "Alaska"], ["AZ", "Arizona"], ["AR", "Arkansas"],
@@ -750,6 +812,35 @@
     { key: "none_of_these", label: "None of these", score: 0 }
   ];
 
+  var URGENT_TRIAGE_OPTIONS = [
+    { key: "lawsuit_papers", label: "I was served with a lawsuit, summons, or court papers", score: 45 },
+    { key: "deadline_court_hearing", label: "I have a deadline, court date, or hearing date", score: 35 },
+    { key: "default_judgment", label: "There is a default judgment against me", score: 50 },
+    { key: "wage_garnishment", label: "My wages are being garnished", score: 60 },
+    { key: "bank_wages_affected", label: "My bank account or wages are already being affected", score: 65 },
+    { key: "collector_repeated_calls", label: "Collectors are calling me repeatedly", score: 25 },
+    { key: "collector_workplace_calls", label: "Collectors are calling my workplace", score: 25 },
+    { key: "collector_third_party_contact", label: "Collectors are contacting my family, friends, or other people", score: 25 },
+    { key: "collector_threats_abusive", label: "Collectors are threatening me or using abusive language", score: 25 },
+    { key: "letters_not_sure", label: "I received letters or notices and I am not sure what they mean", score: 20 },
+    { key: "not_sure_documents", label: "I am not sure, but I have documents", score: 20 },
+    { key: "none_not_sure", label: "None of these / I am not sure", score: 10 }
+  ];
+
+  var PAPERS_RECEIVED_OPTIONS = [
+    { key: "today", label: "Today" },
+    { key: "1_3_days", label: "1-3 days ago" },
+    { key: "4_7_days", label: "4-7 days ago" },
+    { key: "more_than_7", label: "More than 7 days ago" },
+    { key: "not_sure", label: "I am not sure" }
+  ];
+
+  var YES_NO_NOT_SURE_OPTIONS = [
+    { key: "yes", label: "Yes" },
+    { key: "no", label: "No" },
+    { key: "not_sure", label: "Not sure" }
+  ];
+
   var DELIVERY_OPTIONS = [
     { key: "sms", title: "Text me the results", text: "Send my Debt Defense Options summary by SMS." },
     { key: "email", title: "Email me the results", text: "Send the summary to my email inbox." },
@@ -811,6 +902,18 @@
       zip: "",
       personType: "",
       authorizedForOther: "",
+      urgentEvents: [],
+      urgentBranch: "",
+      papersReceivedWhen: "",
+      papersDeadlineStatus: "",
+      papersAvailable: "",
+      judgmentCopyAvailable: "",
+      judgmentEnteredWhen: "",
+      judgmentWagesBankAffected: "",
+      wagesBeingGarnished: "",
+      bankAccountAffected: "",
+      enforcementPaperwork: "",
+      urgentDocumentsAvailable: "",
       debtCountChoice: "",
       debts: [makeDebt()],
       deadlineStatus: "",
@@ -892,6 +995,10 @@
       if (value !== "sms") data.smsConsent = false;
       if (value !== "whatsapp") data.whatsappConsent = false;
     }
+
+    if (field === "urgentDocumentsAvailable" && value === "yes") {
+      data.uploadIntent = true;
+    }
   }
 
   function setDebtField(index, field, value) {
@@ -906,7 +1013,15 @@
   function shouldRerenderAfterInput(el, field, isDebtField) {
     if (el.tagName !== "SELECT") return false;
     if (isDebtField) return ["type", "stage", "documentStatus", "security", "autoRepossessionStatus"].includes(field);
-    return ["state", "deadlineStatus", "validationNotice"].includes(field);
+    return [
+      "state",
+      "deadlineStatus",
+      "validationNotice",
+      "papersAvailable",
+      "urgentDocumentsAvailable",
+      "deliveryChannel",
+      "followUpPreference"
+    ].includes(field);
   }
 
   function resetWidget() {
@@ -932,6 +1047,33 @@
     });
   }
 
+  function currentFlowSteps() {
+    return FLOW_STEPS[data.entryPath] || [STEP.ENTRY];
+  }
+
+  function currentStepId() {
+    var steps = currentFlowSteps();
+    return steps[ui.step] || STEP.ENTRY;
+  }
+
+  function goToStep(stepId) {
+    var steps = currentFlowSteps();
+    var index = steps.indexOf(stepId);
+    ui.step = index >= 0 ? index : 0;
+  }
+
+  function startFlow(entryPath) {
+    var leadId = data.leadId;
+    data = makeInitialData();
+    data.leadId = leadId;
+    data.entryPath = entryPath;
+    ui.step = 1;
+    ui.error = "";
+    ui.fieldErrors = {};
+    trackEvent("start_flow", { entry_path: entryPath });
+    render();
+  }
+
   function handleClick(event) {
     var el = event.target.closest("[data-action]");
     if (!el || !root.contains(el)) return;
@@ -945,6 +1087,11 @@
       return;
     }
 
+    if (action === "start-flow") {
+      startFlow(el.getAttribute("data-entry-path"));
+      return;
+    }
+
     if (action === "toggle-array") {
       toggleArrayValue(el.getAttribute("data-field"), el.getAttribute("data-value"));
       render();
@@ -953,6 +1100,17 @@
 
     if (action === "set-debt-count") {
       setDebtCount(el.getAttribute("data-value"));
+      render();
+      return;
+    }
+
+    if (action === "choose-urgent-cta") {
+      var followUp = el.getAttribute("data-follow-up");
+      var delivery = el.getAttribute("data-delivery");
+      if (followUp) data.followUpPreference = followUp;
+      if (delivery) setDataField("deliveryChannel", delivery);
+      goToStep(STEP.DELIVERY);
+      trackEvent("urgent_cta", { follow_up_preference: followUp || "", delivery_channel: delivery || "" });
       render();
       return;
     }
@@ -995,20 +1153,20 @@
 
     if (action === "prev") {
       ui.step = Math.max(0, ui.step - 1);
-      trackEvent("previous_step", { step: ui.step });
+      trackEvent("previous_step", { step: ui.step, step_id: currentStepId(), entry_path: data.entryPath });
       render();
       return;
     }
 
     if (action === "next") {
-      var validationError = validateStep(ui.step);
+      var validationError = validateStep(currentStepId());
       if (validationError) {
         ui.error = validationError;
         render();
         return;
       }
-      ui.step = Math.min(8, ui.step + 1);
-      trackEvent("next_step", { step: ui.step });
+      ui.step = Math.min(currentFlowSteps().length - 1, ui.step + 1);
+      trackEvent("next_step", { step: ui.step, step_id: currentStepId(), entry_path: data.entryPath });
       render();
       return;
     }
@@ -1048,6 +1206,20 @@
 
   function toggleArrayValue(field, value) {
     if (!Array.isArray(data[field])) data[field] = [];
+    if (field === "urgentEvents") {
+      if (value === "none_not_sure") {
+        data[field] = data[field].includes(value) ? [] : [value];
+      } else {
+        data[field] = data[field].filter(function (x) { return x !== "none_not_sure"; });
+        if (data[field].includes(value)) {
+          data[field] = data[field].filter(function (x) { return x !== value; });
+        } else {
+          data[field].push(value);
+        }
+      }
+      data.urgentBranch = getUrgentBranch();
+      return;
+    }
     if (value === "none_of_these" || value === "letters_only") {
       data[field] = data[field].includes(value) ? [] : [value];
       return;
@@ -1062,27 +1234,73 @@
 
   function setDebtCount(choice) {
     data.debtCountChoice = choice;
-    var target = choice === "6_plus" ? 6 : Number(choice);
+    var target = Number(choice);
+    if (choice === "3_5") target = 3;
+    if (choice === "6_plus") target = 6;
+    if (choice === "not_sure" || choice === "one" || choice === "multiple") target = 1;
     target = Math.min(target, CONFIG.maxDebtCards);
     while (data.debts.length < target) data.debts.push(makeDebt());
     while (data.debts.length > target) data.debts.pop();
   }
 
-  function validateStep(step) {
+  function validateStep(stepId) {
     ui.fieldErrors = {};
 
-    if (step === 0 && !data.entryPath) return markInvalid("Choose one option to start.", ["entryPath"]);
+    if (stepId === STEP.ENTRY && !data.entryPath) return markInvalid("Choose one option to start.", ["entryPath"]);
 
-    if (step === 1) {
+    if (stepId === STEP.URGENT_ELIGIBILITY || stepId === STEP.OPTIONS_ELIGIBILITY) {
       if (!data.state) return markInvalid("Select your state.", ["state"]);
       if (data.zip.trim() && !/^\d{5}$/.test(data.zip.trim())) return markInvalid("Enter a 5-digit ZIP code or leave ZIP blank.", ["zip"]);
       if (!data.personType) return markInvalid("Tell us who this debt help is for.", ["personType"]);
       if (data.personType === "family" && !data.authorizedForOther) return markInvalid("Please confirm whether you are authorized to speak for the other person.", ["authorizedForOther"]);
     }
 
-    if (step === 2 && !data.debtCountChoice) return markInvalid("Select how many debts you want to include.", ["debtCountChoice"]);
+    if (stepId === STEP.URGENT_TRIAGE && !data.urgentEvents.length) {
+      return markInvalid("Select what is happening right now, or choose 'None of these / I am not sure.'", ["urgentEvents"]);
+    }
 
-    if (step === 3) {
+    if (stepId === STEP.URGENT_BRANCH_DETAILS) {
+      var branch = getUrgentBranch();
+      if (branch === "lawsuit_or_summons") {
+        if (!data.papersReceivedWhen) return markInvalid("Select when you received the papers.", ["papersReceivedWhen"]);
+        if (!data.papersDeadlineStatus) return markInvalid("Select whether the papers mention a deadline, court date, or hearing date.", ["papersDeadlineStatus"]);
+        if (!data.papersAvailable) return markInvalid("Select whether you have the papers available.", ["papersAvailable"]);
+      }
+      if (branch === "default_judgment") {
+        if (!data.judgmentCopyAvailable) return markInvalid("Select whether you have a copy of the judgment.", ["judgmentCopyAvailable"]);
+        if (!data.judgmentEnteredWhen) return markInvalid("Select whether you know when the judgment was entered.", ["judgmentEnteredWhen"]);
+        if (!data.judgmentWagesBankAffected) return markInvalid("Select whether wages or bank accounts are already being affected.", ["judgmentWagesBankAffected"]);
+      }
+      if (branch === "garnishment_or_bank_wage_impact") {
+        if (!data.wagesBeingGarnished) return markInvalid("Select whether wages are being garnished.", ["wagesBeingGarnished"]);
+        if (!data.bankAccountAffected) return markInvalid("Select whether a bank account is affected.", ["bankAccountAffected"]);
+        if (!data.enforcementPaperwork) return markInvalid("Select whether you have paperwork from a court, employer, bank, or collector.", ["enforcementPaperwork"]);
+      }
+      if (branch === "collector_harassment" && !data.behaviors.length) {
+        return markInvalid("Select collector behavior details, or choose letters/notices only.", ["behaviors"]);
+      }
+      if (branch === "not_sure_document_review" && !data.urgentDocumentsAvailable) {
+        return markInvalid("Select whether you have documents available.", ["urgentDocumentsAvailable"]);
+      }
+      if (data.userDescription.trim().length > CONFIG.maxDescriptionChars) {
+        return markInvalid("Keep the description under " + CONFIG.maxDescriptionChars + " characters.", ["userDescription"]);
+      }
+    }
+
+    if (stepId === STEP.URGENT_COMPACT_QUALIFICATION) {
+      var urgentDebt = data.debts[0] || makeDebt();
+      if (!urgentDebt.type) return markInvalid("Select the debt type involved.", [debtFieldKey(0, "type")]);
+      if (!urgentDebt.security) return markInvalid("Select whether the debt is unsecured.", [debtFieldKey(0, "security")]);
+      if (!urgentDebt.amount) return markInvalid("Select the approximate amount.", [debtFieldKey(0, "amount")]);
+      if (!data.debtCountChoice) return markInvalid("Select whether this is one debt, multiple debts, or not sure.", ["debtCountChoice"]);
+      if (urgentDebt.type === "auto_repossession" && !urgentDebt.autoRepossessionStatus) {
+        return markInvalid("For Auto Repossession, tell us whether the vehicle was already repossessed.", [debtFieldKey(0, "autoRepossessionStatus")]);
+      }
+    }
+
+    if (stepId === STEP.OPTIONS_DEBT_COUNT && !data.debtCountChoice) return markInvalid("Select how many debts you want to include.", ["debtCountChoice"]);
+
+    if (stepId === STEP.OPTIONS_DEBT_DETAILS) {
       for (var i = 0; i < data.debts.length; i += 1) {
         var debt = data.debts[i];
         if (!debt.type) return markInvalid("Select a debt type for Debt #" + (i + 1) + ".", [debtFieldKey(i, "type")]);
@@ -1096,7 +1314,7 @@
       }
     }
 
-    if (step === 4) {
+    if (stepId === STEP.OPTIONS_URGENCY_DETAILS) {
       if (!data.deadlineStatus) return markInvalid("Select whether any papers mention a deadline, court date, hearing, judgment, or garnishment.", ["deadlineStatus"]);
       if (!data.validationNotice) return markInvalid("Select whether you received a debt validation notice.", ["validationNotice"]);
       if (!data.behaviors.length) return markInvalid("Select what collectors are doing, or choose 'None of these.'", ["behaviors"]);
@@ -1105,7 +1323,7 @@
       }
     }
 
-    if (step === 6) {
+    if (stepId === STEP.DELIVERY) {
       if (!data.deliveryChannel) return markInvalid("Choose where we should send your results.", ["deliveryChannel"]);
       if (!data.firstName.trim()) return markInvalid("Enter your first name.", ["firstName"]);
       if (!data.lastName.trim()) return markInvalid("Enter your last name.", ["lastName"]);
@@ -1117,7 +1335,7 @@
       if (data.deliveryChannel === "whatsapp" && !data.whatsappConsent) return markInvalid("Please accept the WhatsApp consent to receive results by WhatsApp.", ["whatsappConsent"]);
     }
 
-    if (step === 7) {
+    if (stepId === STEP.FOLLOW_UP) {
       if (!data.followUpPreference) return markInvalid("Choose a follow-up preference.", ["followUpPreference"]);
       if (followUpNeedsPhone(data.followUpPreference) && !isValidPhone(data.phone)) {
         return markInvalid("Enter a valid phone number so the team can follow up by phone or message.", ["phone"]);
@@ -1153,21 +1371,25 @@
 
   function render() {
     var content = "";
-    if (ui.step === 0) content = renderEntry();
-    if (ui.step === 1) content = renderEligibility();
-    if (ui.step === 2) content = renderDebtCount();
-    if (ui.step === 3) content = renderDebtDetails();
-    if (ui.step === 4) content = renderUrgencyDetails();
-    if (ui.step === 5) content = renderResults();
-    if (ui.step === 6) content = renderDelivery();
-    if (ui.step === 7) content = renderFollowUp();
-    if (ui.step === 8) content = renderThankYou();
+    var stepId = currentStepId();
+    if (stepId === STEP.ENTRY) content = renderEntry();
+    if (stepId === STEP.URGENT_ELIGIBILITY || stepId === STEP.OPTIONS_ELIGIBILITY) content = renderEligibility();
+    if (stepId === STEP.URGENT_TRIAGE) content = renderUrgentTriage();
+    if (stepId === STEP.URGENT_BRANCH_DETAILS) content = renderUrgentBranchDetails();
+    if (stepId === STEP.URGENT_COMPACT_QUALIFICATION) content = renderUrgentCompactQualification();
+    if (stepId === STEP.OPTIONS_DEBT_COUNT) content = renderDebtCount();
+    if (stepId === STEP.OPTIONS_DEBT_DETAILS) content = renderDebtDetails();
+    if (stepId === STEP.OPTIONS_URGENCY_DETAILS) content = renderUrgencyDetails();
+    if (stepId === STEP.URGENT_RESULTS || stepId === STEP.OPTIONS_RESULTS) content = renderResults();
+    if (stepId === STEP.DELIVERY) content = renderDelivery();
+    if (stepId === STEP.FOLLOW_UP) content = renderFollowUp();
+    if (stepId === STEP.THANK_YOU) content = renderThankYou();
 
     root.innerHTML = [
       '<div class="clw">',
         '<div class="cl-card">',
           renderHeader(),
-          ui.step < 8 ? renderProgress() : '',
+          stepId !== STEP.THANK_YOU ? renderProgress() : '',
           '<div class="cl-body">',
             content,
             ui.error ? '<div class="cl-error" role="alert" aria-live="polite">' + h(ui.error) + '</div>' : '',
@@ -1193,14 +1415,15 @@
   }
 
   function renderProgress() {
-    var labels = ["Start", "Eligibility", "Debt Count", "Debt Details", "Priority", "Results", "Delivery", "Follow-up"];
-    var visibleStep = Math.min(ui.step + 1, labels.length);
-    var pct = Math.max(8, Math.round((visibleStep / labels.length) * 100));
+    var steps = currentFlowSteps().filter(function (stepId) { return stepId !== STEP.THANK_YOU; });
+    var stepId = currentStepId();
+    var visibleStep = Math.min(Math.max(steps.indexOf(stepId) + 1, 1), steps.length);
+    var pct = Math.max(8, Math.round((visibleStep / steps.length) * 100));
     return [
       '<div class="cl-progress-wrap">',
         '<div class="cl-progress-meta">',
-          '<span>' + h(labels[ui.step] || "") + '</span>',
-          '<span>Step ' + visibleStep + ' of ' + labels.length + '</span>',
+          '<span>' + h(STEP_LABELS[stepId] || "") + '</span>',
+          '<span>Step ' + visibleStep + ' of ' + steps.length + '</span>',
         '</div>',
         '<div class="cl-progress"><span style="width:' + pct + '%"></span></div>',
       '</div>'
@@ -1213,8 +1436,8 @@
       '<h2 class="cl-title">Find out where your debt situation stands.</h2>',
       '<p class="cl-subtitle">Answer a few questions about your debt, collector activity, documents, and deadlines. You&#39;ll get a priority level, a readiness score, and a recommended next step before you choose how to be contacted.</p>',
       '<div class="cl-grid cl-grid-2">',
-        optionCard("entryPath", "urgent", "I Need Urgent Debt Help", "I was sued, my wages are being garnished, or collectors are escalating."),
-        optionCard("entryPath", "options_check", "Check My Debt Defense Options", "I want to understand where I stand and what options may be available."),
+        entryCard(FLOW_ENTRY.URGENT, "I Need Urgent Debt Help", "I was sued, my wages are being garnished, or collectors are escalating."),
+        entryCard(FLOW_ENTRY.OPTIONS, "Check My Debt Defense Options", "I want to understand where I stand and what options may be available."),
       '</div>',
       fieldError("entryPath"),
       '<div class="cl-inline-note"><strong>What you&#39;ll receive:</strong> a Debt Defense Priority Level, a Case Readiness Score, and a checklist of what to prepare next.</div>'
@@ -1224,10 +1447,11 @@
   function renderEligibility() {
     var excluded = data.state && CONFIG.excludedStates.includes(data.state);
     var business = data.personType === "business";
+    var urgent = data.entryPath === FLOW_ENTRY.URGENT;
     return [
-      '<div class="cl-eyebrow">Eligibility</div>',
-      '<h2 class="cl-title">First, let&#39;s confirm the basics.</h2>',
-      '<p class="cl-subtitle">Credo Legal reviews consumer debt issues for individuals. This step helps route your request correctly.</p>',
+      '<div class="cl-eyebrow">' + (urgent ? 'Urgent basic check' : 'Eligibility') + '</div>',
+      '<h2 class="cl-title">' + (urgent ? 'First, let&#39;s make sure this is routed correctly.' : 'First, let&#39;s confirm the basics.') + '</h2>',
+      '<p class="cl-subtitle">' + (urgent ? 'For urgent debt help, we only need the basics before triage: state and whether the issue is for an individual.' : 'Credo Legal reviews consumer debt issues for individuals. This step helps route your request correctly.') + '</p>',
       '<div class="cl-form-grid">',
         '<div class="cl-field">',
           '<label for="cl-state">Your state</label>',
@@ -1249,7 +1473,7 @@
       '<div style="margin-top:18px;" class="cl-label">Who is this debt help for?</div>',
       '<div class="cl-grid cl-grid-3" style="margin-top:10px;">',
         optionCard("personType", "self", "Myself", "I'm looking for help with my own debt."),
-        optionCard("personType", "family", "A family member", "I'm helping another individual with their debt."),
+        optionCard("personType", "family", "A family member / another individual", "I'm helping another individual with their debt."),
         optionCard("personType", "business", "A business", "This debt belongs to a business entity."),
       '</div>',
       fieldError("personType"),
@@ -1271,9 +1495,176 @@
     ].join("");
   }
 
+  function renderUrgentTriage() {
+    return [
+      '<div class="cl-eyebrow">Urgent triage</div>',
+      '<h2 class="cl-title">What is happening right now?</h2>',
+      '<p class="cl-subtitle">Choose the urgent events that best match your situation. This short path is designed to identify lawsuits, deadlines, judgments, garnishment, wage or bank impact, collector pressure, and document-review needs quickly.</p>',
+      '<div class="cl-grid cl-grid-2">',
+        URGENT_TRIAGE_OPTIONS.map(function (opt) {
+          return toggleCard("urgentEvents", opt.key, opt.label, urgentTriageDescription(opt.key));
+        }).join(""),
+      '</div>',
+      fieldError("urgentEvents")
+    ].join("");
+  }
+
+  function urgentTriageDescription(key) {
+    var map = {
+      lawsuit_papers: "Summons, complaint, court papers, or lawsuit notice.",
+      deadline_court_hearing: "A response date, hearing date, or other deadline may be listed.",
+      default_judgment: "A judgment may already have been entered.",
+      wage_garnishment: "Payroll deductions or garnishment notices may be involved.",
+      bank_wages_affected: "Bank funds or wages are already affected.",
+      collector_repeated_calls: "Frequent calls or repeated attempts.",
+      collector_workplace_calls: "Calls to your job or employer.",
+      collector_third_party_contact: "Contacting people besides you.",
+      collector_threats_abusive: "Threats, pressure, or abusive wording.",
+      letters_not_sure: "You have notices but are unsure what they mean.",
+      not_sure_documents: "You cannot classify the issue, but documents exist.",
+      none_not_sure: "Use this if none apply or you are unsure."
+    };
+    return map[key] || "";
+  }
+
+  function renderUrgentBranchDetails() {
+    var branch = getUrgentBranch();
+    data.urgentBranch = branch;
+    if (branch === "garnishment_or_bank_wage_impact") return renderGarnishmentBranch();
+    if (branch === "default_judgment") return renderDefaultJudgmentBranch();
+    if (branch === "lawsuit_or_summons") return renderLawsuitBranch();
+    if (branch === "collector_harassment") return renderHarassmentBranch();
+    return renderNotSureDocumentBranch();
+  }
+
+  function renderLawsuitBranch() {
+    return [
+      '<div class="cl-eyebrow">Court papers</div>',
+      '<h2 class="cl-title">Do not ignore court papers.</h2>',
+      '<p class="cl-subtitle">Debt lawsuits may involve strict response deadlines. Ignoring them may increase the risk of a default judgment or other collection action. Your exact options depend on your documents, the court, and your situation.</p>',
+      '<div class="cl-form-grid">',
+        selectField("papersReceivedWhen", "When did you receive the papers?", PAPERS_RECEIVED_OPTIONS, data.papersReceivedWhen, "Select timing"),
+        selectField("papersDeadlineStatus", "Do the papers mention a response deadline, court date, or hearing date?", DEADLINE_OPTIONS, data.papersDeadlineStatus, "Select deadline status"),
+        selectField("papersAvailable", "Do you have the papers available?", YES_NO_NOT_SURE_OPTIONS, data.papersAvailable, "Select one"),
+      '</div>',
+      ["yes", "not_sure"].includes(data.papersAvailable) ? renderUploadPrompt() : '',
+      renderUrgentDescriptionField()
+    ].join("");
+  }
+
+  function renderDefaultJudgmentBranch() {
+    return [
+      '<div class="cl-eyebrow">Judgment review</div>',
+      '<h2 class="cl-title">A default judgment may need quick review.</h2>',
+      '<p class="cl-subtitle">A judgment may give a collector stronger collection tools, depending on the court order and state law. Your next step is to understand what judgment was entered and whether any options may remain.</p>',
+      '<div class="cl-form-grid">',
+        selectField("judgmentCopyAvailable", "Do you have a copy of the judgment?", YES_NO_NOT_SURE_OPTIONS, data.judgmentCopyAvailable, "Select one"),
+        selectField("judgmentEnteredWhen", "Do you know when it was entered?", YES_NO_NOT_SURE_OPTIONS, data.judgmentEnteredWhen, "Select one"),
+        selectField("judgmentWagesBankAffected", "Are wages or bank accounts already being affected?", YES_NO_NOT_SURE_OPTIONS, data.judgmentWagesBankAffected, "Select one"),
+      '</div>',
+      data.judgmentCopyAvailable === "yes" ? renderUploadPrompt() : '',
+      renderUrgentDescriptionField()
+    ].join("");
+  }
+
+  function renderGarnishmentBranch() {
+    return [
+      '<div class="cl-eyebrow">Active collection issue</div>',
+      '<h2 class="cl-title">This appears to involve wage or bank impact.</h2>',
+      '<p class="cl-subtitle">If wages or bank funds are being affected, your situation should be reviewed quickly. The exact options depend on the paperwork, court orders, state law, and your situation.</p>',
+      '<div class="cl-form-grid">',
+        selectField("wagesBeingGarnished", "Are your wages being garnished?", YES_NO_NOT_SURE_OPTIONS, data.wagesBeingGarnished, "Select one"),
+        selectField("bankAccountAffected", "Is your bank account affected?", YES_NO_NOT_SURE_OPTIONS, data.bankAccountAffected, "Select one"),
+        selectField("enforcementPaperwork", "Do you have paperwork from a court, employer, bank, or collector?", YES_NO_NOT_SURE_OPTIONS, data.enforcementPaperwork, "Select one"),
+      '</div>',
+      data.enforcementPaperwork === "yes" ? renderUploadPrompt() : '',
+      renderUrgentDescriptionField()
+    ].join("");
+  }
+
+  function renderHarassmentBranch() {
+    return [
+      '<div class="cl-eyebrow">Collector behavior</div>',
+      '<h2 class="cl-title">Collector conduct may need review.</h2>',
+      '<p class="cl-subtitle">You may have rights when collectors contact you. Certain abusive, deceptive, or unfair collection practices may be restricted under federal law. Credo Legal can review the situation and help you understand what options may be available.</p>',
+      '<div class="cl-label">What collector behavior is happening? Select all that apply.</div>',
+      '<div class="cl-grid cl-grid-2" style="margin-top:10px;">',
+        BEHAVIOR_OPTIONS.map(function (opt) {
+          return toggleCard("behaviors", opt.key, opt.label, behaviorDescription(opt.key));
+        }).join(""),
+      '</div>',
+      fieldError("behaviors"),
+      renderUrgentDescriptionField()
+    ].join("");
+  }
+
+  function renderNotSureDocumentBranch() {
+    return [
+      '<div class="cl-eyebrow">Document review</div>',
+      '<h2 class="cl-title">Not sure how to explain it? No problem.</h2>',
+      '<p class="cl-subtitle">If you have a letter, summons, notice, judgment, or collection document, our team may be able to understand more by reviewing it. Upload is currently a placeholder in this MVP.</p>',
+      '<div class="cl-form-grid">',
+        selectField("urgentDocumentsAvailable", "Do you have documents available?", YES_NO_NOT_SURE_OPTIONS, data.urgentDocumentsAvailable, "Select one"),
+      '</div>',
+      ["yes", "not_sure"].includes(data.urgentDocumentsAvailable) ? renderUploadPrompt() : '',
+      renderUrgentDescriptionField()
+    ].join("");
+  }
+
+  function renderUrgentDescriptionField() {
+    return [
+      '<div class="cl-form-grid">',
+        '<div class="cl-field cl-field-full">',
+          '<label>Anything else the team should know? <span class="cl-help">optional</span></label>',
+          '<textarea data-field="userDescription" maxlength="' + h(CONFIG.maxDescriptionChars) + '" class="' + errorClass("userDescription").trim() + '"' + ariaInvalid("userDescription") + ' placeholder="Example: I received papers today and I am not sure about the deadline.">' + h(data.userDescription) + '</textarea>',
+          fieldError("userDescription"),
+        '</div>',
+      '</div>'
+    ].join("");
+  }
+
+  function renderUrgentCompactQualification() {
+    var debt = data.debts[0] || makeDebt();
+    var countOptions = [
+      { key: "one", title: "One", text: "This appears to involve one debt." },
+      { key: "multiple", title: "Multiple", text: "More than one debt may be involved." },
+      { key: "not_sure", title: "Not sure", text: "The number of debts is unclear." }
+    ];
+    return [
+      '<div class="cl-eyebrow">Debt snapshot</div>',
+      '<h2 class="cl-title">A few quick details about the debt involved.</h2>',
+      '<p class="cl-subtitle">This compact step keeps the urgent path short while still checking supported debt type, unsecured status, and approximate amount.</p>',
+      '<div class="cl-form-grid">',
+        '<div class="cl-field">',
+          '<label>What type of debt is involved?</label>',
+          renderDebtTypeSelect(0, debt.type),
+          fieldError(debtFieldKey(0, "type")),
+        '</div>',
+        '<div class="cl-field">',
+          '<label>Is this debt unsecured?</label>',
+          renderSelect("security", 0, SECURITY_OPTIONS, debt.security, "Select security"),
+          fieldError(debtFieldKey(0, "security")),
+        '</div>',
+        '<div class="cl-field">',
+          '<label>Approximate amount</label>',
+          renderSelect("amount", 0, AMOUNT_OPTIONS, debt.amount, "Select amount"),
+          fieldError(debtFieldKey(0, "amount")),
+        '</div>',
+        debt.type === "auto_repossession" ? renderAutoRepoQuestion(0, debt.autoRepossessionStatus) : '',
+      '</div>',
+      '<div style="margin-top:18px;" class="cl-label">Do you have one debt or multiple debts?</div>',
+      '<div class="cl-grid cl-grid-3" style="margin-top:10px;">',
+        countOptions.map(function (opt) {
+          return optionCard("debtCountChoice", opt.key, opt.title, opt.text);
+        }).join(""),
+      '</div>',
+      fieldError("debtCountChoice")
+    ].join("");
+  }
+
   function renderDebtCount() {
     var countOptions = [
-      ["1", "1 debt"], ["2", "2 debts"], ["3", "3 debts"], ["4", "4 debts"], ["5", "5 debts"], ["6_plus", "6+ debts"]
+      ["1", "1 debt"], ["2", "2 debts"], ["3_5", "3-5 debts"], ["6_plus", "6+ debts"], ["not_sure", "Not sure"]
     ];
     return [
       '<div class="cl-eyebrow">Debt inventory</div>',
@@ -1381,6 +1772,19 @@
     return function (item) {
       return '<option value="' + h(item.key) + '" ' + (selected === item.key ? 'selected' : '') + '>' + h(item.label) + '</option>';
     };
+  }
+
+  function selectField(field, label, options, selected, placeholder) {
+    return [
+      '<div class="cl-field">',
+        '<label>' + h(label) + '</label>',
+        '<select data-field="' + h(field) + '" class="' + errorClass(field).trim() + '"' + ariaInvalid(field) + '>',
+          '<option value="">' + h(placeholder) + '</option>',
+          options.map(optionHtml(selected)).join(""),
+        '</select>',
+        fieldError(field),
+      '</div>'
+    ].join("");
   }
 
   function renderAutoRepoQuestion(index, selected) {
@@ -1512,7 +1916,7 @@
           '<ul class="cl-list">',
             branch.checklist.map(function (item) { return '<li>' + h(item) + '</li>'; }).join(""),
           '</ul>',
-          calc.urgencyLevel === "Critical" || calc.urgencyLevel === "High" ? '<div class="cl-small-row" style="margin-top:16px;"><a class="cl-btn cl-btn-primary" href="' + h(CONFIG.phoneHref) + '">Call Credo Legal now</a><button type="button" class="cl-btn cl-btn-secondary" data-action="next">Send me my results</button></div>' : '',
+          renderResultCtas(calc),
         '</div>',
         '<div class="cl-grid">',
           scoreCard("Debt Defense Priority", calc.urgencyScore, calc.urgencyLevel + " Priority", "This score prioritizes lawsuits, judgments, garnishment, deadlines, collector behavior, debt amount, and number of debts."),
@@ -1520,6 +1924,42 @@
         '</div>',
       '</div>',
       readinessItems.length ? '<div class="cl-inline-note"><strong>To improve readiness, prepare:</strong><ul class="cl-list">' + readinessItems.map(function (item) { return '<li>' + h(item) + '</li>'; }).join("") + '</ul></div>' : '<div class="cl-inline-note"><strong>Good news:</strong> You provided the core information needed for an initial intake review.</div>'
+    ].join("");
+  }
+
+  function renderResultCtas(calc) {
+    if (data.entryPath !== FLOW_ENTRY.URGENT || calc.qualificationStatus === "Not a Fit") {
+      return '<div class="cl-small-row" style="margin-top:16px;"><button type="button" class="cl-btn cl-btn-primary" data-action="next">Send me my results</button><button type="button" class="cl-btn cl-btn-secondary" data-action="choose-urgent-cta" data-follow-up="schedule_call">Schedule a call</button><button type="button" class="cl-btn cl-btn-secondary" data-action="choose-urgent-cta" data-follow-up="message_first">Message me first</button></div>';
+    }
+
+    if (calc.urgencyLevel === "Critical") {
+      return [
+        '<div class="cl-small-row" style="margin-top:16px;">',
+          '<a class="cl-btn cl-btn-primary" href="' + h(CONFIG.phoneHref) + '">Call Credo Legal Now</a>',
+          '<button type="button" class="cl-btn cl-btn-secondary" data-action="choose-urgent-cta" data-follow-up="call_now" data-delivery="call">Request an Immediate Callback</button>',
+          '<button type="button" class="cl-btn cl-btn-secondary" data-action="next">Send Me My Results</button>',
+          '<button type="button" class="cl-btn cl-btn-ghost" data-action="next">Continue / provide more details</button>',
+        '</div>'
+      ].join("");
+    }
+
+    if (calc.urgencyLevel === "High") {
+      return [
+        '<div class="cl-small-row" style="margin-top:16px;">',
+          '<button type="button" class="cl-btn cl-btn-primary" data-action="choose-urgent-cta" data-follow-up="call_today" data-delivery="call">Request a Callback Today</button>',
+          '<button type="button" class="cl-btn cl-btn-secondary" data-action="next">Send Me My Results</button>',
+          '<button type="button" class="cl-btn cl-btn-secondary" data-action="choose-urgent-cta" data-follow-up="message_first">Message Me First</button>',
+          '<button type="button" class="cl-btn cl-btn-ghost" data-action="next">Continue / provide more details</button>',
+        '</div>'
+      ].join("");
+    }
+
+    return [
+      '<div class="cl-small-row" style="margin-top:16px;">',
+        '<button type="button" class="cl-btn cl-btn-primary" data-action="next">Send Me My Results</button>',
+        '<button type="button" class="cl-btn cl-btn-secondary" data-action="choose-urgent-cta" data-follow-up="schedule_call">Schedule a Call</button>',
+        '<button type="button" class="cl-btn cl-btn-secondary" data-action="choose-urgent-cta" data-follow-up="message_first">Message Me First</button>',
+      '</div>'
     ].join("");
   }
 
@@ -1601,10 +2041,19 @@
   }
 
   function renderActions() {
-    if (ui.step === 8) return "";
+    var stepId = currentStepId();
+    if (stepId === STEP.THANK_YOU || stepId === STEP.ENTRY) return "";
+    if (stepId === STEP.URGENT_RESULTS || stepId === STEP.OPTIONS_RESULTS) {
+      return [
+        '<div class="cl-actions">',
+          '<div><button type="button" class="cl-btn cl-btn-ghost" data-action="prev">Previous</button></div>',
+          '<div class="cl-actions-right"></div>',
+        '</div>'
+      ].join("");
+    }
     var nextLabel = "Continue";
-    if (ui.step === 5) nextLabel = "Send me my results";
-    if (ui.step === 7) nextLabel = ui.submitting ? "Submitting..." : "Submit request";
+    if (stepId === STEP.URGENT_RESULTS || stepId === STEP.OPTIONS_RESULTS) nextLabel = "Send me my results";
+    if (stepId === STEP.FOLLOW_UP) nextLabel = ui.submitting ? "Submitting..." : "Submit request";
 
     return [
       '<div class="cl-actions">',
@@ -1612,8 +2061,7 @@
           ui.step > 0 ? '<button type="button" class="cl-btn cl-btn-ghost" data-action="prev">Previous</button>' : '',
         '</div>',
         '<div class="cl-actions-right">',
-          ui.step === 0 ? '<a class="cl-btn cl-btn-secondary" href="' + h(CONFIG.phoneHref) + '">Or call now</a>' : '',
-          '<button type="button" class="cl-btn cl-btn-primary" data-action="' + (ui.step === 7 ? 'submit' : 'next') + '" ' + (ui.submitting ? 'disabled' : '') + '>' + h(nextLabel) + '</button>',
+          '<button type="button" class="cl-btn cl-btn-primary" data-action="' + (stepId === STEP.FOLLOW_UP ? 'submit' : 'next') + '" ' + (ui.submitting ? 'disabled' : '') + '>' + h(nextLabel) + '</button>',
         '</div>',
       '</div>'
     ].join("");
@@ -1641,6 +2089,11 @@
     return '<button type="button" class="cl-option ' + (selected ? 'is-selected' : '') + errorClass(field) + '" data-action="select" data-field="' + h(field) + '" data-value="' + h(value) + '" aria-pressed="' + (selected ? 'true' : 'false') + '"><span class="cl-option-title">' + h(title) + '</span><span class="cl-option-text">' + h(text) + '</span></button>';
   }
 
+  function entryCard(entryPath, title, text) {
+    var selected = data.entryPath === entryPath;
+    return '<button type="button" class="cl-option ' + (selected ? 'is-selected' : '') + errorClass("entryPath") + '" data-action="start-flow" data-entry-path="' + h(entryPath) + '" aria-pressed="' + (selected ? 'true' : 'false') + '"><span class="cl-option-title">' + h(title) + '</span><span class="cl-option-text">' + h(text) + '</span></button>';
+  }
+
   function toggleCard(field, value, title, text) {
     var selected = Array.isArray(data[field]) && data[field].includes(value);
     return '<button type="button" class="cl-option ' + (selected ? 'is-selected' : '') + errorClass(field) + '" data-action="toggle-array" data-field="' + h(field) + '" data-value="' + h(value) + '" aria-pressed="' + (selected ? 'true' : 'false') + '"><span class="cl-option-title">' + h(title) + '</span><span class="cl-option-text">' + h(text) + '</span></button>';
@@ -1648,14 +2101,18 @@
 
   function getCalculations() {
     var qualification = getQualification();
+    var urgentBranch = data.entryPath === FLOW_ENTRY.URGENT ? getUrgentBranch() : "";
     var stageScore = getMaxStageScore();
-    var deadlineScore = getOptionScore(DEADLINE_OPTIONS, data.deadlineStatus);
+    var deadlineScore = Math.max(getOptionScore(DEADLINE_OPTIONS, data.deadlineStatus), getOptionScore(DEADLINE_OPTIONS, data.papersDeadlineStatus));
     var validationScore = getOptionScore(VALIDATION_OPTIONS, data.validationNotice);
     var behaviorScore = Math.min(45, data.behaviors.reduce(function (sum, key) { return sum + getOptionScore(BEHAVIOR_OPTIONS, key); }, 0));
+    if (urgentBranch === "collector_harassment") behaviorScore = 0;
     var amountScore = getLargestAmountScore();
-    var countScore = data.debts.length >= 6 ? 15 : data.debts.length >= 3 ? 10 : data.debts.length === 2 ? 5 : 0;
-    var entryScore = data.entryPath === "urgent" ? 10 : 0;
-    var urgencyScore = Math.min(100, stageScore + deadlineScore + validationScore + behaviorScore + amountScore + countScore + entryScore);
+    var countScore = getDebtCountUrgencyScore();
+    var entryScore = data.entryPath === FLOW_ENTRY.URGENT ? 15 : 0;
+    var urgentScore = data.entryPath === FLOW_ENTRY.URGENT ? getUrgentEventScore() + getUrgentBranchDetailScore() : 0;
+    var urgencyScore = Math.min(100, stageScore + deadlineScore + validationScore + behaviorScore + amountScore + countScore + entryScore + urgentScore);
+    if (urgentBranch === "collector_harassment") urgencyScore = Math.min(urgencyScore, 74);
     var urgencyLevel = urgencyScore >= 75 ? "Critical" : urgencyScore >= 50 ? "High" : urgencyScore >= 25 ? "Moderate" : "Low";
     var readinessScore = getReadinessScore();
     var readinessLevel = readinessScore >= 81 ? "High-Readiness Case" : readinessScore >= 61 ? "Ready for Initial Review" : readinessScore >= 31 ? "Partially Ready" : "Needs More Information";
@@ -1664,6 +2121,7 @@
       qualificationStatus: qualification.status,
       qualificationReasons: qualification.reasons,
       qualificationClass: qualification.className,
+      urgentBranch: urgentBranch,
       urgencyScore: urgencyScore,
       urgencyLevel: urgencyLevel,
       urgencyClass: urgencyLevel === "Critical" ? "cl-pill-critical" : urgencyLevel === "High" ? "cl-pill-high" : urgencyLevel === "Moderate" ? "" : "cl-pill-good",
@@ -1673,6 +2131,7 @@
       hasLawsuit: hasLawsuit(),
       hasDefaultJudgment: hasDefaultJudgment(),
       hasGarnishment: hasGarnishment(),
+      hasWagesOrBankAffected: hasWagesOrBankAffected(),
       hasHarassment: hasHarassment()
     };
   }
@@ -1688,7 +2147,40 @@
     }, 0);
   }
 
+  function getDebtCountUrgencyScore() {
+    if (data.debtCountChoice === "6_plus") return 15;
+    if (data.debtCountChoice === "3_5" || data.debts.length >= 3) return 10;
+    if (data.debtCountChoice === "multiple" || data.debts.length === 2) return 5;
+    return 0;
+  }
+
+  function getUrgentEventScore() {
+    return Math.min(85, data.urgentEvents.reduce(function (sum, key) {
+      return sum + getOptionScore(URGENT_TRIAGE_OPTIONS, key);
+    }, 0));
+  }
+
+  function getUrgentBranchDetailScore() {
+    var score = 0;
+    if (data.papersDeadlineStatus) score += getOptionScore(DEADLINE_OPTIONS, data.papersDeadlineStatus);
+    if (data.judgmentWagesBankAffected === "yes") score += 20;
+    if (data.wagesBeingGarnished === "yes") score += 30;
+    if (data.bankAccountAffected === "yes") score += 35;
+    if (data.enforcementPaperwork === "yes") score += 10;
+    if (data.urgentDocumentsAvailable === "yes" || data.urgentEvents.includes("not_sure_documents")) score += 15;
+    return Math.min(50, score);
+  }
+
   function getHighestRiskStage() {
+    if (data.entryPath === FLOW_ENTRY.URGENT) {
+      var branch = getUrgentBranch();
+      if (branch === "garnishment_or_bank_wage_impact") return data.bankAccountAffected === "yes" ? "wages_bank" : "garnishment";
+      if (branch === "default_judgment") return "default_judgment";
+      if (branch === "lawsuit_or_summons") return "lawsuit";
+      if (branch === "collector_harassment") return "calls";
+      if (data.urgentEvents.includes("letters_not_sure")) return "notices";
+      return "not_sure";
+    }
     var sorted = data.debts.slice().sort(function (a, b) {
       return getOptionScore(STAGE_OPTIONS, b.stage) - getOptionScore(STAGE_OPTIONS, a.stage);
     });
@@ -1702,21 +2194,36 @@
   }
 
   function hasLawsuit() {
-    return data.debts.some(function (d) { return d.stage === "lawsuit" || d.documentStatus === "summons_lawsuit"; }) || ["within_7", "within_8_14", "within_15_30", "yes_not_sure_when"].includes(data.deadlineStatus);
+    return data.urgentEvents.some(function (key) { return ["lawsuit_papers", "deadline_court_hearing"].includes(key); }) || data.debts.some(function (d) { return d.stage === "lawsuit" || d.documentStatus === "summons_lawsuit"; }) || ["within_7", "within_8_14", "within_15_30", "yes_not_sure_when"].includes(data.deadlineStatus) || ["within_7", "within_8_14", "within_15_30", "yes_not_sure_when"].includes(data.papersDeadlineStatus);
   }
 
   function hasDefaultJudgment() {
-    return data.debts.some(function (d) { return d.stage === "default_judgment" || d.documentStatus === "judgment"; });
+    return data.urgentEvents.includes("default_judgment") || data.debts.some(function (d) { return d.stage === "default_judgment" || d.documentStatus === "judgment"; });
   }
 
   function hasGarnishment() {
-    return data.debts.some(function (d) { return d.stage === "garnishment" || d.stage === "wages_bank" || d.documentStatus === "garnishment_order"; });
+    return data.urgentEvents.some(function (key) { return ["wage_garnishment", "bank_wages_affected"].includes(key); }) || data.wagesBeingGarnished === "yes" || data.bankAccountAffected === "yes" || data.debts.some(function (d) { return d.stage === "garnishment" || d.stage === "wages_bank" || d.documentStatus === "garnishment_order"; });
+  }
+
+  function hasWagesOrBankAffected() {
+    return data.urgentEvents.includes("bank_wages_affected") || data.bankAccountAffected === "yes" || data.judgmentWagesBankAffected === "yes" || data.debts.some(function (d) { return d.stage === "wages_bank"; });
   }
 
   function hasHarassment() {
-    return data.behaviors.some(function (key) {
+    return data.urgentEvents.some(function (key) {
+      return ["collector_repeated_calls", "collector_workplace_calls", "collector_third_party_contact", "collector_threats_abusive"].includes(key);
+    }) || data.behaviors.some(function (key) {
       return !["none_of_these", "letters_only"].includes(key);
     });
+  }
+
+  function getUrgentBranch() {
+    var events = data.urgentEvents || [];
+    if (events.some(function (key) { return ["wage_garnishment", "bank_wages_affected"].includes(key); })) return "garnishment_or_bank_wage_impact";
+    if (events.includes("default_judgment")) return "default_judgment";
+    if (events.some(function (key) { return ["lawsuit_papers", "deadline_court_hearing"].includes(key); })) return "lawsuit_or_summons";
+    if (events.some(function (key) { return ["collector_repeated_calls", "collector_workplace_calls", "collector_third_party_contact", "collector_threats_abusive"].includes(key); })) return "collector_harassment";
+    return "not_sure_document_review";
   }
 
   function getQualification() {
@@ -1779,11 +2286,11 @@
     if (data.debts.some(function (d) { return d.security === "unsecured" || (d.type === "auto_repossession" && d.autoRepossessionStatus === "repossessed_yes"); })) score += 15;
     if (data.debtCountChoice) score += 5;
     if (data.debts.every(function (d) { return !!d.amount; })) score += 15;
-    if (data.debts.every(function (d) { return d.stage && d.stage !== "not_sure"; })) score += 15;
+    if (hasKnownStageSignal()) score += 15;
     if (data.debts.some(function (d) { return d.creditorName.trim(); })) score += 10;
-    if (data.uploadIntent || data.debts.some(function (d) { return !["", "none", "not_sure"].includes(d.documentStatus); })) score += 10;
-    if (data.deadlineStatus && data.deadlineStatus !== "not_sure") score += 10;
-    if (data.behaviors.length && !data.behaviors.includes("none_of_these")) score += 5;
+    if (hasDocumentSignal()) score += 10;
+    if (hasDeadlineSignal()) score += 10;
+    if (hasCollectorBehaviorSignal()) score += 5;
     if (data.deliveryChannel) score += 5;
     return Math.min(100, score);
   }
@@ -1793,11 +2300,32 @@
     if (!data.debts.some(function (d) { return SUPPORTED_DEBT_KEYS.includes(d.type); })) items.push("Confirm whether any debt is credit card, medical, payday loan, utilities, or auto repossession related.");
     if (!data.debts.some(function (d) { return d.security === "unsecured" || (d.type === "auto_repossession" && d.autoRepossessionStatus === "repossessed_yes"); })) items.push("Confirm whether the debt is unsecured or connected to a post-repossession balance.");
     if (!data.debts.every(function (d) { return !!d.amount; })) items.push("Approximate amount for each debt.");
-    if (!data.debts.every(function (d) { return d.stage && d.stage !== "not_sure"; })) items.push("Current stage for each debt: collections, lawsuit, judgment, garnishment, or other.");
+    if (!hasKnownStageSignal()) items.push("Current stage: collections, lawsuit, judgment, garnishment, bank/wage impact, or other.");
     if (!data.debts.some(function (d) { return d.creditorName.trim(); })) items.push("Creditor or debt collector name, if known.");
-    if (!(data.uploadIntent || data.debts.some(function (d) { return !["", "none", "not_sure"].includes(d.documentStatus); }))) items.push("Any collection letter, notice, summons, judgment, or garnishment document.");
-    if (!(data.deadlineStatus && data.deadlineStatus !== "not_sure")) items.push("Any deadline, court date, hearing date, judgment date, or garnishment date listed on the papers.");
+    if (!hasDocumentSignal()) items.push("Any collection letter, notice, summons, judgment, or garnishment document.");
+    if (!hasDeadlineSignal()) items.push("Any deadline, court date, hearing date, judgment date, or garnishment date listed on the papers.");
     return items.slice(0, 5);
+  }
+
+  function hasKnownStageSignal() {
+    if (data.entryPath === FLOW_ENTRY.URGENT && data.urgentEvents.length && !data.urgentEvents.includes("none_not_sure")) return true;
+    return data.debts.every(function (d) { return d.stage && d.stage !== "not_sure"; });
+  }
+
+  function hasDocumentSignal() {
+    return data.uploadIntent || data.urgentEvents.includes("not_sure_documents") || data.papersAvailable === "yes" || data.judgmentCopyAvailable === "yes" || data.enforcementPaperwork === "yes" || data.urgentDocumentsAvailable === "yes" || data.debts.some(function (d) {
+      return !["", "none", "not_sure"].includes(d.documentStatus);
+    });
+  }
+
+  function hasDeadlineSignal() {
+    return (data.deadlineStatus && data.deadlineStatus !== "not_sure") || (data.papersDeadlineStatus && data.papersDeadlineStatus !== "not_sure") || data.urgentEvents.includes("deadline_court_hearing");
+  }
+
+  function hasCollectorBehaviorSignal() {
+    return data.behaviors.length && !data.behaviors.includes("none_of_these") || data.urgentEvents.some(function (key) {
+      return ["collector_repeated_calls", "collector_workplace_calls", "collector_third_party_contact", "collector_threats_abusive"].includes(key);
+    });
   }
 
   function getBranchMessage(calc) {
@@ -1813,8 +2341,8 @@
     if (calc.hasGarnishment) {
       return {
         title: "Active garnishment or wage/bank impact may be involved.",
-        body: "Your answers suggest that wages, bank funds, or an enforcement notice may already be involved. These situations can move quickly and should be reviewed promptly.",
-        nextStep: "Prepare any garnishment, bank levy, judgment, payroll, or court paperwork and request a prompt follow-up.",
+        body: "This appears to be an active collection enforcement issue. If wages or bank funds are being affected, your situation should be reviewed quickly.",
+        nextStep: "Prepare any garnishment, bank levy, judgment, payroll, or court paperwork and request an immediate callback or call now.",
         checklist: ["Garnishment or levy notice", "Judgment papers", "Employer or bank notice", "Date wages or bank funds were affected"]
       };
     }
@@ -1823,7 +2351,7 @@
       return {
         title: "A default judgment may be involved.",
         body: "A judgment can give a collector stronger collection tools depending on the court order and state law. Your next step is to understand what judgment was entered and whether any options remain.",
-        nextStep: "Prepare the judgment paperwork, court name, date entered, and any wage or bank collection notices.",
+        nextStep: "Prepare the judgment paperwork, court name, date entered, and any wage or bank collection notices, then request urgent review or a callback.",
         checklist: ["Copy of judgment", "Court name", "Date judgment was entered", "Any garnishment or bank levy notice"]
       };
     }
@@ -1831,8 +2359,8 @@
     if (calc.hasLawsuit) {
       return {
         title: "Do not ignore court papers or lawsuit deadlines.",
-        body: "Debt lawsuits and court papers may involve strict response deadlines. Failing to respond can increase the risk of a default judgment or other collection action.",
-        nextStep: "Have the documents reviewed and confirm whether a response, appearance, or other action is required.",
+        body: "Debt lawsuits may involve strict response deadlines. Ignoring them may increase the risk of a default judgment or other collection action. Your exact options depend on your documents, the court, and your situation.",
+        nextStep: "Prioritize document review and request an immediate callback so the papers and any deadlines can be reviewed.",
         checklist: ["Summons or complaint", "Date you received the papers", "Court name", "Plaintiff / creditor / collector name", "Any response deadline or hearing date"]
       };
     }
@@ -1840,9 +2368,18 @@
     if (calc.hasHarassment) {
       return {
         title: "Collector behavior may need review.",
-        body: "Your answers suggest collectors may be contacting you aggressively or using pressure tactics. Certain abusive, deceptive, or unfair collection practices may be restricted under consumer protection laws.",
-        nextStep: "Document what happened, when it happened, who contacted you, and whether they called your workplace or other people.",
+        body: "Your answers suggest collectors may be contacting you aggressively or using pressure tactics. Certain abusive, deceptive, or unfair collection practices may be restricted under federal law.",
+        nextStep: "Document what happened, when it happened, who contacted you, and request a collector behavior review without assuming a specific legal outcome.",
         checklist: ["Call logs", "Voicemails or text messages", "Letters or notices", "Names of collectors", "Workplace or third-party contact details"]
+      };
+    }
+
+    if (data.entryPath === FLOW_ENTRY.URGENT && calc.urgentBranch === "not_sure_document_review") {
+      return {
+        title: "Document review may be the best next step.",
+        body: "If you are not sure what the letter, notice, summons, judgment, or collection document means, the next step is to organize the documents and have the situation reviewed.",
+        nextStep: "Send yourself the results, prepare the document, and request a callback or message-first follow-up.",
+        checklist: ["Letter, summons, notice, judgment, or collection document", "Any date or deadline shown", "Creditor or collector name", "Approximate debt amount"]
       };
     }
 
@@ -1855,7 +2392,7 @@
   }
 
   async function submitLead() {
-    var validationError = validateStep(7);
+    var validationError = validateStep(STEP.FOLLOW_UP);
     if (validationError) {
       ui.error = validationError;
       render();
@@ -1900,6 +2437,8 @@
     var totalEstimate = data.debts.reduce(function (sum, d) { return sum + (getAmountOption(d.amount).estimate || 0); }, 0);
     var largestDebt = data.debts.slice().sort(function (a, b) { return (getAmountOption(b.amount).estimate || 0) - (getAmountOption(a.amount).estimate || 0); })[0] || makeDebt();
     var collectorNames = unique(data.debts.map(function (d) { return d.creditorName.trim(); }).filter(Boolean));
+    var urgentBranch = getPayloadUrgentBranch(calc);
+    var uploadIntent = data.uploadIntent || data.urgentDocumentsAvailable === "yes" || data.urgentEvents.includes("not_sure_documents") || data.papersAvailable === "yes" || data.enforcementPaperwork === "yes";
 
     return {
       created_at: new Date().toISOString(),
@@ -1907,7 +2446,9 @@
       widget_version: CONFIG.widgetVersion,
       page_url: safePageUrl(),
       referrer: safeReferrer(),
-      entry_path: data.entryPath === "urgent" ? "I Need Urgent Debt Help" : "Debt Defense Options Check",
+      entry_path: data.entryPath,
+      urgent_branch: urgentBranch,
+      urgent_events: data.urgentEvents.map(function (key) { return getLabel(URGENT_TRIAGE_OPTIONS, key); }).filter(Boolean).join(", "),
       first_name: data.firstName.trim(),
       last_name: data.lastName.trim(),
       phone: isValidPhone(data.phone) ? phoneForPayload(data.phone) : "",
@@ -1924,34 +2465,39 @@
 
       qualification_status: calc.qualificationStatus,
       qualification_reasons: calc.qualificationReasons.join("; "),
+      disqualification_reason: calc.qualificationStatus === "Not a Fit" ? calc.qualificationReasons.join("; ") : "",
+      excluded_state_flag: CONFIG.excludedStates.includes(data.state) ? "Yes" : "No",
+      individual_or_business: data.personType,
       urgency_score: calc.urgencyScore,
       urgency_level: calc.urgencyLevel,
       readiness_score: calc.readinessScore,
       readiness_level: calc.readinessLevel,
       recommended_next_action: getBranchMessage(calc).nextStep,
 
+      debt_count: getDebtCountLabel(data.debtCountChoice),
       number_of_debts: data.debts.length,
       total_estimated_debt: totalEstimate ? "$" + totalEstimate.toLocaleString() + "+ estimated from ranges" : "Not sure",
       largest_debt_amount: getAmountOption(largestDebt.amount).label,
       supported_debt_types: supportedDebtTypes.join(", "),
       unsupported_debt_types: unsupportedDebtTypes.join(", "),
+      debt_types: unique(debtTypeLabels).join(", "),
       all_debt_types: unique(debtTypeLabels).join(", "),
       debt_security: unique(data.debts.map(function (d) { return getLabel(SECURITY_OPTIONS, d.security); }).filter(Boolean)).join(", "),
       debt_stage: getLabel(STAGE_OPTIONS, calc.highestRiskStage),
       lawsuit_or_summons: calc.hasLawsuit ? "Yes" : "No",
-      deadline_or_court_date: getLabel(DEADLINE_OPTIONS, data.deadlineStatus),
+      deadline_or_court_date: getLabel(DEADLINE_OPTIONS, data.papersDeadlineStatus || data.deadlineStatus),
       default_judgment: calc.hasDefaultJudgment ? "Yes" : "No",
       garnishment: calc.hasGarnishment ? "Yes" : "No",
-      wages_or_bank_affected: data.debts.some(function (d) { return d.stage === "wages_bank"; }) ? "Yes" : "No",
+      wages_or_bank_affected: calc.hasWagesOrBankAffected ? "Yes" : "No",
 
-      collector_calls: (data.behaviors.includes("calling_repeatedly") || data.debts.some(function (d) { return d.stage === "calls"; })) ? "Yes" : "No",
-      workplace_calls: data.behaviors.includes("calling_workplace") ? "Yes" : "No",
-      family_or_friend_contact: data.behaviors.includes("contacting_others") ? "Yes" : "No",
-      threats_or_abusive_language: data.behaviors.some(function (x) { return ["threatening", "abusive_language", "threatening_arrest", "threatening_garnishment"].includes(x); }) ? "Yes" : "No",
-      collector_behaviors: data.behaviors.map(function (key) { return getLabel(BEHAVIOR_OPTIONS, key); }).join(", "),
+      collector_calls: (data.urgentEvents.includes("collector_repeated_calls") || data.behaviors.includes("calling_repeatedly") || data.debts.some(function (d) { return d.stage === "calls"; })) ? "Yes" : "No",
+      workplace_calls: (data.urgentEvents.includes("collector_workplace_calls") || data.behaviors.includes("calling_workplace")) ? "Yes" : "No",
+      family_or_friend_contact: (data.urgentEvents.includes("collector_third_party_contact") || data.behaviors.includes("contacting_others")) ? "Yes" : "No",
+      threats_or_abusive_language: (data.urgentEvents.includes("collector_threats_abusive") || data.behaviors.some(function (x) { return ["threatening", "abusive_language", "threatening_arrest", "threatening_garnishment"].includes(x); })) ? "Yes" : "No",
+      collector_behaviors: getCollectorBehaviorLabels().join(", "),
       validation_notice_status: getLabel(VALIDATION_OPTIONS, data.validationNotice),
-      has_documents: data.debts.some(function (d) { return !["none", "", "not_sure"].includes(d.documentStatus); }) || data.uploadIntent ? "Yes" : "No",
-      upload_intent: data.uploadIntent ? "Yes" : "No",
+      has_documents: hasDocumentSignal() ? "Yes" : "No",
+      upload_intent: uploadIntent ? "Yes" : "No",
       collector_names: collectorNames.join(", "),
       user_description: data.userDescription.trim(),
       debts_json: JSON.stringify(data.debts.map(function (d, idx) {
@@ -1968,6 +2514,42 @@
       })),
       raw_answers_json: JSON.stringify(data)
     };
+  }
+
+  function getPayloadUrgentBranch(calc) {
+    if (data.entryPath === FLOW_ENTRY.URGENT) return calc.urgentBranch || getUrgentBranch();
+    if (calc.hasGarnishment) return "garnishment_or_bank_wage_impact";
+    if (calc.hasDefaultJudgment) return "default_judgment";
+    if (calc.hasLawsuit) return "lawsuit_or_summons";
+    if (calc.hasHarassment) return "collector_harassment";
+    return "";
+  }
+
+  function getDebtCountLabel(choice) {
+    var map = {
+      "1": "1 debt",
+      "2": "2 debts",
+      "3_5": "3-5 debts",
+      "6_plus": "6+ debts",
+      one: "One debt",
+      multiple: "Multiple debts",
+      not_sure: "Not sure"
+    };
+    return map[choice] || "";
+  }
+
+  function getCollectorBehaviorLabels() {
+    var labels = data.behaviors.map(function (key) { return getLabel(BEHAVIOR_OPTIONS, key); }).filter(Boolean);
+    if (!labels.length) {
+      var urgentBehaviorMap = {
+        collector_repeated_calls: "Calling me repeatedly",
+        collector_workplace_calls: "Calling my workplace",
+        collector_third_party_contact: "Contacting family, friends, or other people",
+        collector_threats_abusive: "Threatening me or using abusive language"
+      };
+      labels = data.urgentEvents.map(function (key) { return urgentBehaviorMap[key] || ""; }).filter(Boolean);
+    }
+    return unique(labels);
   }
 
   function unique(values) {

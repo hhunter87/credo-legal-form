@@ -14,9 +14,9 @@ Use this checklist on a staging page before production launch. Record browser, d
 
 ## Entry Gate
 
-- [ ] `I Need Urgent Debt Help` path can continue.
-- [ ] `Check My Debt Defense Options` path can continue.
-- [ ] Continuing without selecting an entry option shows validation.
+- [ ] Clicking `I Need Urgent Debt Help` starts the urgent path with `entry_path = urgent_debt_help`.
+- [ ] Clicking `Check My Debt Defense Options` starts the normal path with `entry_path = debt_defense_options_check`.
+- [ ] The two entry buttons do not route into the same main step sequence.
 
 ## Eligibility
 
@@ -30,11 +30,50 @@ Use this checklist on a staging page before production launch. Record browser, d
 - [ ] Optional ZIP accepts blank.
 - [ ] Invalid ZIP shows validation.
 
-## Debt Inventory
+## Urgent Triage Flow
+
+- [ ] Urgent path asks basic eligibility first: state and individual/family/business routing.
+- [ ] After urgent eligibility, the first major question is `What is happening right now?`
+- [ ] Urgent triage includes lawsuit/summons/court papers.
+- [ ] Urgent triage includes deadline, court date, or hearing date.
+- [ ] Urgent triage includes default judgment.
+- [ ] Urgent triage includes wage garnishment.
+- [ ] Urgent triage includes bank account or wages already affected.
+- [ ] Urgent triage includes repeated collector calls.
+- [ ] Urgent triage includes workplace calls.
+- [ ] Urgent triage includes family/friend/other contact.
+- [ ] Urgent triage includes threats or abusive language.
+- [ ] Urgent triage includes letters/notices that are not understood.
+- [ ] Urgent triage includes not sure but has documents.
+- [ ] Urgent triage includes none of these / not sure.
+- [ ] Urgent path does not show the full `How many debts do you want reviewed?` inventory as the first branch-specific question.
+
+## Urgent Branch Modules
+
+- [ ] Urgent lawsuit/summons selection shows `Do not ignore court papers` copy.
+- [ ] Urgent lawsuit/summons asks when papers were received.
+- [ ] Urgent lawsuit/summons asks whether papers mention a response deadline, court date, or hearing date.
+- [ ] Urgent lawsuit/summons asks whether papers are available.
+- [ ] Urgent lawsuit/summons can produce High or Critical urgency.
+- [ ] Urgent default judgment selection shows judgment-specific copy.
+- [ ] Urgent default judgment asks for judgment copy, judgment date knowledge, and wage/bank impact.
+- [ ] Urgent garnishment/bank-wage selection shows active collection enforcement copy.
+- [ ] Urgent garnishment/bank-wage asks about wages, bank account, and paperwork.
+- [ ] Urgent garnishment/bank-wage can produce Critical urgency.
+- [ ] Urgent collector workplace calls/threats route to the collector harassment branch.
+- [ ] Urgent collector harassment asks collector behavior details.
+- [ ] Urgent collector harassment can produce Moderate or High urgency depending on severity.
+- [ ] Urgent not-sure/document path shows the simulated upload placeholder when documents are available or uncertain.
+- [ ] Urgent compact qualification asks debt type, secured/unsecured status, amount, and one/multiple/not sure.
+- [ ] Urgent compact qualification does not require detailed per-debt cards before results.
+
+## Normal Debt Inventory
 
 - [ ] One debt path works.
 - [ ] Multiple debt path works.
+- [ ] `3-5 debts` starts with three cards.
 - [ ] `6+ debts` creates six cards.
+- [ ] `Not sure` starts with one card and can continue after required debt details are entered.
 - [ ] Add another debt works up to the configured maximum.
 - [ ] Remove debt works and never removes the last remaining card.
 - [ ] Missing debt type shows validation.
@@ -110,6 +149,11 @@ Use this checklist on a staging page before production launch. Record browser, d
 - [ ] Missing information checklist appears.
 - [ ] Copy avoids legal advice and outcome guarantees.
 - [ ] Disclaimer says the tool does not create an attorney-client relationship.
+- [ ] Critical urgent result shows `Call Credo Legal Now` before lower-priority CTAs.
+- [ ] Critical urgent result shows `Request an Immediate Callback`.
+- [ ] High urgent result shows `Request a Callback Today`.
+- [ ] Moderate/Low urgent result prioritizes sending results, scheduling a call, or message-first follow-up.
+- [ ] Business or otherwise `Not a Fit` urgent result does not show aggressive urgent legal CTAs.
 
 ## Delivery And Consent
 
@@ -144,6 +188,14 @@ Use this checklist on a staging page before production launch. Record browser, d
 - [ ] Google Sheet writes headers if missing.
 - [ ] Google Sheet appends missing headers without deleting existing data.
 - [ ] Submitted row includes `lead_id`, contact fields, qualification, urgency, readiness, debt details, and raw JSON.
+- [ ] Submitted row includes `entry_path`.
+- [ ] Submitted row includes `urgent_branch`.
+- [ ] Submitted row includes `urgent_events`.
+- [ ] Submitted row includes `disqualification_reason`.
+- [ ] Submitted row includes `excluded_state_flag`.
+- [ ] Submitted row includes `individual_or_business`.
+- [ ] Submitted row includes `debt_count` and `debt_types`.
+- [ ] Normal options path submits blank `urgent_branch` unless lawsuit, judgment, garnishment, bank/wage impact, or collector harassment answers trigger escalation.
 - [ ] `sms_consent` is `Yes` only for SMS delivery with consent checked.
 - [ ] `whatsapp_consent` is `Yes` only for WhatsApp delivery with consent checked.
 - [ ] `debts_json` is valid JSON.
@@ -155,6 +207,8 @@ Use this checklist on a staging page before production launch. Record browser, d
 - [ ] Excluded-state path: DC, individual, unsecured credit-card debt, email delivery.
 - [ ] Unsupported path: NY, individual, student loan only, email delivery.
 - [ ] Secured path: NY, individual, secured non-auto debt, call delivery.
-- [ ] Lawsuit path: NY, individual, unsecured credit-card debt, summons/lawsuit documents, urgent path.
-- [ ] Garnishment path: NY, individual, unsecured debt, garnishment stage, call-now follow-up.
+- [ ] Urgent lawsuit path: NY, individual, lawsuit/summons selected, deadline within 7 days, unsecured credit-card debt, Critical result, immediate callback CTA.
+- [ ] Urgent garnishment path: NY, individual, wage garnishment selected, unsecured debt, Critical result, call-now/immediate callback CTA.
+- [ ] Urgent harassment path: NY, individual, workplace calls/threats selected, harassment branch, collector behavior review recommendation.
+- [ ] Normal options lawsuit escalation: options path, full debt inventory, lawsuit stage, High/Critical urgency while remaining visibly different from urgent triage path.
 - [ ] WhatsApp path: NY, individual, unsecured medical debt, WhatsApp delivery, WhatsApp consent.

@@ -1,12 +1,12 @@
 /**
- * Credo Legal Debt Defense Options Check → Google Sheets endpoint
+ * Credo Legal Debt Defense Options Check -> Google Sheets endpoint
  *
  * Setup:
  * 1) Create a new Google Sheet.
- * 2) Open Extensions → Apps Script.
+ * 2) Open Extensions -> Apps Script.
  * 3) Paste this file into Code.gs.
  * 4) Save.
- * 5) Deploy → New deployment → Web app.
+ * 5) Deploy -> New deployment -> Web app.
  * 6) Execute as: Me.
  * 7) Who has access: Anyone.
  * 8) Copy the Web App URL and paste it into CONFIG.googleScriptUrl in the widget.
@@ -22,6 +22,8 @@ const FIELDS = [
   'page_url',
   'referrer',
   'entry_path',
+  'urgent_branch',
+  'urgent_events',
   'first_name',
   'last_name',
   'phone',
@@ -38,17 +40,22 @@ const FIELDS = [
 
   'qualification_status',
   'qualification_reasons',
+  'disqualification_reason',
+  'excluded_state_flag',
+  'individual_or_business',
   'urgency_score',
   'urgency_level',
   'readiness_score',
   'readiness_level',
   'recommended_next_action',
 
+  'debt_count',
   'number_of_debts',
   'total_estimated_debt',
   'largest_debt_amount',
   'supported_debt_types',
   'unsupported_debt_types',
+  'debt_types',
   'all_debt_types',
   'debt_security',
   'debt_stage',

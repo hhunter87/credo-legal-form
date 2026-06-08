@@ -38,16 +38,76 @@ The widget is designed to be pasted into a normal website. It does not require R
 
 The widget does not hard-block users from submitting. It routes unsupported, excluded-state, secured, or business-debt answers to `Not a Fit`, `Needs Review`, or `Partially Qualified` as appropriate.
 
-## User Flow
+## User Flows
+
+The entry buttons intentionally route into different flows. They share validation, scoring, contact capture, consent logic, and Google Sheets submission utilities, but they do not share the same main step sequence.
+
+### Urgent Debt Help
+
+Entry path value submitted to Google Sheets:
+
+```text
+urgent_debt_help
+```
 
 1. Entry gate:
    - `I Need Urgent Debt Help`
+2. Basic eligibility gate:
+   - State
+   - ZIP, optional
+   - Individual/family/business routing
+3. Urgent triage:
+   - Lawsuit, summons, or court papers
+   - Deadline, court date, or hearing date
+   - Default judgment
+   - Wage garnishment
+   - Bank account or wages affected
+   - Collector repeated calls, workplace calls, third-party contact, threats, or abusive language
+   - Letters/notices not understood
+   - Not sure but has documents
+4. Urgent branch details:
+   - Lawsuit/summons document timing and deadline questions
+   - Default judgment questions
+   - Garnishment or bank/wage impact questions
+   - Collector behavior detail questions
+   - Not sure/document review placeholder
+5. Compact debt qualification:
+   - Debt type
+   - Secured/unsecured status
+   - Approximate amount
+   - One debt, multiple debts, or not sure
+6. Results before contact capture:
+   - Qualification status
+   - Debt Defense Priority Level
+   - Case Readiness Scorecard
+   - Recommended next step
+   - Missing information checklist
+   - Urgent CTA ordering for Critical/High results
+7. Results delivery and contact capture.
+8. Follow-up preference.
+9. Submit to Google Sheets through Google Apps Script.
+
+### Debt Defense Options Check
+
+Entry path value submitted to Google Sheets:
+
+```text
+debt_defense_options_check
+```
+
+1. Entry gate:
    - `Check My Debt Defense Options`
 2. Eligibility:
    - State
    - ZIP, optional
    - Individual/family/business routing
-3. Debt inventory:
+3. Debt count:
+   - 1 debt
+   - 2 debts
+   - 3-5 debts
+   - 6+ debts
+   - Not sure
+4. Debt inventory:
    - One or multiple debts
    - Debt type
    - Amount range
@@ -55,34 +115,36 @@ The widget does not hard-block users from submitting. It routes unsupported, exc
    - Stage
    - Document status
    - Creditor/collector name
-4. Urgency and collector behavior:
+5. Urgency and collector behavior:
    - Deadline/court/judgment/garnishment indicators
    - Debt validation notice status
    - Collector behavior selections
    - Simulated upload placeholder
-5. Results before contact capture:
+6. Results before contact capture:
    - Qualification status
    - Debt Defense Priority Level
    - Case Readiness Scorecard
    - Recommended next step
    - Missing information checklist
-6. Results delivery:
+7. Results delivery:
    - Text/SMS
    - Email
    - WhatsApp
    - Call
-7. Contact and consent:
+8. Contact and consent:
    - Phone is shown only when the selected delivery or follow-up choice needs it.
    - Email is shown only when the selected delivery or follow-up choice needs it.
    - SMS consent appears only for SMS delivery.
    - WhatsApp consent appears only for WhatsApp delivery.
-8. Follow-up preference:
+9. Follow-up preference:
    - Call me now
    - Call me today
    - Schedule a call
    - Message me first
    - Email me first
-9. Submit to Google Sheets through Google Apps Script.
+10. Submit to Google Sheets through Google Apps Script.
+
+If a normal options-check user later selects lawsuit, judgment, garnishment, or bank/wage impact, the urgency score can still become High or Critical. The user remains in the normal assessment path unless a future product decision adds an explicit jump-to-urgent transition.
 
 ## Configure the Widget
 
@@ -90,7 +152,7 @@ Open `credo-debt-defense-widget.html` and edit the `CONFIG` block:
 
 ```js
 var CONFIG = {
-  widgetVersion: "1.1.0",
+  widgetVersion: "1.2.0",
   googleScriptUrl: "PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE",
   phoneDisplay: "(718) 865-8350",
   phoneHref: "tel:+17188658350",
@@ -185,6 +247,8 @@ If `googleScriptUrl` is still the placeholder, submissions run in demo mode and 
 5. Confirm a row appears in the `Credo Debt Leads` sheet.
 6. Confirm these fields are populated:
    - `lead_id`
+   - `entry_path`
+   - `urgent_branch`
    - `qualification_status`
    - `urgency_level`
    - `readiness_score`
