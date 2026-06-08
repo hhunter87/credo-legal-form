@@ -1,0 +1,1786 @@
+<!--
+  Credo Legal - Debt Defense Options Check Widget
+  Plain HTML/CSS/JS embed. No external dependencies.
+
+  Setup:
+  1) Paste this whole block into the target page where the widget should appear.
+  2) Create the Google Apps Script web app using google-apps-script.gs.
+  3) Paste the deployed Apps Script Web App URL into CONFIG.googleScriptUrl below.
+-->
+<div id="credo-debt-defense-widget"></div>
+
+<style>
+  #credo-debt-defense-widget,
+  #credo-debt-defense-widget * {
+    box-sizing: border-box;
+  }
+
+  #credo-debt-defense-widget {
+    --cl-red: #b91f2d;
+    --cl-red-dark: #8f1722;
+    --cl-navy: #101828;
+    --cl-ink: #1f2937;
+    --cl-muted: #667085;
+    --cl-line: #e4e7ec;
+    --cl-soft: #f8fafc;
+    --cl-soft-red: #fff1f3;
+    --cl-green: #067647;
+    --cl-orange: #b54708;
+    --cl-yellow-bg: #fffaeb;
+    --cl-green-bg: #ecfdf3;
+    --cl-blue-bg: #eff8ff;
+    --cl-shadow: 0 22px 60px rgba(16, 24, 40, 0.12);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: var(--cl-ink);
+    width: 100%;
+  }
+
+  #credo-debt-defense-widget .clw {
+    width: min(100%, 980px);
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  #credo-debt-defense-widget .cl-card {
+    background: #fff;
+    border: 1px solid var(--cl-line);
+    border-radius: 26px;
+    box-shadow: var(--cl-shadow);
+    overflow: hidden;
+  }
+
+  #credo-debt-defense-widget .cl-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 18px;
+    padding: 22px 24px;
+    border-bottom: 1px solid var(--cl-line);
+    background: linear-gradient(135deg, #fff 0%, #fff7f8 100%);
+  }
+
+  #credo-debt-defense-widget .cl-logo-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+  }
+
+  #credo-debt-defense-widget .cl-logo {
+    height: 38px;
+    width: auto;
+    max-width: 180px;
+    object-fit: contain;
+  }
+
+  #credo-debt-defense-widget .cl-brand-fallback {
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--cl-red);
+    font-size: 22px;
+  }
+
+  #credo-debt-defense-widget .cl-call-top {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+    color: var(--cl-red);
+    border: 1px solid rgba(185, 31, 45, 0.24);
+    background: #fff;
+    border-radius: 999px;
+    padding: 9px 13px;
+    font-weight: 750;
+    white-space: nowrap;
+  }
+
+  #credo-debt-defense-widget .cl-body {
+    padding: 26px;
+  }
+
+  #credo-debt-defense-widget .cl-progress-wrap {
+    padding: 0 26px 22px;
+  }
+
+  #credo-debt-defense-widget .cl-progress-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    color: var(--cl-muted);
+    font-size: 13px;
+    margin-bottom: 8px;
+  }
+
+  #credo-debt-defense-widget .cl-progress {
+    height: 8px;
+    width: 100%;
+    background: #f2f4f7;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  #credo-debt-defense-widget .cl-progress > span {
+    display: block;
+    height: 100%;
+    background: linear-gradient(90deg, var(--cl-red), var(--cl-red-dark));
+    border-radius: 999px;
+    transition: width 220ms ease;
+  }
+
+  #credo-debt-defense-widget h2,
+  #credo-debt-defense-widget h3,
+  #credo-debt-defense-widget h4,
+  #credo-debt-defense-widget p {
+    margin-top: 0;
+  }
+
+  #credo-debt-defense-widget .cl-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    color: var(--cl-red-dark);
+    background: var(--cl-soft-red);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  #credo-debt-defense-widget .cl-title {
+    font-size: clamp(28px, 4vw, 44px);
+    line-height: 1.04;
+    letter-spacing: -0.045em;
+    color: var(--cl-navy);
+    margin-bottom: 12px;
+  }
+
+  #credo-debt-defense-widget .cl-subtitle {
+    color: var(--cl-muted);
+    font-size: 17px;
+    line-height: 1.58;
+    max-width: 760px;
+    margin-bottom: 22px;
+  }
+
+  #credo-debt-defense-widget .cl-grid {
+    display: grid;
+    gap: 14px;
+  }
+
+  #credo-debt-defense-widget .cl-grid-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #credo-debt-defense-widget .cl-grid-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  #credo-debt-defense-widget .cl-option {
+    width: 100%;
+    text-align: left;
+    border: 1px solid var(--cl-line);
+    border-radius: 20px;
+    background: #fff;
+    padding: 18px;
+    cursor: pointer;
+    transition: transform 160ms ease, border-color 160ms ease, background 160ms ease, box-shadow 160ms ease;
+    color: var(--cl-ink);
+    min-height: 100%;
+  }
+
+  #credo-debt-defense-widget .cl-option:hover {
+    transform: translateY(-1px);
+    border-color: rgba(185, 31, 45, 0.45);
+    box-shadow: 0 10px 28px rgba(16, 24, 40, 0.08);
+  }
+
+  #credo-debt-defense-widget .cl-option.is-selected {
+    background: var(--cl-soft-red);
+    border-color: var(--cl-red);
+    box-shadow: 0 0 0 4px rgba(185, 31, 45, 0.08);
+  }
+
+  #credo-debt-defense-widget .cl-option-title {
+    display: block;
+    font-size: 17px;
+    font-weight: 850;
+    color: var(--cl-navy);
+    margin-bottom: 6px;
+  }
+
+  #credo-debt-defense-widget .cl-option-text {
+    display: block;
+    color: var(--cl-muted);
+    line-height: 1.45;
+    font-size: 14px;
+  }
+
+  #credo-debt-defense-widget .cl-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 18px;
+  }
+
+  #credo-debt-defense-widget .cl-field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  #credo-debt-defense-widget .cl-field-full {
+    grid-column: 1 / -1;
+  }
+
+  #credo-debt-defense-widget label,
+  #credo-debt-defense-widget .cl-label {
+    color: var(--cl-navy);
+    font-size: 14px;
+    font-weight: 750;
+  }
+
+  #credo-debt-defense-widget input,
+  #credo-debt-defense-widget select,
+  #credo-debt-defense-widget textarea {
+    width: 100%;
+    border: 1px solid #d0d5dd;
+    border-radius: 14px;
+    background: #fff;
+    color: var(--cl-ink);
+    padding: 12px 13px;
+    font: inherit;
+    outline: none;
+    transition: border-color 160ms ease, box-shadow 160ms ease;
+  }
+
+  #credo-debt-defense-widget textarea {
+    min-height: 104px;
+    resize: vertical;
+  }
+
+  #credo-debt-defense-widget input:focus,
+  #credo-debt-defense-widget select:focus,
+  #credo-debt-defense-widget textarea:focus {
+    border-color: var(--cl-red);
+    box-shadow: 0 0 0 4px rgba(185, 31, 45, 0.08);
+  }
+
+  #credo-debt-defense-widget .cl-help {
+    color: var(--cl-muted);
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  #credo-debt-defense-widget .cl-inline-note {
+    margin-top: 14px;
+    padding: 14px 15px;
+    border-radius: 16px;
+    background: var(--cl-blue-bg);
+    border: 1px solid #b2ddff;
+    color: #184e77;
+    line-height: 1.5;
+    font-size: 14px;
+  }
+
+  #credo-debt-defense-widget .cl-warning {
+    margin-top: 14px;
+    padding: 14px 15px;
+    border-radius: 16px;
+    background: var(--cl-yellow-bg);
+    border: 1px solid #fedf89;
+    color: #7a2e0e;
+    line-height: 1.5;
+    font-size: 14px;
+  }
+
+  #credo-debt-defense-widget .cl-error {
+    margin-top: 18px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: #fef3f2;
+    border: 1px solid #fecdca;
+    color: #b42318;
+    font-weight: 700;
+    line-height: 1.45;
+  }
+
+  #credo-debt-defense-widget .cl-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    align-items: center;
+    margin-top: 24px;
+    padding-top: 22px;
+    border-top: 1px solid var(--cl-line);
+  }
+
+  #credo-debt-defense-widget .cl-actions-right {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: flex-end;
+  }
+
+  #credo-debt-defense-widget .cl-btn {
+    border: none;
+    border-radius: 999px;
+    padding: 13px 19px;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 850;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+  }
+
+  #credo-debt-defense-widget .cl-btn:hover {
+    transform: translateY(-1px);
+  }
+
+  #credo-debt-defense-widget .cl-btn-primary {
+    background: var(--cl-red);
+    color: #fff;
+    box-shadow: 0 12px 22px rgba(185, 31, 45, 0.22);
+  }
+
+  #credo-debt-defense-widget .cl-btn-primary:hover {
+    background: var(--cl-red-dark);
+  }
+
+  #credo-debt-defense-widget .cl-btn-secondary {
+    background: #fff;
+    color: var(--cl-navy);
+    border: 1px solid var(--cl-line);
+  }
+
+  #credo-debt-defense-widget .cl-btn-ghost {
+    background: transparent;
+    color: var(--cl-muted);
+    border: 1px solid transparent;
+  }
+
+  #credo-debt-defense-widget .cl-btn[disabled] {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  #credo-debt-defense-widget .cl-pill-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin: 12px 0 0;
+  }
+
+  #credo-debt-defense-widget .cl-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: 999px;
+    padding: 7px 10px;
+    font-size: 12px;
+    font-weight: 850;
+    background: #f2f4f7;
+    color: #344054;
+  }
+
+  #credo-debt-defense-widget .cl-pill-critical {
+    background: #fef3f2;
+    color: #b42318;
+  }
+
+  #credo-debt-defense-widget .cl-pill-high {
+    background: var(--cl-yellow-bg);
+    color: #b54708;
+  }
+
+  #credo-debt-defense-widget .cl-pill-good {
+    background: var(--cl-green-bg);
+    color: var(--cl-green);
+  }
+
+  #credo-debt-defense-widget .cl-debt-card {
+    border: 1px solid var(--cl-line);
+    border-radius: 20px;
+    padding: 18px;
+    background: #fff;
+    margin-top: 16px;
+  }
+
+  #credo-debt-defense-widget .cl-debt-card h3 {
+    margin-bottom: 4px;
+    color: var(--cl-navy);
+    letter-spacing: -0.02em;
+  }
+
+  #credo-debt-defense-widget .cl-result-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+    gap: 18px;
+    align-items: stretch;
+  }
+
+  #credo-debt-defense-widget .cl-score-card,
+  #credo-debt-defense-widget .cl-summary-card {
+    border: 1px solid var(--cl-line);
+    border-radius: 22px;
+    padding: 18px;
+    background: #fff;
+  }
+
+  #credo-debt-defense-widget .cl-summary-card {
+    background: linear-gradient(180deg, #fff 0%, #fff8f9 100%);
+  }
+
+  #credo-debt-defense-widget .cl-score-number {
+    font-size: 42px;
+    line-height: 1;
+    font-weight: 900;
+    letter-spacing: -0.06em;
+    color: var(--cl-navy);
+    margin: 6px 0;
+  }
+
+  #credo-debt-defense-widget .cl-meter {
+    width: 100%;
+    height: 10px;
+    background: #f2f4f7;
+    border-radius: 999px;
+    overflow: hidden;
+    margin: 10px 0 12px;
+  }
+
+  #credo-debt-defense-widget .cl-meter > span {
+    display: block;
+    height: 100%;
+    background: linear-gradient(90deg, var(--cl-red), var(--cl-red-dark));
+    border-radius: 999px;
+  }
+
+  #credo-debt-defense-widget .cl-list {
+    margin: 12px 0 0;
+    padding-left: 20px;
+    color: var(--cl-ink);
+    line-height: 1.55;
+  }
+
+  #credo-debt-defense-widget .cl-list li {
+    margin: 6px 0;
+  }
+
+  #credo-debt-defense-widget .cl-checkbox-row {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    line-height: 1.45;
+    color: var(--cl-ink);
+    font-size: 14px;
+    margin-top: 12px;
+  }
+
+  #credo-debt-defense-widget .cl-checkbox-row input {
+    width: auto;
+    margin-top: 3px;
+  }
+
+  #credo-debt-defense-widget .cl-disclaimer {
+    margin-top: 18px;
+    padding: 14px;
+    border-radius: 16px;
+    background: var(--cl-soft);
+    border: 1px solid var(--cl-line);
+    color: var(--cl-muted);
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  #credo-debt-defense-widget .cl-footer-mini {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--cl-muted);
+    font-size: 12px;
+    margin-top: 12px;
+  }
+
+  #credo-debt-defense-widget .cl-footer-mini a {
+    color: var(--cl-muted);
+  }
+
+  #credo-debt-defense-widget .cl-upload-placeholder {
+    border: 1.5px dashed #f2a7ae;
+    border-radius: 20px;
+    background: #fff8f9;
+    padding: 18px;
+    margin-top: 16px;
+  }
+
+  #credo-debt-defense-widget .cl-small-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+  }
+
+  @media (max-width: 760px) {
+    #credo-debt-defense-widget .clw {
+      padding: 10px;
+    }
+
+    #credo-debt-defense-widget .cl-header,
+    #credo-debt-defense-widget .cl-body {
+      padding: 18px;
+    }
+
+    #credo-debt-defense-widget .cl-progress-wrap {
+      padding: 0 18px 18px;
+    }
+
+    #credo-debt-defense-widget .cl-grid-2,
+    #credo-debt-defense-widget .cl-grid-3,
+    #credo-debt-defense-widget .cl-form-grid,
+    #credo-debt-defense-widget .cl-result-layout {
+      grid-template-columns: 1fr;
+    }
+
+    #credo-debt-defense-widget .cl-header {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    #credo-debt-defense-widget .cl-actions {
+      align-items: stretch;
+      flex-direction: column-reverse;
+    }
+
+    #credo-debt-defense-widget .cl-actions-right,
+    #credo-debt-defense-widget .cl-btn {
+      width: 100%;
+    }
+  }
+</style>
+
+<script>
+(function () {
+  "use strict";
+
+  var CONFIG = {
+    // Replace this with the deployed Google Apps Script Web App URL.
+    googleScriptUrl: "PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE",
+
+    phoneDisplay: "(718) 865-8350",
+    phoneHref: "tel:+17188658350",
+    privacyUrl: "https://credolegal.com/privacy-policy",
+    termsUrl: "https://credolegal.com/term-of-service",
+
+    // Existing excluded-state configuration. Change here only if business rules change.
+    excludedStates: ["DC", "DE", "ID", "OK", "WV", "WY"],
+
+    // Public logo URL from the current landing page asset. Replace if desired.
+    logoUrl: "https://cdn.prod.website-files.com/6903ad8d7b4674d0123baecd/6903af5ee5e121af84994b38_Credo%20Logo%20Red.png"
+  };
+
+  var STATES = [
+    ["AL", "Alabama"], ["AK", "Alaska"], ["AZ", "Arizona"], ["AR", "Arkansas"],
+    ["CA", "California"], ["CO", "Colorado"], ["CT", "Connecticut"], ["DE", "Delaware"],
+    ["DC", "District of Columbia"], ["FL", "Florida"], ["GA", "Georgia"], ["HI", "Hawaii"],
+    ["ID", "Idaho"], ["IL", "Illinois"], ["IN", "Indiana"], ["IA", "Iowa"],
+    ["KS", "Kansas"], ["KY", "Kentucky"], ["LA", "Louisiana"], ["ME", "Maine"],
+    ["MD", "Maryland"], ["MA", "Massachusetts"], ["MI", "Michigan"], ["MN", "Minnesota"],
+    ["MS", "Mississippi"], ["MO", "Missouri"], ["MT", "Montana"], ["NE", "Nebraska"],
+    ["NV", "Nevada"], ["NH", "New Hampshire"], ["NJ", "New Jersey"], ["NM", "New Mexico"],
+    ["NY", "New York"], ["NC", "North Carolina"], ["ND", "North Dakota"], ["OH", "Ohio"],
+    ["OK", "Oklahoma"], ["OR", "Oregon"], ["PA", "Pennsylvania"], ["RI", "Rhode Island"],
+    ["SC", "South Carolina"], ["SD", "South Dakota"], ["TN", "Tennessee"], ["TX", "Texas"],
+    ["UT", "Utah"], ["VT", "Vermont"], ["VA", "Virginia"], ["WA", "Washington"],
+    ["WV", "West Virginia"], ["WI", "Wisconsin"], ["WY", "Wyoming"]
+  ];
+
+  var DEBT_TYPES = [
+    { key: "credit_card", label: "Credit Card", group: "Supported" },
+    { key: "medical", label: "Medical", group: "Supported" },
+    { key: "payday_loans", label: "Payday Loans", group: "Supported" },
+    { key: "utilities", label: "Utilities", group: "Supported" },
+    { key: "auto_repossession", label: "Auto Repossession", group: "Supported" },
+    { key: "student_loans", label: "Student Loans", group: "Not supported" },
+    { key: "tax", label: "Tax", group: "Not supported" },
+    { key: "state_city_government", label: "State or City Government", group: "Not supported" },
+    { key: "tribal_debts", label: "Tribal Debts", group: "Not supported" },
+    { key: "child_support", label: "Child Support", group: "Not supported" },
+    { key: "court_related", label: "Court Related", group: "Not supported" },
+    { key: "other_not_sure", label: "Other / Not Sure", group: "Needs review" }
+  ];
+
+  var SUPPORTED_DEBT_KEYS = ["credit_card", "medical", "payday_loans", "utilities", "auto_repossession"];
+  var UNSUPPORTED_DEBT_KEYS = ["student_loans", "tax", "state_city_government", "tribal_debts", "child_support", "court_related"];
+
+  var AMOUNT_OPTIONS = [
+    { key: "under_2500", label: "Under $2,500", score: 0, estimate: 1250 },
+    { key: "2500_7999", label: "$2,500–$7,999", score: 5, estimate: 5250 },
+    { key: "8000_14999", label: "$8,000–$14,999", score: 10, estimate: 11500 },
+    { key: "15000_24999", label: "$15,000–$24,999", score: 15, estimate: 20000 },
+    { key: "25000_plus", label: "$25,000+", score: 20, estimate: 25000 },
+    { key: "not_sure", label: "Not sure", score: 5, estimate: 0 }
+  ];
+
+  var SECURITY_OPTIONS = [
+    { key: "unsecured", label: "Unsecured / no collateral" },
+    { key: "secured", label: "Secured with collateral" },
+    { key: "not_sure", label: "I’m not sure" }
+  ];
+
+  var STAGE_OPTIONS = [
+    { key: "behind", label: "I’ve fallen behind on payments", score: 10 },
+    { key: "collections", label: "Account is in collections", score: 20 },
+    { key: "notices", label: "I received collection letters or notices", score: 25 },
+    { key: "calls", label: "Collectors are calling me", score: 25 },
+    { key: "lawsuit", label: "I was served with a lawsuit / summons", score: 45 },
+    { key: "default_judgment", label: "Debt is in default judgment", score: 50 },
+    { key: "garnishment", label: "Debt is in garnishment", score: 60 },
+    { key: "wages_bank", label: "My wages or bank account are already being affected", score: 65 },
+    { key: "not_sure", label: "Not sure", score: 20 }
+  ];
+
+  var DOCUMENT_OPTIONS = [
+    { key: "letter_notice", label: "Collection letter / notice" },
+    { key: "summons_lawsuit", label: "Lawsuit / summons / court papers" },
+    { key: "judgment", label: "Judgment papers" },
+    { key: "garnishment_order", label: "Garnishment or bank levy notice" },
+    { key: "none", label: "No document" },
+    { key: "not_sure", label: "Not sure what it is" }
+  ];
+
+  var DEADLINE_OPTIONS = [
+    { key: "within_7", label: "Yes, within 7 days", score: 35 },
+    { key: "within_8_14", label: "Yes, within 8–14 days", score: 25 },
+    { key: "within_15_30", label: "Yes, within 15–30 days", score: 15 },
+    { key: "yes_not_sure_when", label: "Yes, but I’m not sure when", score: 25 },
+    { key: "no", label: "No", score: 0 },
+    { key: "not_sure", label: "I’m not sure", score: 10 }
+  ];
+
+  var VALIDATION_OPTIONS = [
+    { key: "within_30", label: "Yes, within the last 30 days", score: 15 },
+    { key: "over_30", label: "Yes, more than 30 days ago", score: 8 },
+    { key: "received_not_sure", label: "I received something, but I’m not sure what it is", score: 12 },
+    { key: "no", label: "No", score: 8 },
+    { key: "not_sure", label: "Not sure", score: 10 }
+  ];
+
+  var BEHAVIOR_OPTIONS = [
+    { key: "calling_repeatedly", label: "Calling me repeatedly", score: 15 },
+    { key: "calling_workplace", label: "Calling my workplace", score: 25 },
+    { key: "contacting_others", label: "Contacting family, friends, or other people", score: 25 },
+    { key: "threatening", label: "Threatening me", score: 20 },
+    { key: "abusive_language", label: "Using abusive language", score: 20 },
+    { key: "threatening_arrest", label: "Threatening arrest, jail, or criminal charges", score: 25 },
+    { key: "threatening_garnishment", label: "Threatening garnishment or taking money", score: 20 },
+    { key: "refusing_verify", label: "Refusing to explain or verify the debt", score: 15 },
+    { key: "letters_only", label: "Sending letters or notices only", score: 10 },
+    { key: "none_of_these", label: "None of these", score: 0 }
+  ];
+
+  var DELIVERY_OPTIONS = [
+    { key: "sms", title: "Text me the results", text: "Send my Debt Defense Options summary by SMS." },
+    { key: "email", title: "Email me the results", text: "Send the summary to my email inbox." },
+    { key: "whatsapp", title: "Send via WhatsApp", text: "Send the results and next step by WhatsApp." },
+    { key: "call", title: "Call me with the results", text: "Have the intake team explain the result by phone." }
+  ];
+
+  var FOLLOW_UP_OPTIONS_DEFAULT = [
+    { key: "message_first", title: "Message me first", text: "Send a message before calling." },
+    { key: "schedule_call", title: "Schedule a call", text: "I prefer to choose a better time." },
+    { key: "call_today", title: "Call me today", text: "A call today works for me." },
+    { key: "email_first", title: "Email me first", text: "Start with email." }
+  ];
+
+  var FOLLOW_UP_OPTIONS_URGENT = [
+    { key: "call_now", title: "Call me now", text: "I can speak as soon as possible." },
+    { key: "immediate_callback", title: "Request an immediate callback", text: "Please prioritize my request." },
+    { key: "call_today", title: "Call me today", text: "Today works for a call." },
+    { key: "message_first", title: "Message me first", text: "Send a message first." }
+  ];
+
+  var root = document.getElementById("credo-debt-defense-widget");
+  if (!root) return;
+
+  var ui = {
+    step: 0,
+    error: "",
+    submitting: false,
+    submittedInDemoMode: false
+  };
+
+  var data = {
+    leadId: makeLeadId(),
+    entryPath: "",
+    state: "",
+    zip: "",
+    personType: "",
+    authorizedForOther: "",
+    debtCountChoice: "",
+    debts: [makeDebt()],
+    deadlineStatus: "",
+    validationNotice: "",
+    behaviors: [],
+    userDescription: "",
+    uploadIntent: false,
+    deliveryChannel: "",
+    firstName: "",
+    lastName: "",
+    phone: "",
+    email: "",
+    smsConsent: false,
+    whatsappConsent: false,
+    followUpPreference: ""
+  };
+
+  root.addEventListener("click", handleClick);
+  root.addEventListener("input", handleInput);
+  root.addEventListener("change", handleInput);
+
+  render();
+
+  function makeLeadId() {
+    var randomPart = Math.random().toString(36).slice(2, 8).toUpperCase();
+    return "CL-" + Date.now().toString(36).toUpperCase() + "-" + randomPart;
+  }
+
+  function makeDebt() {
+    return {
+      type: "",
+      amount: "",
+      security: "",
+      stage: "",
+      autoRepossessionStatus: "",
+      documentStatus: "",
+      creditorName: ""
+    };
+  }
+
+  function h(value) {
+    return String(value == null ? "" : value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  function getLabel(list, key) {
+    var item = list.find(function (x) { return x.key === key; });
+    return item ? item.label : "";
+  }
+
+  function getStateName(abbr) {
+    var item = STATES.find(function (x) { return x[0] === abbr; });
+    return item ? item[1] : "";
+  }
+
+  function getAmountOption(key) {
+    return AMOUNT_OPTIONS.find(function (x) { return x.key === key; }) || { label: "", score: 0, estimate: 0 };
+  }
+
+  function handleClick(event) {
+    var el = event.target.closest("[data-action]");
+    if (!el || !root.contains(el)) return;
+
+    var action = el.getAttribute("data-action");
+    ui.error = "";
+
+    if (action === "select") {
+      data[el.getAttribute("data-field")] = el.getAttribute("data-value");
+      render();
+      return;
+    }
+
+    if (action === "toggle-array") {
+      toggleArrayValue(el.getAttribute("data-field"), el.getAttribute("data-value"));
+      render();
+      return;
+    }
+
+    if (action === "set-debt-count") {
+      setDebtCount(el.getAttribute("data-value"));
+      render();
+      return;
+    }
+
+    if (action === "add-debt") {
+      data.debts.push(makeDebt());
+      data.debtCountChoice = data.debts.length >= 6 ? "6_plus" : String(data.debts.length);
+      render();
+      return;
+    }
+
+    if (action === "remove-debt") {
+      var index = Number(el.getAttribute("data-index"));
+      if (data.debts.length > 1) {
+        data.debts.splice(index, 1);
+        data.debtCountChoice = data.debts.length >= 6 ? "6_plus" : String(data.debts.length);
+      }
+      render();
+      return;
+    }
+
+    if (action === "upload-intent") {
+      data.uploadIntent = true;
+      render();
+      return;
+    }
+
+    if (action === "prev") {
+      ui.step = Math.max(0, ui.step - 1);
+      render();
+      return;
+    }
+
+    if (action === "next") {
+      var validationError = validateStep(ui.step);
+      if (validationError) {
+        ui.error = validationError;
+        render();
+        return;
+      }
+      ui.step = Math.min(8, ui.step + 1);
+      render();
+      return;
+    }
+
+    if (action === "submit") {
+      submitLead();
+    }
+  }
+
+  function handleInput(event) {
+    var el = event.target;
+    if (!el || !root.contains(el)) return;
+
+    if (el.hasAttribute("data-field")) {
+      var field = el.getAttribute("data-field");
+      if (el.type === "checkbox") {
+        data[field] = el.checked;
+      } else {
+        data[field] = el.value;
+      }
+    }
+
+    if (el.hasAttribute("data-debt-field")) {
+      var index = Number(el.getAttribute("data-index"));
+      var debtField = el.getAttribute("data-debt-field");
+      if (data.debts[index]) {
+        data.debts[index][debtField] = el.value;
+        if (debtField === "type" && el.value !== "auto_repossession") {
+          data.debts[index].autoRepossessionStatus = "";
+        }
+      }
+    }
+  }
+
+  function toggleArrayValue(field, value) {
+    if (!Array.isArray(data[field])) data[field] = [];
+    if (value === "none_of_these") {
+      data[field] = data[field].includes(value) ? [] : [value];
+      return;
+    }
+    data[field] = data[field].filter(function (x) { return x !== "none_of_these"; });
+    if (data[field].includes(value)) {
+      data[field] = data[field].filter(function (x) { return x !== value; });
+    } else {
+      data[field].push(value);
+    }
+  }
+
+  function setDebtCount(choice) {
+    data.debtCountChoice = choice;
+    var target = choice === "6_plus" ? 6 : Number(choice);
+    while (data.debts.length < target) data.debts.push(makeDebt());
+    while (data.debts.length > target) data.debts.pop();
+  }
+
+  function validateStep(step) {
+    if (step === 0 && !data.entryPath) return "Choose one option to start.";
+
+    if (step === 1) {
+      if (!data.state) return "Select your state.";
+      if (!data.personType) return "Tell us who this debt help is for.";
+      if (data.personType === "family" && !data.authorizedForOther) return "Please confirm whether you are authorized to speak for the other person.";
+    }
+
+    if (step === 2 && !data.debtCountChoice) return "Select how many debts you want to include.";
+
+    if (step === 3) {
+      for (var i = 0; i < data.debts.length; i += 1) {
+        var debt = data.debts[i];
+        if (!debt.type) return "Select a debt type for Debt #" + (i + 1) + ".";
+        if (!debt.amount) return "Select an approximate amount for Debt #" + (i + 1) + ".";
+        if (!debt.security) return "Select whether Debt #" + (i + 1) + " is secured or unsecured.";
+        if (!debt.stage) return "Select the current stage for Debt #" + (i + 1) + ".";
+        if (debt.type === "auto_repossession" && !debt.autoRepossessionStatus) {
+          return "For Auto Repossession on Debt #" + (i + 1) + ", tell us whether the vehicle was already repossessed.";
+        }
+        if (!debt.documentStatus) return "Select whether you have documents for Debt #" + (i + 1) + ".";
+      }
+    }
+
+    if (step === 4) {
+      if (!data.deadlineStatus) return "Select whether any papers mention a deadline, court date, hearing, judgment, or garnishment.";
+      if (!data.validationNotice) return "Select whether you received a debt validation notice.";
+      if (!data.behaviors.length) return "Select what collectors are doing, or choose “None of these.”";
+    }
+
+    if (step === 6) {
+      if (!data.deliveryChannel) return "Choose where we should send your results.";
+      if (!data.firstName.trim()) return "Enter your first name.";
+      if (!data.lastName.trim()) return "Enter your last name.";
+      if (["sms", "whatsapp", "call"].includes(data.deliveryChannel) && !isValidPhone(data.phone)) {
+        return "Enter a valid 10-digit phone number.";
+      }
+      if (data.deliveryChannel === "email" && !isValidEmail(data.email)) return "Enter a valid email address.";
+      if (data.deliveryChannel === "sms" && !data.smsConsent) return "Please accept the SMS consent to receive results by text message.";
+      if (data.deliveryChannel === "whatsapp" && !data.whatsappConsent) return "Please accept the WhatsApp consent to receive results by WhatsApp.";
+    }
+
+    if (step === 7) {
+      if (!data.followUpPreference) return "Choose a follow-up preference.";
+      if (["call_now", "immediate_callback", "call_today", "schedule_call"].includes(data.followUpPreference) && !isValidPhone(data.phone)) {
+        return "Enter a valid phone number so the team can follow up by phone.";
+      }
+      if (data.followUpPreference === "email_first" && !isValidEmail(data.email)) return "Enter a valid email address for email follow-up.";
+    }
+
+    return "";
+  }
+
+  function isValidEmail(value) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value || "").trim());
+  }
+
+  function isValidPhone(value) {
+    return String(value || "").replace(/\D/g, "").length === 10;
+  }
+
+  function render() {
+    var content = "";
+    if (ui.step === 0) content = renderEntry();
+    if (ui.step === 1) content = renderEligibility();
+    if (ui.step === 2) content = renderDebtCount();
+    if (ui.step === 3) content = renderDebtDetails();
+    if (ui.step === 4) content = renderUrgencyDetails();
+    if (ui.step === 5) content = renderResults();
+    if (ui.step === 6) content = renderDelivery();
+    if (ui.step === 7) content = renderFollowUp();
+    if (ui.step === 8) content = renderThankYou();
+
+    root.innerHTML = [
+      '<div class="clw">',
+        '<div class="cl-card">',
+          renderHeader(),
+          ui.step < 8 ? renderProgress() : '',
+          '<div class="cl-body">',
+            content,
+            ui.error ? '<div class="cl-error">' + h(ui.error) + '</div>' : '',
+            renderActions(),
+            renderDisclaimer(),
+          '</div>',
+        '</div>',
+        renderFooterMini(),
+      '</div>'
+    ].join("");
+  }
+
+  function renderHeader() {
+    return [
+      '<div class="cl-header">',
+        '<div class="cl-logo-wrap">',
+          '<img class="cl-logo" src="' + h(CONFIG.logoUrl) + '" alt="Credo Legal" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'block\';">',
+          '<div class="cl-brand-fallback" style="display:none;">Credo Legal</div>',
+        '</div>',
+        '<a class="cl-call-top" href="' + h(CONFIG.phoneHref) + '">Call now ' + h(CONFIG.phoneDisplay) + '</a>',
+      '</div>'
+    ].join("");
+  }
+
+  function renderProgress() {
+    var labels = ["Start", "Eligibility", "Debt Count", "Debt Details", "Priority", "Results", "Delivery", "Follow-up"];
+    var visibleStep = Math.min(ui.step + 1, labels.length);
+    var pct = Math.max(8, Math.round((visibleStep / labels.length) * 100));
+    return [
+      '<div class="cl-progress-wrap">',
+        '<div class="cl-progress-meta">',
+          '<span>' + h(labels[ui.step] || "") + '</span>',
+          '<span>Step ' + visibleStep + ' of ' + labels.length + '</span>',
+        '</div>',
+        '<div class="cl-progress"><span style="width:' + pct + '%"></span></div>',
+      '</div>'
+    ].join("");
+  }
+
+  function renderEntry() {
+    return [
+      '<div class="cl-eyebrow">Free intake check</div>',
+      '<h2 class="cl-title">Find out where your debt situation stands.</h2>',
+      '<p class="cl-subtitle">Answer a few questions about your debt, collector activity, documents, and deadlines. You’ll get a priority level, a readiness score, and a recommended next step before you choose how to be contacted.</p>',
+      '<div class="cl-grid cl-grid-2">',
+        optionCard("entryPath", "urgent", "I Need Urgent Debt Help", "I was sued, my wages are being garnished, or collectors are escalating."),
+        optionCard("entryPath", "options_check", "Check My Debt Defense Options", "I want to understand where I stand and what options may be available."),
+      '</div>',
+      '<div class="cl-inline-note"><strong>What you’ll receive:</strong> a Debt Defense Priority Level, a Case Readiness Score, and a checklist of what to prepare next.</div>'
+    ].join("");
+  }
+
+  function renderEligibility() {
+    var excluded = data.state && CONFIG.excludedStates.includes(data.state);
+    var business = data.personType === "business";
+    return [
+      '<div class="cl-eyebrow">Eligibility</div>',
+      '<h2 class="cl-title">First, let’s confirm the basics.</h2>',
+      '<p class="cl-subtitle">Credo Legal reviews consumer debt issues for individuals. This step helps route your request correctly.</p>',
+      '<div class="cl-form-grid">',
+        '<div class="cl-field">',
+          '<label for="cl-state">Your state</label>',
+          '<select id="cl-state" data-field="state">',
+            '<option value="">Select state</option>',
+            STATES.map(function (state) {
+              return '<option value="' + h(state[0]) + '" ' + (data.state === state[0] ? 'selected' : '') + '>' + h(state[1]) + (CONFIG.excludedStates.includes(state[0]) ? ' — currently not serviced' : '') + '</option>';
+            }).join(""),
+          '</select>',
+          '<div class="cl-help">Current excluded-state configuration: ' + h(CONFIG.excludedStates.join(", ")) + '.</div>',
+        '</div>',
+        '<div class="cl-field">',
+          '<label for="cl-zip">ZIP code <span class="cl-help">optional</span></label>',
+          '<input id="cl-zip" data-field="zip" inputmode="numeric" placeholder="5-digit ZIP" value="' + h(data.zip) + '">',
+        '</div>',
+      '</div>',
+      '<div style="margin-top:18px;" class="cl-label">Who is this debt help for?</div>',
+      '<div class="cl-grid cl-grid-3" style="margin-top:10px;">',
+        optionCard("personType", "self", "Myself", "I’m looking for help with my own debt."),
+        optionCard("personType", "family", "A family member", "I’m helping another individual with their debt."),
+        optionCard("personType", "business", "A business", "This debt belongs to a business entity."),
+      '</div>',
+      data.personType === "family" ? renderAuthorizedQuestion() : '',
+      excluded ? '<div class="cl-warning"><strong>State eligibility note:</strong> Credo Legal is currently configured as not servicing ' + h(getStateName(data.state)) + '. You can still continue to see the summary, but the request may be marked as not a fit.</div>' : '',
+      business ? '<div class="cl-warning"><strong>Consumer-debt note:</strong> This flow is designed for individuals with consumer debt. Business debt will be marked as not a fit unless the intake team decides otherwise.</div>' : ''
+    ].join("");
+  }
+
+  function renderAuthorizedQuestion() {
+    return [
+      '<div style="margin-top:18px;" class="cl-label">Are you authorized to speak with Credo Legal about this person’s debt?</div>',
+      '<div class="cl-grid cl-grid-3" style="margin-top:10px;">',
+        optionCard("authorizedForOther", "yes", "Yes", "I can discuss this request."),
+        optionCard("authorizedForOther", "no", "No", "I’m only gathering information."),
+        optionCard("authorizedForOther", "not_sure", "Not sure", "The team may need to confirm."),
+      '</div>'
+    ].join("");
+  }
+
+  function renderDebtCount() {
+    var countOptions = [
+      ["1", "1 debt"], ["2", "2 debts"], ["3", "3 debts"], ["4", "4 debts"], ["5", "5 debts"], ["6_plus", "6+ debts"]
+    ];
+    return [
+      '<div class="cl-eyebrow">Debt inventory</div>',
+      '<h2 class="cl-title">How many debts do you want reviewed?</h2>',
+      '<p class="cl-subtitle">You’ll be able to enter the type and approximate amount for each debt. If you have more than six, start with the most important ones and add more if needed.</p>',
+      '<div class="cl-grid cl-grid-3">',
+        countOptions.map(function (opt) {
+          var selected = data.debtCountChoice === opt[0];
+          return '<button type="button" class="cl-option ' + (selected ? 'is-selected' : '') + '" data-action="set-debt-count" data-value="' + h(opt[0]) + '"><span class="cl-option-title">' + h(opt[1]) + '</span><span class="cl-option-text">Include this in the review.</span></button>';
+        }).join(""),
+      '</div>',
+      data.debtCountChoice === "6_plus" ? '<div class="cl-inline-note">For 6+ debts, this widget starts with six debt cards. You can add more on the next step.</div>' : ''
+    ].join("");
+  }
+
+  function renderDebtDetails() {
+    return [
+      '<div class="cl-eyebrow">Debt details</div>',
+      '<h2 class="cl-title">Tell us about each debt.</h2>',
+      '<p class="cl-subtitle">Credo Legal focuses on unsecured consumer debts such as credit card, medical, payday loan, utility, and certain auto repossession deficiency matters.</p>',
+      data.debts.map(renderDebtCard).join(""),
+      '<div class="cl-small-row" style="margin-top:16px;">',
+        '<button type="button" class="cl-btn cl-btn-secondary" data-action="add-debt">+ Add another debt</button>',
+        data.debts.length > 1 ? '<span class="cl-help">Current debts entered: ' + data.debts.length + '</span>' : '',
+      '</div>'
+    ].join("");
+  }
+
+  function renderDebtCard(debt, index) {
+    return [
+      '<div class="cl-debt-card">',
+        '<div class="cl-small-row" style="justify-content:space-between;">',
+          '<div><h3>Debt #' + (index + 1) + '</h3><p class="cl-help">Type, amount, stage, security, and documents.</p></div>',
+          data.debts.length > 1 ? '<button type="button" class="cl-btn cl-btn-ghost" data-action="remove-debt" data-index="' + index + '">Remove</button>' : '',
+        '</div>',
+        '<div class="cl-form-grid">',
+          '<div class="cl-field">',
+            '<label>Debt type</label>',
+            renderDebtTypeSelect(index, debt.type),
+          '</div>',
+          '<div class="cl-field">',
+            '<label>Approximate amount</label>',
+            renderSelect("amount", index, AMOUNT_OPTIONS, debt.amount, "Select amount"),
+          '</div>',
+          '<div class="cl-field">',
+            '<label>Is this debt unsecured?</label>',
+            renderSelect("security", index, SECURITY_OPTIONS, debt.security, "Select security"),
+          '</div>',
+          '<div class="cl-field">',
+            '<label>What stage is this debt at?</label>',
+            renderSelect("stage", index, STAGE_OPTIONS, debt.stage, "Select stage"),
+          '</div>',
+          debt.type === "auto_repossession" ? renderAutoRepoQuestion(index, debt.autoRepossessionStatus) : '',
+          '<div class="cl-field">',
+            '<label>Do you have any document for this debt?</label>',
+            renderSelect("documentStatus", index, DOCUMENT_OPTIONS, debt.documentStatus, "Select document status"),
+          '</div>',
+          '<div class="cl-field">',
+            '<label>Creditor / collector name <span class="cl-help">optional</span></label>',
+            '<input data-index="' + index + '" data-debt-field="creditorName" placeholder="Example: Midland, Portfolio Recovery, Capital One" value="' + h(debt.creditorName) + '">',
+          '</div>',
+        '</div>',
+      '</div>'
+    ].join("");
+  }
+
+  function renderDebtTypeSelect(index, selected) {
+    var supported = DEBT_TYPES.filter(function (x) { return x.group === "Supported"; });
+    var unsupported = DEBT_TYPES.filter(function (x) { return x.group === "Not supported"; });
+    var review = DEBT_TYPES.filter(function (x) { return x.group === "Needs review"; });
+    return [
+      '<select data-index="' + index + '" data-debt-field="type">',
+        '<option value="">Select debt type</option>',
+        '<optgroup label="Supported debt types">',
+          supported.map(optionHtml(selected)).join(""),
+        '</optgroup>',
+        '<optgroup label="Not supported debt types">',
+          unsupported.map(optionHtml(selected)).join(""),
+        '</optgroup>',
+        '<optgroup label="Other">',
+          review.map(optionHtml(selected)).join(""),
+        '</optgroup>',
+      '</select>'
+    ].join("");
+  }
+
+  function renderSelect(field, index, options, selected, placeholder) {
+    return [
+      '<select data-index="' + index + '" data-debt-field="' + h(field) + '">',
+        '<option value="">' + h(placeholder) + '</option>',
+        options.map(optionHtml(selected)).join(""),
+      '</select>'
+    ].join("");
+  }
+
+  function optionHtml(selected) {
+    return function (item) {
+      return '<option value="' + h(item.key) + '" ' + (selected === item.key ? 'selected' : '') + '>' + h(item.label) + '</option>';
+    };
+  }
+
+  function renderAutoRepoQuestion(index, selected) {
+    var options = [
+      { key: "repossessed_yes", label: "Yes, the vehicle was already repossessed" },
+      { key: "repossessed_no", label: "No, the vehicle has not been repossessed" },
+      { key: "not_sure", label: "I’m not sure" }
+    ];
+    return [
+      '<div class="cl-field">',
+        '<label>Was the vehicle already repossessed?</label>',
+        '<select data-index="' + index + '" data-debt-field="autoRepossessionStatus">',
+          '<option value="">Select one</option>',
+          options.map(optionHtml(selected)).join(""),
+        '</select>',
+        '<div class="cl-help">Credo Legal focuses on unsecured debt. A post-repossession deficiency balance may need review.</div>',
+      '</div>'
+    ].join("");
+  }
+
+  function renderUrgencyDetails() {
+    var needsUploadPrompt = shouldShowUploadPrompt();
+    return [
+      '<div class="cl-eyebrow">Priority check</div>',
+      '<h2 class="cl-title">Now let’s check urgency and collector behavior.</h2>',
+      '<p class="cl-subtitle">This helps determine whether your situation appears early-stage, active, high-priority, or critical for intake review.</p>',
+      '<div class="cl-form-grid">',
+        '<div class="cl-field cl-field-full">',
+          '<label>Do any papers mention a deadline, court date, hearing date, judgment, or garnishment?</label>',
+          '<select data-field="deadlineStatus">',
+            '<option value="">Select one</option>',
+            DEADLINE_OPTIONS.map(function (opt) { return '<option value="' + h(opt.key) + '" ' + (data.deadlineStatus === opt.key ? 'selected' : '') + '>' + h(opt.label) + '</option>'; }).join(""),
+          '</select>',
+        '</div>',
+        '<div class="cl-field cl-field-full">',
+          '<label>Did you receive a written debt validation notice?</label>',
+          '<select data-field="validationNotice">',
+            '<option value="">Select one</option>',
+            VALIDATION_OPTIONS.map(function (opt) { return '<option value="' + h(opt.key) + '" ' + (data.validationNotice === opt.key ? 'selected' : '') + '>' + h(opt.label) + '</option>'; }).join(""),
+          '</select>',
+        '</div>',
+      '</div>',
+      '<div style="margin-top:18px;" class="cl-label">What are collectors doing? Select all that apply.</div>',
+      '<div class="cl-grid cl-grid-2" style="margin-top:10px;">',
+        BEHAVIOR_OPTIONS.map(function (opt) {
+          return toggleCard("behaviors", opt.key, opt.label, behaviorDescription(opt.key));
+        }).join(""),
+      '</div>',
+      needsUploadPrompt ? renderUploadPrompt() : renderOptionalUploadPrompt(),
+      '<div class="cl-form-grid">',
+        '<div class="cl-field cl-field-full">',
+          '<label>Tell us more about your situation <span class="cl-help">optional</span></label>',
+          '<textarea data-field="userDescription" placeholder="Example: A collector has been calling me at work, and I received a letter last week but I’m not sure what it means.">' + h(data.userDescription) + '</textarea>',
+        '</div>',
+      '</div>'
+    ].join("");
+  }
+
+  function behaviorDescription(key) {
+    var map = {
+      calling_repeatedly: "Frequent calls or repeated attempts.",
+      calling_workplace: "Calls to your job or employer.",
+      contacting_others: "Contacting people besides you.",
+      threatening: "Threatening language or pressure.",
+      abusive_language: "Insults, abusive wording, or intimidation.",
+      threatening_arrest: "Threats about jail or criminal charges.",
+      threatening_garnishment: "Threats involving wages, bank funds, or garnishment.",
+      refusing_verify: "Won’t explain or validate the debt.",
+      letters_only: "Letters or notices, but no aggressive conduct selected.",
+      none_of_these: "No collector behavior listed here."
+    };
+    return map[key] || "";
+  }
+
+  function shouldShowUploadPrompt() {
+    return data.debts.some(function (debt) {
+      return debt.type === "other_not_sure" || debt.stage === "not_sure" || debt.documentStatus === "not_sure" || debt.documentStatus === "summons_lawsuit" || debt.documentStatus === "judgment" || debt.documentStatus === "garnishment_order";
+    }) || data.deadlineStatus === "not_sure" || data.validationNotice === "received_not_sure" || data.validationNotice === "not_sure";
+  }
+
+  function renderUploadPrompt() {
+    return [
+      '<div class="cl-upload-placeholder">',
+        '<h3>Not sure how to explain the document?</h3>',
+        '<p class="cl-help">If you have a letter, summons, judgment, garnishment notice, or collection document, a future upload tool can be placed here. For this MVP, clicking below records that you have documents available.</p>',
+        data.uploadIntent ? '<div class="cl-pill-row"><span class="cl-pill cl-pill-good">Document upload intent saved</span></div>' : '',
+        '<div class="cl-small-row" style="margin-top:12px;">',
+          '<button type="button" class="cl-btn cl-btn-secondary" data-action="upload-intent">I have documents to upload later</button>',
+        '</div>',
+      '</div>'
+    ].join("");
+  }
+
+  function renderOptionalUploadPrompt() {
+    return [
+      '<div class="cl-upload-placeholder">',
+        '<h3>Have letters or collection documents?</h3>',
+        '<p class="cl-help">For now, this is a simulated upload step. The production upload tool can be connected later.</p>',
+        data.uploadIntent ? '<div class="cl-pill-row"><span class="cl-pill cl-pill-good">Document upload intent saved</span></div>' : '',
+        '<button type="button" class="cl-btn cl-btn-secondary" data-action="upload-intent">I have documents to upload later</button>',
+      '</div>'
+    ].join("");
+  }
+
+  function renderResults() {
+    var calc = getCalculations();
+    var branch = getBranchMessage(calc);
+    var readinessItems = getMissingReadinessItems();
+    return [
+      '<div class="cl-eyebrow">Your results</div>',
+      '<h2 class="cl-title">Your Debt Defense Options summary is ready.</h2>',
+      '<p class="cl-subtitle">Below is a preliminary intake summary based on your answers. It is not legal advice and does not create an attorney-client relationship.</p>',
+      '<div class="cl-result-layout">',
+        '<div class="cl-summary-card">',
+          '<div class="cl-pill-row">',
+            '<span class="cl-pill ' + h(calc.urgencyClass) + '">' + h(calc.urgencyLevel) + ' Priority</span>',
+            '<span class="cl-pill ' + h(calc.qualificationClass) + '">' + h(calc.qualificationStatus) + '</span>',
+          '</div>',
+          '<h3 style="margin-top:18px;">' + h(branch.title) + '</h3>',
+          '<p style="line-height:1.6;color:var(--cl-ink);">' + h(branch.body) + '</p>',
+          '<h4>Recommended next step</h4>',
+          '<p style="line-height:1.6;color:var(--cl-ink);">' + h(branch.nextStep) + '</p>',
+          '<ul class="cl-list">',
+            branch.checklist.map(function (item) { return '<li>' + h(item) + '</li>'; }).join(""),
+          '</ul>',
+          calc.urgencyLevel === "Critical" || calc.urgencyLevel === "High" ? '<div class="cl-small-row" style="margin-top:16px;"><a class="cl-btn cl-btn-primary" href="' + h(CONFIG.phoneHref) + '">Call Credo Legal now</a><button type="button" class="cl-btn cl-btn-secondary" data-action="next">Send me my results</button></div>' : '',
+        '</div>',
+        '<div class="cl-grid">',
+          scoreCard("Debt Defense Priority", calc.urgencyScore, calc.urgencyLevel + " Priority", "This score prioritizes lawsuits, judgments, garnishment, deadlines, collector behavior, debt amount, and number of debts."),
+          scoreCard("Case Readiness", calc.readinessScore, calc.readinessLevel, "This score measures how ready your information is for an initial intake review."),
+        '</div>',
+      '</div>',
+      readinessItems.length ? '<div class="cl-inline-note"><strong>To improve readiness, prepare:</strong><ul class="cl-list">' + readinessItems.map(function (item) { return '<li>' + h(item) + '</li>'; }).join("") + '</ul></div>' : '<div class="cl-inline-note"><strong>Good news:</strong> You provided the core information needed for an initial intake review.</div>'
+    ].join("");
+  }
+
+  function scoreCard(title, score, label, text) {
+    return [
+      '<div class="cl-score-card">',
+        '<h3>' + h(title) + '</h3>',
+        '<div class="cl-score-number">' + h(score) + '<span style="font-size:20px;letter-spacing:0;">/100</span></div>',
+        '<div class="cl-meter"><span style="width:' + h(score) + '%"></span></div>',
+        '<div class="cl-pill-row"><span class="cl-pill">' + h(label) + '</span></div>',
+        '<p class="cl-help" style="margin-top:12px;">' + h(text) + '</p>',
+      '</div>'
+    ].join("");
+  }
+
+  function renderDelivery() {
+    return [
+      '<div class="cl-eyebrow">Send results</div>',
+      '<h2 class="cl-title">Where should we send your results?</h2>',
+      '<p class="cl-subtitle">Choose how you want to receive your Debt Defense Options summary. After that, you can choose how the team should follow up.</p>',
+      '<div class="cl-grid cl-grid-2">',
+        DELIVERY_OPTIONS.map(function (opt) {
+          return optionCard("deliveryChannel", opt.key, opt.title, opt.text);
+        }).join(""),
+      '</div>',
+      data.deliveryChannel ? renderContactFields() : ''
+    ].join("");
+  }
+
+  function renderContactFields() {
+    var phoneRequired = ["sms", "whatsapp", "call"].includes(data.deliveryChannel);
+    var emailRequired = data.deliveryChannel === "email";
+    return [
+      '<div class="cl-form-grid">',
+        '<div class="cl-field">',
+          '<label>First name</label>',
+          '<input data-field="firstName" autocomplete="given-name" value="' + h(data.firstName) + '">',
+        '</div>',
+        '<div class="cl-field">',
+          '<label>Last name</label>',
+          '<input data-field="lastName" autocomplete="family-name" value="' + h(data.lastName) + '">',
+        '</div>',
+        '<div class="cl-field">',
+          '<label>Phone number ' + (phoneRequired ? '' : '<span class="cl-help">optional unless you request a call</span>') + '</label>',
+          '<input data-field="phone" autocomplete="tel" inputmode="tel" placeholder="10-digit phone" value="' + h(data.phone) + '">',
+        '</div>',
+        '<div class="cl-field">',
+          '<label>Email ' + (emailRequired ? '' : '<span class="cl-help">optional</span>') + '</label>',
+          '<input data-field="email" autocomplete="email" inputmode="email" placeholder="name@example.com" value="' + h(data.email) + '">',
+        '</div>',
+      '</div>',
+      data.deliveryChannel === "sms" ? '<label class="cl-checkbox-row"><input type="checkbox" data-field="smsConsent" ' + (data.smsConsent ? 'checked' : '') + '> <span>By selecting text message, I agree that Credo Legal and its representatives may contact me by SMS regarding my request. Message and data rates may apply. I can opt out at any time.</span></label>' : '',
+      data.deliveryChannel === "whatsapp" ? '<label class="cl-checkbox-row"><input type="checkbox" data-field="whatsappConsent" ' + (data.whatsappConsent ? 'checked' : '') + '> <span>By selecting WhatsApp, I agree that Credo Legal and its representatives may contact me by WhatsApp regarding my request.</span></label>' : '',
+      '<div class="cl-disclaimer">By submitting this form, you agree that Credo Legal and its representatives may contact you by phone, text message, WhatsApp, or email regarding your request. This is placeholder consent copy and should be reviewed before production use.</div>'
+    ].join("");
+  }
+
+  function renderFollowUp() {
+    var calc = getCalculations();
+    var urgent = calc.urgencyLevel === "Critical" || calc.urgencyLevel === "High" || data.entryPath === "urgent";
+    var options = urgent ? FOLLOW_UP_OPTIONS_URGENT : FOLLOW_UP_OPTIONS_DEFAULT;
+    var needsPhone = ["call_now", "immediate_callback", "call_today", "schedule_call"].includes(data.followUpPreference) && !isValidPhone(data.phone);
+    var needsEmail = data.followUpPreference === "email_first" && !isValidEmail(data.email);
+    return [
+      '<div class="cl-eyebrow">Follow-up preference</div>',
+      '<h2 class="cl-title">How should the intake team follow up?</h2>',
+      '<p class="cl-subtitle">Your results will be sent using the channel you selected. This tells the team how to follow up after that.</p>',
+      '<div class="cl-grid cl-grid-2">',
+        options.map(function (opt) { return optionCard("followUpPreference", opt.key, opt.title, opt.text); }).join(""),
+      '</div>',
+      (needsPhone || needsEmail) ? '<div class="cl-form-grid">' + (needsPhone ? '<div class="cl-field"><label>Best phone number</label><input data-field="phone" autocomplete="tel" inputmode="tel" placeholder="10-digit phone" value="' + h(data.phone) + '"></div>' : '') + (needsEmail ? '<div class="cl-field"><label>Best email</label><input data-field="email" autocomplete="email" inputmode="email" placeholder="name@example.com" value="' + h(data.email) + '"></div>' : '') + '</div>' : '',
+      '<div class="cl-inline-note"><strong>Lead ID:</strong> ' + h(data.leadId) + '. This ID will be sent to the Google Sheet with the full intake summary.</div>'
+    ].join("");
+  }
+
+  function renderThankYou() {
+    return [
+      '<div class="cl-eyebrow">Submitted</div>',
+      '<h2 class="cl-title">Thank you. Your request has been prepared.</h2>',
+      '<p class="cl-subtitle">Your Debt Defense Options summary and intake data were packaged for Credo Legal. Lead ID: <strong>' + h(data.leadId) + '</strong>.</p>',
+      ui.submittedInDemoMode ? '<div class="cl-warning"><strong>Demo mode:</strong> No Google Apps Script URL is configured yet, so the lead payload was logged to the browser console instead of being sent to Google Sheets.</div>' : '<div class="cl-inline-note"><strong>Next step:</strong> The intake team can review the Google Sheet row and follow up using your selected contact preference.</div>',
+      '<div class="cl-small-row" style="margin-top:16px;"><a class="cl-btn cl-btn-primary" href="' + h(CONFIG.phoneHref) + '">Call ' + h(CONFIG.phoneDisplay) + '</a><button type="button" class="cl-btn cl-btn-secondary" onclick="location.reload()">Start another check</button></div>'
+    ].join("");
+  }
+
+  function renderActions() {
+    if (ui.step === 8) return "";
+    var nextLabel = "Continue";
+    if (ui.step === 5) nextLabel = "Send me my results";
+    if (ui.step === 7) nextLabel = ui.submitting ? "Submitting..." : "Submit request";
+
+    return [
+      '<div class="cl-actions">',
+        '<div>',
+          ui.step > 0 ? '<button type="button" class="cl-btn cl-btn-ghost" data-action="prev">Previous</button>' : '',
+        '</div>',
+        '<div class="cl-actions-right">',
+          ui.step === 0 ? '<a class="cl-btn cl-btn-secondary" href="' + h(CONFIG.phoneHref) + '">Or call now</a>' : '',
+          '<button type="button" class="cl-btn cl-btn-primary" data-action="' + (ui.step === 7 ? 'submit' : 'next') + '" ' + (ui.submitting ? 'disabled' : '') + '>' + h(nextLabel) + '</button>',
+        '</div>',
+      '</div>'
+    ].join("");
+  }
+
+  function renderDisclaimer() {
+    return [
+      '<div class="cl-disclaimer">',
+        '<strong>Placeholder disclaimer:</strong> This tool is for general intake and informational purposes only. It does not provide legal advice and does not create an attorney-client relationship. Deadlines and legal options depend on the facts of your situation and applicable law. A qualified legal professional should review your documents before you take action.',
+      '</div>'
+    ].join("");
+  }
+
+  function renderFooterMini() {
+    return [
+      '<div class="cl-footer-mini">',
+        '<span>Attorney Advertising. Prior results do not guarantee a similar outcome.</span>',
+        '<span><a href="' + h(CONFIG.privacyUrl) + '" target="_blank" rel="noopener">Privacy Policy</a> · <a href="' + h(CONFIG.termsUrl) + '" target="_blank" rel="noopener">Terms</a></span>',
+      '</div>'
+    ].join("");
+  }
+
+  function optionCard(field, value, title, text) {
+    var selected = data[field] === value;
+    return '<button type="button" class="cl-option ' + (selected ? 'is-selected' : '') + '" data-action="select" data-field="' + h(field) + '" data-value="' + h(value) + '"><span class="cl-option-title">' + h(title) + '</span><span class="cl-option-text">' + h(text) + '</span></button>';
+  }
+
+  function toggleCard(field, value, title, text) {
+    var selected = Array.isArray(data[field]) && data[field].includes(value);
+    return '<button type="button" class="cl-option ' + (selected ? 'is-selected' : '') + '" data-action="toggle-array" data-field="' + h(field) + '" data-value="' + h(value) + '"><span class="cl-option-title">' + h(title) + '</span><span class="cl-option-text">' + h(text) + '</span></button>';
+  }
+
+  function getCalculations() {
+    var qualification = getQualification();
+    var stageScore = getMaxStageScore();
+    var deadlineScore = getOptionScore(DEADLINE_OPTIONS, data.deadlineStatus);
+    var validationScore = getOptionScore(VALIDATION_OPTIONS, data.validationNotice);
+    var behaviorScore = Math.min(45, data.behaviors.reduce(function (sum, key) { return sum + getOptionScore(BEHAVIOR_OPTIONS, key); }, 0));
+    var amountScore = getLargestAmountScore();
+    var countScore = data.debts.length >= 6 ? 15 : data.debts.length >= 3 ? 10 : data.debts.length === 2 ? 5 : 0;
+    var entryScore = data.entryPath === "urgent" ? 10 : 0;
+    var urgencyScore = Math.min(100, stageScore + deadlineScore + validationScore + behaviorScore + amountScore + countScore + entryScore);
+    var urgencyLevel = urgencyScore >= 75 ? "Critical" : urgencyScore >= 50 ? "High" : urgencyScore >= 25 ? "Moderate" : "Low";
+    var readinessScore = getReadinessScore();
+    var readinessLevel = readinessScore >= 81 ? "High-Readiness Case" : readinessScore >= 61 ? "Ready for Initial Review" : readinessScore >= 31 ? "Partially Ready" : "Needs More Information";
+
+    return {
+      qualificationStatus: qualification.status,
+      qualificationReasons: qualification.reasons,
+      qualificationClass: qualification.className,
+      urgencyScore: urgencyScore,
+      urgencyLevel: urgencyLevel,
+      urgencyClass: urgencyLevel === "Critical" ? "cl-pill-critical" : urgencyLevel === "High" ? "cl-pill-high" : urgencyLevel === "Moderate" ? "" : "cl-pill-good",
+      readinessScore: readinessScore,
+      readinessLevel: readinessLevel,
+      highestRiskStage: getHighestRiskStage(),
+      hasLawsuit: hasLawsuit(),
+      hasDefaultJudgment: hasDefaultJudgment(),
+      hasGarnishment: hasGarnishment(),
+      hasHarassment: hasHarassment()
+    };
+  }
+
+  function getOptionScore(list, key) {
+    var item = list.find(function (x) { return x.key === key; });
+    return item ? item.score : 0;
+  }
+
+  function getMaxStageScore() {
+    return data.debts.reduce(function (max, debt) {
+      return Math.max(max, getOptionScore(STAGE_OPTIONS, debt.stage));
+    }, 0);
+  }
+
+  function getHighestRiskStage() {
+    var sorted = data.debts.slice().sort(function (a, b) {
+      return getOptionScore(STAGE_OPTIONS, b.stage) - getOptionScore(STAGE_OPTIONS, a.stage);
+    });
+    return sorted[0] ? sorted[0].stage : "";
+  }
+
+  function getLargestAmountScore() {
+    return data.debts.reduce(function (max, debt) {
+      return Math.max(max, getAmountOption(debt.amount).score || 0);
+    }, 0);
+  }
+
+  function hasLawsuit() {
+    return data.debts.some(function (d) { return d.stage === "lawsuit" || d.documentStatus === "summons_lawsuit"; }) || ["within_7", "within_8_14", "within_15_30", "yes_not_sure_when"].includes(data.deadlineStatus);
+  }
+
+  function hasDefaultJudgment() {
+    return data.debts.some(function (d) { return d.stage === "default_judgment" || d.documentStatus === "judgment"; });
+  }
+
+  function hasGarnishment() {
+    return data.debts.some(function (d) { return d.stage === "garnishment" || d.stage === "wages_bank" || d.documentStatus === "garnishment_order"; });
+  }
+
+  function hasHarassment() {
+    return data.behaviors.some(function (key) {
+      return !["none_of_these", "letters_only"].includes(key);
+    });
+  }
+
+  function getQualification() {
+    var reasons = [];
+    var className = "";
+    var stateExcluded = CONFIG.excludedStates.includes(data.state);
+    var business = data.personType === "business";
+    var eligibleDebts = data.debts.filter(isDebtEligible);
+    var conditionalDebts = data.debts.filter(isDebtConditional);
+    var unsupportedDebts = data.debts.filter(function (d) { return UNSUPPORTED_DEBT_KEYS.includes(d.type); });
+    var supportedDebts = data.debts.filter(function (d) { return SUPPORTED_DEBT_KEYS.includes(d.type); });
+
+    if (stateExcluded) reasons.push("State currently not serviced: " + data.state);
+    if (business) reasons.push("Business debt is outside the consumer-debt flow");
+    if (!supportedDebts.length && unsupportedDebts.length) reasons.push("Only unsupported debt types selected");
+    if (!eligibleDebts.length && supportedDebts.length && data.debts.every(function (d) { return d.security === "secured" && !(d.type === "auto_repossession" && d.autoRepossessionStatus === "repossessed_yes"); })) {
+      reasons.push("Selected debt appears secured with collateral");
+    }
+
+    if (stateExcluded || business || (!supportedDebts.length && unsupportedDebts.length) || (!eligibleDebts.length && supportedDebts.length && !conditionalDebts.length)) {
+      return { status: "Not a Fit", reasons: reasons, className: "cl-pill-critical" };
+    }
+
+    if (eligibleDebts.length && (unsupportedDebts.length || conditionalDebts.length)) {
+      if (unsupportedDebts.length) reasons.push("Some selected debts are not supported");
+      if (conditionalDebts.length) reasons.push("Some debts need review to confirm unsecured status");
+      return { status: "Partially Qualified", reasons: reasons, className: "cl-pill-high" };
+    }
+
+    if (!eligibleDebts.length && conditionalDebts.length) {
+      reasons.push("Documents or more details may be needed to confirm fit");
+      return { status: "Needs Review", reasons: reasons, className: "cl-pill-high" };
+    }
+
+    if (eligibleDebts.length) {
+      return { status: "Qualified", reasons: ["Supported unsecured consumer-debt issue selected"], className: "cl-pill-good" };
+    }
+
+    return { status: "Needs Review", reasons: ["Debt type or security status is unclear"], className: "cl-pill-high" };
+  }
+
+  function isDebtEligible(debt) {
+    if (!SUPPORTED_DEBT_KEYS.includes(debt.type)) return false;
+    if (debt.type === "auto_repossession") {
+      return debt.security === "unsecured" || debt.autoRepossessionStatus === "repossessed_yes";
+    }
+    return debt.security === "unsecured";
+  }
+
+  function isDebtConditional(debt) {
+    if (debt.type === "other_not_sure") return true;
+    if (SUPPORTED_DEBT_KEYS.includes(debt.type) && debt.security === "not_sure") return true;
+    if (debt.type === "auto_repossession" && debt.autoRepossessionStatus === "not_sure") return true;
+    return false;
+  }
+
+  function getReadinessScore() {
+    var score = 0;
+    if (data.debts.some(function (d) { return SUPPORTED_DEBT_KEYS.includes(d.type); })) score += 20;
+    if (data.debts.some(function (d) { return d.security === "unsecured" || (d.type === "auto_repossession" && d.autoRepossessionStatus === "repossessed_yes"); })) score += 15;
+    if (data.debts.every(function (d) { return !!d.amount; })) score += 15;
+    if (data.debts.every(function (d) { return d.stage && d.stage !== "not_sure"; })) score += 15;
+    if (data.debts.some(function (d) { return d.creditorName.trim(); })) score += 10;
+    if (data.uploadIntent || data.debts.some(function (d) { return !["", "none", "not_sure"].includes(d.documentStatus); })) score += 10;
+    if (data.deadlineStatus && data.deadlineStatus !== "not_sure") score += 10;
+    if (data.behaviors.length && !data.behaviors.includes("none_of_these")) score += 5;
+    return Math.min(100, score);
+  }
+
+  function getMissingReadinessItems() {
+    var items = [];
+    if (!data.debts.some(function (d) { return SUPPORTED_DEBT_KEYS.includes(d.type); })) items.push("Confirm whether any debt is credit card, medical, payday loan, utilities, or auto repossession related.");
+    if (!data.debts.some(function (d) { return d.security === "unsecured" || (d.type === "auto_repossession" && d.autoRepossessionStatus === "repossessed_yes"); })) items.push("Confirm whether the debt is unsecured or connected to a post-repossession balance.");
+    if (!data.debts.every(function (d) { return !!d.amount; })) items.push("Approximate amount for each debt.");
+    if (!data.debts.every(function (d) { return d.stage && d.stage !== "not_sure"; })) items.push("Current stage for each debt: collections, lawsuit, judgment, garnishment, or other.");
+    if (!data.debts.some(function (d) { return d.creditorName.trim(); })) items.push("Creditor or debt collector name, if known.");
+    if (!(data.uploadIntent || data.debts.some(function (d) { return !["", "none", "not_sure"].includes(d.documentStatus); }))) items.push("Any collection letter, notice, summons, judgment, or garnishment document.");
+    if (!(data.deadlineStatus && data.deadlineStatus !== "not_sure")) items.push("Any deadline, court date, hearing date, judgment date, or garnishment date listed on the papers.");
+    return items.slice(0, 5);
+  }
+
+  function getBranchMessage(calc) {
+    if (calc.qualificationStatus === "Not a Fit") {
+      return {
+        title: "This may not fit Credo Legal’s current review criteria.",
+        body: "Based on your answers, the issue may involve an excluded state, business debt, unsupported debt type, or secured debt. You can still send yourself the summary, but this request may be marked as not a fit for the intake team.",
+        nextStep: "Review the summary and, if anything was selected incorrectly, restart the check or contact the team directly.",
+        checklist: calc.qualificationReasons.length ? calc.qualificationReasons : ["Confirm state, debt type, and whether the debt is unsecured."]
+      };
+    }
+
+    if (calc.hasGarnishment) {
+      return {
+        title: "Active garnishment or wage/bank impact may be involved.",
+        body: "Your answers suggest that wages, bank funds, or an enforcement notice may already be involved. These situations can move quickly and should be reviewed promptly.",
+        nextStep: "Prepare any garnishment, bank levy, judgment, payroll, or court paperwork and request a prompt follow-up.",
+        checklist: ["Garnishment or levy notice", "Judgment papers", "Employer or bank notice", "Date wages or bank funds were affected"]
+      };
+    }
+
+    if (calc.hasDefaultJudgment) {
+      return {
+        title: "A default judgment may be involved.",
+        body: "A judgment can give a collector stronger collection tools depending on the court order and state law. Your next step is to understand what judgment was entered and whether any options remain.",
+        nextStep: "Prepare the judgment paperwork, court name, date entered, and any wage or bank collection notices.",
+        checklist: ["Copy of judgment", "Court name", "Date judgment was entered", "Any garnishment or bank levy notice"]
+      };
+    }
+
+    if (calc.hasLawsuit) {
+      return {
+        title: "Do not ignore court papers or lawsuit deadlines.",
+        body: "Debt lawsuits and court papers may involve strict response deadlines. Failing to respond can increase the risk of a default judgment or other collection action.",
+        nextStep: "Have the documents reviewed and confirm whether a response, appearance, or other action is required.",
+        checklist: ["Summons or complaint", "Date you received the papers", "Court name", "Plaintiff / creditor / collector name", "Any response deadline or hearing date"]
+      };
+    }
+
+    if (calc.hasHarassment) {
+      return {
+        title: "Collector behavior may need review.",
+        body: "Your answers suggest collectors may be contacting you aggressively or using pressure tactics. Certain abusive, deceptive, or unfair collection practices may be restricted under consumer protection laws.",
+        nextStep: "Document what happened, when it happened, who contacted you, and whether they called your workplace or other people.",
+        checklist: ["Call logs", "Voicemails or text messages", "Letters or notices", "Names of collectors", "Workplace or third-party contact details"]
+      };
+    }
+
+    return {
+      title: "Your debt situation appears ready for an options review.",
+      body: "Based on your answers, your situation may involve unsecured consumer debt that Credo Legal can review. The priority level depends on stage, documents, deadlines, and collector behavior.",
+      nextStep: "Send yourself the results, prepare your debt documents, and choose how you want the team to follow up.",
+      checklist: ["Creditor or collector name", "Approximate debt amount", "Any notices or collection letters", "Dates of recent calls or letters"]
+    };
+  }
+
+  async function submitLead() {
+    var validationError = validateStep(7);
+    if (validationError) {
+      ui.error = validationError;
+      render();
+      return;
+    }
+
+    ui.submitting = true;
+    render();
+
+    var payload = buildPayload();
+    var isDemo = !CONFIG.googleScriptUrl || CONFIG.googleScriptUrl.indexOf("PASTE_YOUR") === 0;
+
+    try {
+      if (isDemo) {
+        console.log("Credo Legal lead payload", payload);
+        ui.submittedInDemoMode = true;
+      } else {
+        await fetch(CONFIG.googleScriptUrl, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload)
+        });
+      }
+      ui.step = 8;
+      ui.error = "";
+    } catch (error) {
+      ui.error = "Something went wrong while submitting the request. Please call " + CONFIG.phoneDisplay + " or try again.";
+      console.error(error);
+    } finally {
+      ui.submitting = false;
+      render();
+    }
+  }
+
+  function buildPayload() {
+    var calc = getCalculations();
+    var debtTypeLabels = data.debts.map(function (d) { return getLabel(DEBT_TYPES, d.type); }).filter(Boolean);
+    var supportedDebtTypes = unique(data.debts.filter(function (d) { return SUPPORTED_DEBT_KEYS.includes(d.type); }).map(function (d) { return getLabel(DEBT_TYPES, d.type); }));
+    var unsupportedDebtTypes = unique(data.debts.filter(function (d) { return UNSUPPORTED_DEBT_KEYS.includes(d.type); }).map(function (d) { return getLabel(DEBT_TYPES, d.type); }));
+    var totalEstimate = data.debts.reduce(function (sum, d) { return sum + (getAmountOption(d.amount).estimate || 0); }, 0);
+    var largestDebt = data.debts.slice().sort(function (a, b) { return (getAmountOption(b.amount).estimate || 0) - (getAmountOption(a.amount).estimate || 0); })[0] || makeDebt();
+    var collectorNames = unique(data.debts.map(function (d) { return d.creditorName.trim(); }).filter(Boolean));
+
+    return {
+      created_at: new Date().toISOString(),
+      lead_id: data.leadId,
+      entry_path: data.entryPath === "urgent" ? "I Need Urgent Debt Help" : "Debt Defense Options Check",
+      first_name: data.firstName.trim(),
+      last_name: data.lastName.trim(),
+      phone: data.phone.trim(),
+      email: data.email.trim(),
+      state: data.state,
+      state_name: getStateName(data.state),
+      zip: data.zip.trim(),
+      delivery_channel: getDeliveryLabel(data.deliveryChannel),
+      follow_up_preference: getFollowUpLabel(data.followUpPreference),
+      sms_consent: data.smsConsent ? "Yes" : "No",
+      whatsapp_consent: data.whatsappConsent ? "Yes" : "No",
+      person_type: data.personType,
+      authorized_for_other: data.authorizedForOther,
+
+      qualification_status: calc.qualificationStatus,
+      qualification_reasons: calc.qualificationReasons.join("; "),
+      urgency_score: calc.urgencyScore,
+      urgency_level: calc.urgencyLevel,
+      readiness_score: calc.readinessScore,
+      readiness_level: calc.readinessLevel,
+      recommended_next_action: getBranchMessage(calc).nextStep,
+
+      number_of_debts: data.debts.length,
+      total_estimated_debt: totalEstimate ? "$" + totalEstimate.toLocaleString() + "+ estimated from ranges" : "Not sure",
+      largest_debt_amount: getAmountOption(largestDebt.amount).label,
+      supported_debt_types: supportedDebtTypes.join(", "),
+      unsupported_debt_types: unsupportedDebtTypes.join(", "),
+      all_debt_types: unique(debtTypeLabels).join(", "),
+      debt_security: unique(data.debts.map(function (d) { return getLabel(SECURITY_OPTIONS, d.security); }).filter(Boolean)).join(", "),
+      debt_stage: getLabel(STAGE_OPTIONS, calc.highestRiskStage),
+      lawsuit_or_summons: calc.hasLawsuit ? "Yes" : "No",
+      deadline_or_court_date: getLabel(DEADLINE_OPTIONS, data.deadlineStatus),
+      default_judgment: calc.hasDefaultJudgment ? "Yes" : "No",
+      garnishment: calc.hasGarnishment ? "Yes" : "No",
+      wages_or_bank_affected: data.debts.some(function (d) { return d.stage === "wages_bank"; }) ? "Yes" : "No",
+
+      collector_calls: (data.behaviors.includes("calling_repeatedly") || data.behaviors.includes("letters_only") || data.debts.some(function (d) { return d.stage === "calls"; })) ? "Yes" : "No",
+      workplace_calls: data.behaviors.includes("calling_workplace") ? "Yes" : "No",
+      family_or_friend_contact: data.behaviors.includes("contacting_others") ? "Yes" : "No",
+      threats_or_abusive_language: data.behaviors.some(function (x) { return ["threatening", "abusive_language", "threatening_arrest", "threatening_garnishment"].includes(x); }) ? "Yes" : "No",
+      collector_behaviors: data.behaviors.map(function (key) { return getLabel(BEHAVIOR_OPTIONS, key); }).join(", "),
+      validation_notice_status: getLabel(VALIDATION_OPTIONS, data.validationNotice),
+      has_documents: data.debts.some(function (d) { return !["none", "", "not_sure"].includes(d.documentStatus); }) || data.uploadIntent ? "Yes" : "No",
+      upload_intent: data.uploadIntent ? "Yes" : "No",
+      collector_names: collectorNames.join(", "),
+      user_description: data.userDescription.trim(),
+      debts_json: JSON.stringify(data.debts.map(function (d, idx) {
+        return {
+          debt_number: idx + 1,
+          type: getLabel(DEBT_TYPES, d.type),
+          amount: getAmountOption(d.amount).label,
+          security: getLabel(SECURITY_OPTIONS, d.security),
+          stage: getLabel(STAGE_OPTIONS, d.stage),
+          auto_repossession_status: d.autoRepossessionStatus,
+          document_status: getLabel(DOCUMENT_OPTIONS, d.documentStatus),
+          creditor_name: d.creditorName.trim()
+        };
+      })),
+      raw_answers_json: JSON.stringify(data)
+    };
+  }
+
+  function unique(values) {
+    return Array.from(new Set(values.filter(Boolean)));
+  }
+
+  function getDeliveryLabel(key) {
+    var item = DELIVERY_OPTIONS.find(function (x) { return x.key === key; });
+    return item ? item.title : "";
+  }
+
+  function getFollowUpLabel(key) {
+    var item = FOLLOW_UP_OPTIONS_DEFAULT.concat(FOLLOW_UP_OPTIONS_URGENT).find(function (x) { return x.key === key; });
+    return item ? item.title : "";
+  }
+})();
+</script>
