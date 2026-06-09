@@ -104,7 +104,7 @@ The full report is generated in the browser and captured in Google Sheets as bot
 
 ## User Flows
 
-The entry buttons intentionally route into different flows. They share validation, scoring, contact capture, consent logic, and Google Sheets submission utilities, but they do not share the same main step sequence.
+The entry buttons intentionally route into different flows. The urgent path is a direct call/callback request and does not show the Snapshot loader, report screen, full assessment, or delivery capture. The normal options path keeps the full Debt Defense Snapshot assessment.
 
 ### Urgent Debt Help
 
@@ -116,42 +116,23 @@ urgent_debt_help
 
 1. Entry gate:
    - `Collectors Are Escalating — I Need Urgent Debt Help`
-2. Basic eligibility gate:
+2. Urgent Debt Help Request page:
+   - `Call Now for Urgent Debt Help`
+   - `Request an Immediate Callback`
+3. Short urgent callback form:
+   - First name
+   - Phone number
    - State
-   - ZIP, optional
-   - Individual/family/business routing
-3. Urgent triage:
-   - Lawsuit, summons, or court papers
-   - Deadline, court date, or hearing date
-   - Default judgment
-   - Wage garnishment
-   - Bank account or wages affected
-   - Collector repeated calls, workplace calls, third-party contact, threats, or abusive language
-   - Letters/notices not understood
-   - Not sure but has documents
-4. Urgent branch details:
-   - Lawsuit/summons document timing and deadline questions
-   - Default judgment questions
-   - Garnishment or bank/wage impact questions
-   - Collector behavior detail questions
-   - Not sure/document review placeholder
-5. Compact debt qualification:
-   - Debt type
+   - Total debt amount
+   - Debt type multi-select
    - Secured/unsecured status
-   - Approximate amount
-   - One debt, multiple debts, or not sure
-6. Snapshot preparation loader, if enabled.
-7. Quick Summary before contact capture:
-   - Snapshot ID
-   - Situation Type
-   - Debt Defense Priority Level
-   - Case Readiness Scorecard
-   - Top 3 Findings
-   - Full Snapshot preview
-   - Urgent CTA ordering for Critical/High Quick Summaries
-8. Full Snapshot delivery and contact capture.
-9. Follow-up preference.
-10. Submit to Google Sheets through Google Apps Script.
+   - Optional urgent situation checkboxes
+4. Submit urgent callback request to Google Sheets.
+5. Dedicated urgent thank-you page:
+   - Repeats `Call Now for Urgent Debt Help`
+   - Reminds the user to keep collection letters, court papers, garnishment notices, or creditor information available.
+
+Urgent submissions set `urgent_direct_request = Yes`, `urgent_callback_requested = Yes`, `snapshot_requested = No`, `full_snapshot_requested = No`, and `report_loader_shown = No`.
 
 ### Normal Debt Defense Options Assessment
 
@@ -220,7 +201,7 @@ Open `credo-debt-defense-widget.html` and edit the `CONFIG` block:
 
 ```js
 var CONFIG = {
-  widgetVersion: "1.6.1",
+  widgetVersion: "1.7.0",
   googleScriptUrl: "PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE",
   phoneDisplay: "(718) 865-8350",
   phoneHref: "tel:+17188658350",
@@ -334,6 +315,11 @@ If `googleScriptUrl` is still the placeholder, submissions run in demo mode and 
    - `risk_flags_json`
    - `document_checklist_json`
    - `suggested_next_steps_json`
+   - `urgent_direct_request`
+   - `snapshot_requested`
+   - `urgent_callback_requested`
+   - `callback_consent`
+   - `report_loader_shown`
    - `report_screen_viewed`
    - `call_cta_clicked`
    - `callback_cta_clicked`
@@ -352,6 +338,8 @@ Use `MANUAL_QA_CHECKLIST.md` for the full checklist. Minimum launch smoke tests:
 - Mobile and desktop layout.
 - Tablet report layout around 768-900px.
 - Mobile header, forms, delivery capture, report screen, loader, and footer with no horizontal scrolling.
+- Urgent CTA opens `Urgent Debt Help Request`, not the Snapshot assessment.
+- Urgent callback submit goes directly to urgent thank-you and submits `urgent_direct_request = Yes`.
 - Excluded state routes to `Not a Fit`.
 - Business debt routes to `Not a Fit`.
 - Supported unsecured debt routes to `Qualified`.

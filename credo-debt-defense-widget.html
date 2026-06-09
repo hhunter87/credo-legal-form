@@ -362,6 +362,168 @@
     margin: 14px 0 0;
   }
 
+  #credo-debt-defense-widget .cl-urgent-action {
+    display: grid;
+    gap: 20px;
+  }
+
+  #credo-debt-defense-widget .cl-urgent-hero {
+    background: linear-gradient(135deg, #fff7ed 0%, #fff 72%);
+    border: 1px solid #fed7aa;
+    border-radius: var(--cl-radius);
+    display: grid;
+    gap: 20px;
+    grid-template-columns: minmax(0, 1.7fr) minmax(240px, 0.8fr);
+    padding: 22px;
+  }
+
+  #credo-debt-defense-widget .cl-urgent-support {
+    color: var(--cl-ink);
+    font-size: 15px;
+    line-height: 1.55;
+    margin-bottom: 18px;
+    max-width: 720px;
+  }
+
+  #credo-debt-defense-widget .cl-urgent-cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+  }
+
+  #credo-debt-defense-widget .cl-btn-urgent {
+    background: #c2410c;
+    color: #fff;
+    box-shadow: 0 12px 24px rgba(194, 65, 12, 0.22);
+  }
+
+  #credo-debt-defense-widget .cl-btn-urgent:hover {
+    background: #9a3412;
+  }
+
+  #credo-debt-defense-widget .cl-urgent-cta-main {
+    padding-left: 22px;
+    padding-right: 22px;
+  }
+
+  #credo-debt-defense-widget .cl-urgent-cta-secondary {
+    background: #fff;
+  }
+
+  #credo-debt-defense-widget .cl-urgent-side-card,
+  #credo-debt-defense-widget .cl-urgent-form-card,
+  #credo-debt-defense-widget .cl-urgent-next-card,
+  #credo-debt-defense-widget .cl-urgent-thankyou {
+    background: #fff;
+    border: 1px solid var(--cl-line);
+    border-radius: var(--cl-radius);
+    box-shadow: 0 14px 34px rgba(16, 24, 40, 0.08);
+    padding: 18px;
+  }
+
+  #credo-debt-defense-widget .cl-urgent-side-card {
+    align-self: start;
+    display: grid;
+    gap: 10px;
+  }
+
+  #credo-debt-defense-widget .cl-urgent-side-card strong,
+  #credo-debt-defense-widget .cl-urgent-form-card h3,
+  #credo-debt-defense-widget .cl-urgent-next-card h3,
+  #credo-debt-defense-widget .cl-urgent-thankyou h3 {
+    color: var(--cl-navy);
+  }
+
+  #credo-debt-defense-widget .cl-urgent-side-card a {
+    color: #c2410c;
+    font-size: 24px;
+    font-weight: 950;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+  }
+
+  #credo-debt-defense-widget .cl-urgent-side-card span,
+  #credo-debt-defense-widget .cl-urgent-side-card p,
+  #credo-debt-defense-widget .cl-urgent-form-card p,
+  #credo-debt-defense-widget .cl-urgent-next-card li {
+    color: var(--cl-muted);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  #credo-debt-defense-widget .cl-urgent-layout {
+    display: grid;
+    gap: 18px;
+    grid-template-columns: minmax(0, 1.45fr) minmax(260px, 0.75fr);
+    align-items: start;
+  }
+
+  #credo-debt-defense-widget .cl-field-block {
+    margin-top: 18px;
+  }
+
+  #credo-debt-defense-widget .cl-checkbox-grid {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 10px;
+  }
+
+  #credo-debt-defense-widget .cl-checkbox-card {
+    align-items: flex-start;
+    background: #fff;
+    border: 1px solid var(--cl-line);
+    border-radius: var(--cl-radius);
+    color: var(--cl-ink);
+    cursor: pointer;
+    display: flex;
+    gap: 10px;
+    min-height: 44px;
+    padding: 12px;
+    transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+  }
+
+  #credo-debt-defense-widget .cl-checkbox-card:hover {
+    border-color: rgba(185, 31, 45, 0.36);
+    box-shadow: 0 8px 22px rgba(16, 24, 40, 0.07);
+    transform: translateY(-1px);
+  }
+
+  #credo-debt-defense-widget .cl-checkbox-card.is-selected {
+    background: var(--cl-soft-red);
+    border-color: var(--cl-red);
+  }
+
+  #credo-debt-defense-widget .cl-checkbox-card input {
+    flex: 0 0 auto;
+    height: 18px;
+    margin-top: 2px;
+    min-height: 18px;
+    width: 18px;
+  }
+
+  #credo-debt-defense-widget .cl-checkbox-card span {
+    font-size: 14px;
+    font-weight: 750;
+    line-height: 1.35;
+  }
+
+  #credo-debt-defense-widget .cl-urgent-submit-wrap {
+    display: grid;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  #credo-debt-defense-widget .cl-urgent-next-card ol {
+    margin: 12px 0 0;
+    padding-left: 20px;
+  }
+
+  #credo-debt-defense-widget .cl-urgent-next-card li + li {
+    margin-top: 9px;
+  }
+
   #credo-debt-defense-widget .cl-form-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1181,7 +1343,9 @@
   @media (max-width: 900px) {
     #credo-debt-defense-widget .cl-report-layout,
     #credo-debt-defense-widget .cl-report-hero-grid,
-    #credo-debt-defense-widget .cl-bottom-cta {
+    #credo-debt-defense-widget .cl-bottom-cta,
+    #credo-debt-defense-widget .cl-urgent-hero,
+    #credo-debt-defense-widget .cl-urgent-layout {
       grid-template-columns: 1fr;
     }
 
@@ -1226,7 +1390,8 @@
     #credo-debt-defense-widget .cl-report-layout,
     #credo-debt-defense-widget .cl-bottom-cta,
     #credo-debt-defense-widget .cl-preview-list,
-    #credo-debt-defense-widget .cl-entry-value-grid {
+    #credo-debt-defense-widget .cl-entry-value-grid,
+    #credo-debt-defense-widget .cl-checkbox-grid {
       grid-template-columns: 1fr;
     }
 
@@ -1241,7 +1406,8 @@
 
     #credo-debt-defense-widget .cl-report-topbar-inner,
     #credo-debt-defense-widget .cl-report-topbar-actions,
-    #credo-debt-defense-widget .cl-report-actions {
+    #credo-debt-defense-widget .cl-report-actions,
+    #credo-debt-defense-widget .cl-urgent-cta-row {
       display: grid;
       grid-template-columns: 1fr;
       align-items: stretch;
@@ -1326,6 +1492,11 @@
     #credo-debt-defense-widget .cl-option,
     #credo-debt-defense-widget .cl-entry-card,
     #credo-debt-defense-widget .cl-entry-value-card,
+    #credo-debt-defense-widget .cl-urgent-hero,
+    #credo-debt-defense-widget .cl-urgent-side-card,
+    #credo-debt-defense-widget .cl-urgent-form-card,
+    #credo-debt-defense-widget .cl-urgent-next-card,
+    #credo-debt-defense-widget .cl-urgent-thankyou,
     #credo-debt-defense-widget .cl-debt-card,
     #credo-debt-defense-widget .cl-report-section-card,
     #credo-debt-defense-widget .cl-side-cta-card,
@@ -1412,7 +1583,7 @@
   "use strict";
 
   var CONFIG = {
-    widgetVersion: "1.6.1",
+    widgetVersion: "1.7.0",
 
     // Replace this with the deployed Google Apps Script Web App URL.
     googleScriptUrl: "PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE",
@@ -1451,6 +1622,7 @@
 
   var STEP = {
     ENTRY: "entry",
+    URGENT_DIRECT: "urgentDirectRequest",
     URGENT_ELIGIBILITY: "urgentEligibility",
     URGENT_TRIAGE: "urgentTriage",
     URGENT_BRANCH_DETAILS: "urgentBranchDetails",
@@ -1463,20 +1635,15 @@
     OPTIONS_RESULTS: "optionsResults",
     DELIVERY: "delivery",
     FOLLOW_UP: "followUp",
+    URGENT_THANK_YOU: "urgentThankYou",
     THANK_YOU: "thankYou"
   };
 
   var FLOW_STEPS = {};
   FLOW_STEPS[FLOW_ENTRY.URGENT] = [
     STEP.ENTRY,
-    STEP.URGENT_ELIGIBILITY,
-    STEP.URGENT_TRIAGE,
-    STEP.URGENT_BRANCH_DETAILS,
-    STEP.URGENT_COMPACT_QUALIFICATION,
-    STEP.URGENT_RESULTS,
-    STEP.DELIVERY,
-    STEP.FOLLOW_UP,
-    STEP.THANK_YOU
+    STEP.URGENT_DIRECT,
+    STEP.URGENT_THANK_YOU
   ];
   FLOW_STEPS[FLOW_ENTRY.OPTIONS] = [
     STEP.ENTRY,
@@ -1492,6 +1659,7 @@
 
   var STEP_LABELS = {};
   STEP_LABELS[STEP.ENTRY] = "Start";
+  STEP_LABELS[STEP.URGENT_DIRECT] = "Urgent Request";
   STEP_LABELS[STEP.URGENT_ELIGIBILITY] = "Basic Check";
   STEP_LABELS[STEP.URGENT_TRIAGE] = "Urgent Triage";
   STEP_LABELS[STEP.URGENT_BRANCH_DETAILS] = "Urgent Details";
@@ -1504,6 +1672,7 @@
   STEP_LABELS[STEP.OPTIONS_RESULTS] = "Results";
   STEP_LABELS[STEP.DELIVERY] = "Delivery";
   STEP_LABELS[STEP.FOLLOW_UP] = "Follow-up";
+  STEP_LABELS[STEP.URGENT_THANK_YOU] = "Submitted";
   STEP_LABELS[STEP.THANK_YOU] = "Submitted";
 
   var STATES = [
@@ -1621,6 +1790,16 @@
     { key: "none_not_sure", label: "None of these / I am not sure", score: 10 }
   ];
 
+  var URGENT_DIRECT_EVENT_OPTIONS = [
+    { key: "collector_calls", label: "Collectors are calling me" },
+    { key: "lawsuit_court_papers", label: "I received lawsuit or court papers" },
+    { key: "garnishment_threats", label: "I'm facing garnishment threats" },
+    { key: "wages_bank_affected", label: "My wages or bank account may be affected" },
+    { key: "workplace_family_calls", label: "Collectors are calling my workplace or family" },
+    { key: "negotiate_reduce", label: "I want to negotiate or reduce the debt" },
+    { key: "not_sure", label: "Not sure" }
+  ];
+
   var PAPERS_RECEIVED_OPTIONS = [
     { key: "today", label: "Today" },
     { key: "1_3_days", label: "1-3 days ago" },
@@ -1705,6 +1884,13 @@
       snapshotId: generateSnapshotId(),
       reportGeneratedAt: new Date().toISOString(),
       entryPath: "",
+      urgentDirectRequest: false,
+      urgentCallbackRequested: false,
+      callbackConsent: false,
+      urgentDebtAmount: "",
+      urgentDebtTypes: [],
+      urgentDebtSecurity: "",
+      urgentDirectEvents: [],
       state: "",
       zip: "",
       personType: "",
@@ -1887,6 +2073,8 @@
     data = makeInitialData();
     data.leadId = leadId;
     data.entryPath = entryPath;
+    data.urgentDirectRequest = entryPath === FLOW_ENTRY.URGENT;
+    data.fullSnapshotRequested = false;
     ui.reportLoaderActive = false;
     ui.reportLoaderStepIndex = 0;
     ui.reportLoaderSteps = [];
@@ -1912,6 +2100,19 @@
 
     if (action === "start-flow") {
       startFlow(el.getAttribute("data-entry-path"));
+      return;
+    }
+
+    if (action === "urgent-call") {
+      data.callCtaClicked = true;
+      trackEvent("urgent_call_click", { entry_path: data.entryPath });
+      return;
+    }
+
+    if (action === "urgent-callback-scroll") {
+      data.callbackCtaClicked = true;
+      trackEvent("urgent_callback_scroll", { entry_path: data.entryPath });
+      scrollToUrgentCallbackForm();
       return;
     }
 
@@ -2030,6 +2231,12 @@
 
     if (action === "submit") {
       submitLead();
+      return;
+    }
+
+    if (action === "urgent-submit") {
+      submitLead();
+      return;
     }
   }
 
@@ -2039,6 +2246,15 @@
     var shouldRender = false;
     var hadError = !!ui.error || Object.keys(ui.fieldErrors).length > 0;
     ui.error = "";
+
+    if (el.hasAttribute("data-array-field")) {
+      var arrayField = el.getAttribute("data-array-field");
+      var arrayValue = el.getAttribute("data-value");
+      setArrayCheckboxValue(arrayField, arrayValue, !!el.checked);
+      ui.fieldErrors = {};
+      render();
+      return;
+    }
 
     if (el.hasAttribute("data-field")) {
       var field = el.getAttribute("data-field");
@@ -2059,6 +2275,16 @@
 
     ui.fieldErrors = {};
     if (shouldRender || hadError) render();
+  }
+
+  function setArrayCheckboxValue(field, value, checked) {
+    if (!Array.isArray(data[field])) data[field] = [];
+    if (checked && !data[field].includes(value)) {
+      data[field].push(value);
+    }
+    if (!checked) {
+      data[field] = data[field].filter(function (x) { return x !== value; });
+    }
   }
 
   function toggleArrayValue(field, value) {
@@ -2104,6 +2330,15 @@
     ui.fieldErrors = {};
 
     if (stepId === STEP.ENTRY && !data.entryPath) return markInvalid("Choose one option to start.", ["entryPath"]);
+
+    if (stepId === STEP.URGENT_DIRECT) {
+      if (!data.firstName.trim()) return markInvalid("Enter your first name.", ["firstName"]);
+      if (!isValidPhone(data.phone)) return markInvalid("Enter a valid US phone number.", ["phone"]);
+      if (!data.state) return markInvalid("Select your state.", ["state"]);
+      if (!data.urgentDebtAmount) return markInvalid("Select the total debt amount.", ["urgentDebtAmount"]);
+      if (!data.urgentDebtTypes.length) return markInvalid("Select at least one debt type.", ["urgentDebtTypes"]);
+      if (!data.urgentDebtSecurity) return markInvalid("Select whether the debt is unsecured.", ["urgentDebtSecurity"]);
+    }
 
     if (stepId === STEP.URGENT_ELIGIBILITY || stepId === STEP.OPTIONS_ELIGIBILITY) {
       if (!data.state) return markInvalid("Select your state.", ["state"]);
@@ -2230,6 +2465,7 @@
     var content = "";
     var stepId = currentStepId();
     if (stepId === STEP.ENTRY) content = renderEntry();
+    if (stepId === STEP.URGENT_DIRECT) content = renderUrgentDirectRequest();
     if (stepId === STEP.URGENT_ELIGIBILITY || stepId === STEP.OPTIONS_ELIGIBILITY) content = renderEligibility();
     if (stepId === STEP.URGENT_TRIAGE) content = renderUrgentTriage();
     if (stepId === STEP.URGENT_BRANCH_DETAILS) content = renderUrgentBranchDetails();
@@ -2240,13 +2476,14 @@
     if (stepId === STEP.URGENT_RESULTS || stepId === STEP.OPTIONS_RESULTS) content = renderResults();
     if (stepId === STEP.DELIVERY) content = renderDelivery();
     if (stepId === STEP.FOLLOW_UP) content = renderFollowUp();
+    if (stepId === STEP.URGENT_THANK_YOU) content = renderUrgentThankYou();
     if (stepId === STEP.THANK_YOU) content = renderThankYou();
 
     root.innerHTML = [
       '<div class="clw">',
         '<div class="cl-card">',
           renderHeader(),
-          stepId !== STEP.THANK_YOU ? renderProgress() : '',
+          stepId !== STEP.THANK_YOU && stepId !== STEP.URGENT_THANK_YOU ? renderProgress() : '',
           '<div class="cl-body">',
             content,
             ui.error ? '<div class="cl-error" role="alert" aria-live="polite">' + h(ui.error) + '</div>' : '',
@@ -2272,7 +2509,7 @@
   }
 
   function renderProgress() {
-    var steps = currentFlowSteps().filter(function (stepId) { return stepId !== STEP.THANK_YOU; });
+    var steps = currentFlowSteps().filter(function (stepId) { return stepId !== STEP.THANK_YOU && stepId !== STEP.URGENT_THANK_YOU; });
     var stepId = currentStepId();
     var visibleStep = Math.min(Math.max(steps.indexOf(stepId) + 1, 1), steps.length);
     var pct = Math.max(8, Math.round((visibleStep / steps.length) * 100));
@@ -2310,6 +2547,137 @@
         '</div>',
       '</div>',
       '<p class="cl-entry-disclaimer">Free to start. No obligation. This is for general intake and informational purposes only and is not legal advice.</p>'
+    ].join("");
+  }
+
+  function renderUrgentDirectRequest() {
+    var excluded = data.state && CONFIG.excludedStates.includes(data.state);
+    return [
+      '<section class="cl-urgent-action">',
+        '<div class="cl-eyebrow">Urgent Debt Help Request</div>',
+        '<div class="cl-urgent-hero">',
+          '<div>',
+            '<h2 class="cl-title">Debt collectors escalating? Speak with us before it goes further.</h2>',
+            '<p class="cl-subtitle">If you&#39;re dealing with collection calls, lawsuit papers, garnishment threats, or aggressive debt collectors, call now or request an immediate callback.</p>',
+            '<p class="cl-urgent-support">Our team member can help you understand what information may matter and what next steps may be available.</p>',
+            '<div class="cl-urgent-cta-row">',
+              '<a class="cl-btn cl-btn-urgent cl-urgent-cta-main" href="' + h(CONFIG.phoneHref) + '" data-action="urgent-call">Call Now for Urgent Debt Help</a>',
+              '<button type="button" class="cl-btn cl-btn-secondary cl-urgent-cta-secondary" data-action="urgent-callback-scroll">Request an Immediate Callback</button>',
+            '</div>',
+          '</div>',
+          '<div class="cl-urgent-side-card">',
+            '<strong>Fastest next step</strong>',
+            '<a href="' + h(CONFIG.phoneHref) + '" data-action="urgent-call">' + h(CONFIG.phoneDisplay) + '</a>',
+            '<span>Calling now is usually the fastest way to speak with the team.</span>',
+            '<p>Calling or submitting information does not create an attorney-client relationship.</p>',
+          '</div>',
+        '</div>',
+        '<div class="cl-urgent-layout">',
+          '<div class="cl-urgent-form-card" id="cl-urgent-callback-form">',
+            '<h3>Request an Immediate Callback</h3>',
+            '<p>Answer a few quick questions so the team can understand the basics before contacting you.</p>',
+            '<div class="cl-form-grid">',
+              '<div class="cl-field">',
+                '<label for="cl-urgent-first-name">First Name</label>',
+                '<input id="cl-urgent-first-name" data-field="firstName" autocomplete="given-name" placeholder="First name" value="' + h(data.firstName) + '" class="' + errorClass("firstName").trim() + '"' + ariaInvalid("firstName") + '>',
+                fieldError("firstName"),
+              '</div>',
+              '<div class="cl-field">',
+                '<label for="cl-urgent-phone">Phone Number</label>',
+                '<input id="cl-urgent-phone" type="tel" data-field="phone" autocomplete="tel" inputmode="tel" placeholder="(555) 555-5555" value="' + h(data.phone) + '" class="' + errorClass("phone").trim() + '"' + ariaInvalid("phone") + '>',
+                fieldError("phone"),
+              '</div>',
+              '<div class="cl-field">',
+                '<label for="cl-urgent-state">State</label>',
+                '<select id="cl-urgent-state" data-field="state" class="' + errorClass("state").trim() + '"' + ariaInvalid("state") + '>',
+                  '<option value="">Select state</option>',
+                  STATES.map(function (state) {
+                    return '<option value="' + h(state[0]) + '" ' + (data.state === state[0] ? 'selected' : '') + '>' + h(state[1]) + (CONFIG.excludedStates.includes(state[0]) ? ' - currently not serviced' : '') + '</option>';
+                  }).join(""),
+                '</select>',
+                fieldError("state"),
+              '</div>',
+              '<div class="cl-field">',
+                '<label for="cl-urgent-amount">Total Debt Amount</label>',
+                '<select id="cl-urgent-amount" data-field="urgentDebtAmount" class="' + errorClass("urgentDebtAmount").trim() + '"' + ariaInvalid("urgentDebtAmount") + '>',
+                  '<option value="">Select amount</option>',
+                  AMOUNT_OPTIONS.map(function (opt) {
+                    return '<option value="' + h(opt.key) + '" ' + (data.urgentDebtAmount === opt.key ? 'selected' : '') + '>' + h(opt.label) + '</option>';
+                  }).join(""),
+                '</select>',
+                fieldError("urgentDebtAmount"),
+              '</div>',
+            '</div>',
+            excluded ? '<div class="cl-warning"><strong>State notice:</strong> Credo Legal may not currently service ' + h(getStateName(data.state) || data.state) + '. You may still submit this request, and the team can use the information to route or review it appropriately.</div>' : '',
+            '<div class="cl-field cl-field-block">',
+              '<div class="cl-label">Debt Type</div>',
+              '<div class="cl-checkbox-grid">',
+                DEBT_TYPES.map(function (type) { return urgentCheckbox("urgentDebtTypes", type.key, type.label, data.urgentDebtTypes.includes(type.key)); }).join(""),
+              '</div>',
+              fieldError("urgentDebtTypes"),
+            '</div>',
+            '<div class="cl-field cl-field-block">',
+              '<div class="cl-label">Is the debt unsecured?</div>',
+              '<div class="cl-grid cl-grid-3">',
+                urgentSecurityCard("unsecured", "Yes, unsecured", "No collateral like a vehicle or property is securing it."),
+                urgentSecurityCard("secured", "No, secured by collateral", "A vehicle, property, or other collateral may be involved."),
+                urgentSecurityCard("not_sure", "I&#39;m not sure", "The team may need more details to understand this."),
+              '</div>',
+              fieldError("urgentDebtSecurity"),
+            '</div>',
+            '<div class="cl-field cl-field-block">',
+              '<div class="cl-label">What is happening right now? <span class="cl-help">Optional</span></div>',
+              '<div class="cl-checkbox-grid">',
+                URGENT_DIRECT_EVENT_OPTIONS.map(function (opt) { return urgentCheckbox("urgentDirectEvents", opt.key, opt.label, data.urgentDirectEvents.includes(opt.key)); }).join(""),
+              '</div>',
+            '</div>',
+            '<div class="cl-urgent-submit-wrap">',
+              '<button type="button" class="cl-btn cl-btn-urgent" data-action="urgent-submit" ' + (ui.submitting ? 'disabled' : '') + '>' + (ui.submitting ? 'Submitting...' : 'Request My Immediate Callback') + '</button>',
+              '<p class="cl-help">Submitting this request helps Credo Legal understand the basics before contacting you.</p>',
+              '<div class="cl-disclaimer">By submitting this request, you agree that Credo Legal and its representatives may contact you by phone regarding your request. This is for intake and informational purposes only and is not legal advice.</div>',
+              '<div class="cl-disclaimer">Submitting information does not create an attorney-client relationship.</div>',
+            '</div>',
+          '</div>',
+          '<div class="cl-urgent-next-card">',
+            '<h3>What happens next</h3>',
+            '<ol>',
+              '<li>Your request is sent to Credo Legal&#39;s intake team.</li>',
+              '<li>The team uses your answers to understand the debt type and urgency.</li>',
+              '<li>Someone can call you back using the number you provide.</li>',
+              '<li>If you have letters, court papers, or garnishment notices, keep them nearby.</li>',
+            '</ol>',
+          '</div>',
+        '</div>',
+      '</section>'
+    ].join("");
+  }
+
+  function renderUrgentThankYou() {
+    return [
+      '<section class="cl-urgent-action">',
+        '<div class="cl-eyebrow">Urgent request submitted</div>',
+        '<div class="cl-urgent-thankyou">',
+          '<h2 class="cl-title">Your urgent callback request has been submitted.</h2>',
+          '<p class="cl-subtitle">The fastest way to get started is still to call us now.</p>',
+          '<p class="cl-urgent-support">If you prefer to wait for a callback, keep your phone nearby and have any collection letters, court papers, garnishment notices, or creditor information available.</p>',
+          ui.submittedInDemoMode ? '<div class="cl-warning"><strong>Demo mode:</strong> No Google Apps Script URL is configured yet, so the urgent callback payload was logged to the browser console instead of being sent to Google Sheets.</div>' : '',
+          '<div class="cl-urgent-cta-row">',
+            '<a class="cl-btn cl-btn-urgent cl-urgent-cta-main" href="' + h(CONFIG.phoneHref) + '" data-action="urgent-call">Call Now for Urgent Debt Help</a>',
+            '<button type="button" class="cl-btn cl-btn-secondary" data-action="reset">Start another request</button>',
+          '</div>',
+          '<p class="cl-help">Calling now is usually the fastest way to speak with the team.</p>',
+          '<div class="cl-entry-value-card">',
+            '<h3>Before the call, try to have:</h3>',
+            '<div class="cl-entry-value-grid">',
+              entryValueItem("Collector or creditor name"),
+              entryValueItem("Approximate balance"),
+              entryValueItem("Any letters, notices, lawsuit papers, or garnishment documents"),
+              entryValueItem("Dates of recent calls or documents received"),
+            '</div>',
+          '</div>',
+          '<div class="cl-disclaimer">Submitting this request does not create an attorney-client relationship. This is for intake and informational purposes only and is not legal advice.</div>',
+        '</div>',
+      '</section>'
     ].join("");
   }
 
@@ -3407,6 +3775,17 @@
     goToStep(STEP.DELIVERY);
   }
 
+  function scrollToUrgentCallbackForm() {
+    try {
+      var form = document.getElementById("cl-urgent-callback-form");
+      if (form && typeof form.scrollIntoView === "function") {
+        form.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    } catch (error) {
+      // Scrolling is a convenience only; the form is already on the same page.
+    }
+  }
+
   function trackReportCtaClick(type) {
     if (type === "call_now") data.callCtaClicked = true;
     if (type === "request_callback") data.callbackCtaClicked = true;
@@ -3533,7 +3912,7 @@
   function renderActions() {
     var stepId = currentStepId();
     if (ui.reportLoaderActive) return "";
-    if (stepId === STEP.THANK_YOU || stepId === STEP.ENTRY) return "";
+    if (stepId === STEP.THANK_YOU || stepId === STEP.URGENT_THANK_YOU || stepId === STEP.URGENT_DIRECT || stepId === STEP.ENTRY) return "";
     if (stepId === STEP.URGENT_RESULTS || stepId === STEP.OPTIONS_RESULTS) {
       return [
         '<div class="cl-actions">',
@@ -3588,6 +3967,15 @@
 
   function entryValueItem(label) {
     return '<div class="cl-entry-value-item"><span class="cl-entry-check" aria-hidden="true">&#10003;</span><span>' + h(label) + '</span></div>';
+  }
+
+  function urgentCheckbox(field, value, label, checked) {
+    return '<label class="cl-checkbox-card ' + (checked ? 'is-selected' : '') + '"><input type="checkbox" data-array-field="' + h(field) + '" data-value="' + h(value) + '" ' + (checked ? 'checked' : '') + '> <span>' + h(label) + '</span></label>';
+  }
+
+  function urgentSecurityCard(value, title, text) {
+    var selected = data.urgentDebtSecurity === value;
+    return '<button type="button" class="cl-option ' + (selected ? 'is-selected' : '') + errorClass("urgentDebtSecurity") + '" data-action="select" data-field="urgentDebtSecurity" data-value="' + h(value) + '" aria-pressed="' + (selected ? 'true' : 'false') + '"><span class="cl-option-title">' + title + '</span><span class="cl-option-text">' + h(text) + '</span></button>';
   }
 
   function toggleCard(field, value, title, text) {
@@ -3759,6 +4147,43 @@
     }
 
     return { status: "Needs Review", reasons: ["Debt type or security status is unclear"], className: "cl-pill-high" };
+  }
+
+  function getUrgentDirectQualification() {
+    var reasons = [];
+    var stateExcluded = CONFIG.excludedStates.includes(data.state);
+    var supported = data.urgentDebtTypes.filter(function (key) { return SUPPORTED_DEBT_KEYS.includes(key); });
+    var unsupported = data.urgentDebtTypes.filter(function (key) { return UNSUPPORTED_DEBT_KEYS.includes(key); });
+    var needsReview = data.urgentDebtTypes.includes("other_not_sure") || data.urgentDebtSecurity === "not_sure";
+    var hasEligibleSupported = supported.length && data.urgentDebtSecurity === "unsecured";
+    var securedSupported = supported.length && data.urgentDebtSecurity === "secured";
+
+    if (stateExcluded) reasons.push("State currently not serviced: " + data.state);
+    if (!supported.length && unsupported.length && !needsReview) reasons.push("Only unsupported debt types selected");
+    if (securedSupported && !hasEligibleSupported) reasons.push("Selected debt appears secured with collateral");
+
+    if (stateExcluded || (!supported.length && unsupported.length && !needsReview) || securedSupported) {
+      return { status: "Not a Fit", reasons: reasons.length ? reasons : ["Urgent request may not fit current intake criteria"], className: "cl-pill-critical" };
+    }
+
+    if (hasEligibleSupported && unsupported.length) {
+      reasons.push("Some selected debts are not supported");
+      return { status: "Partially Qualified", reasons: reasons, className: "cl-pill-high" };
+    }
+
+    if (hasEligibleSupported) {
+      return { status: "Qualified", reasons: ["Supported unsecured consumer-debt issue selected"], className: "cl-pill-good" };
+    }
+
+    reasons.push("Debt type or unsecured status may need review");
+    return { status: "Needs Review", reasons: reasons, className: "cl-pill-high" };
+  }
+
+  function getUrgentSecurityLabel(key) {
+    if (key === "unsecured") return "Yes, unsecured";
+    if (key === "secured") return "No, secured by collateral";
+    if (key === "not_sure") return "I'm not sure";
+    return "";
   }
 
   function isDebtEligible(debt) {
@@ -4272,7 +4697,9 @@
   }
 
   async function submitLead() {
-    var validationError = validateStep(STEP.FOLLOW_UP);
+    var currentId = currentStepId();
+    var urgentDirect = currentId === STEP.URGENT_DIRECT;
+    var validationError = validateStep(urgentDirect ? STEP.URGENT_DIRECT : STEP.FOLLOW_UP);
     if (validationError) {
       ui.error = validationError;
       render();
@@ -4282,7 +4709,7 @@
     ui.submitting = true;
     render();
 
-    var payload = buildPayload();
+    var payload = urgentDirect ? buildUrgentDirectPayload() : buildPayload();
     var isDemo = !CONFIG.googleScriptUrl || CONFIG.googleScriptUrl.indexOf("PASTE_YOUR") === 0;
 
     try {
@@ -4297,9 +4724,13 @@
           body: JSON.stringify(payload)
         });
       }
-      ui.step = 8;
+      if (urgentDirect) {
+        goToStep(STEP.URGENT_THANK_YOU);
+      } else {
+        goToStep(STEP.THANK_YOU);
+      }
       ui.error = "";
-      trackEvent("submit", { demo_mode: isDemo, qualification_status: payload.qualification_status, urgency_level: payload.urgency_level });
+      trackEvent("submit", { demo_mode: isDemo, qualification_status: payload.qualification_status, urgency_level: payload.urgency_level, urgent_direct_request: urgentDirect });
     } catch (error) {
       ui.error = "Something went wrong while submitting the request. Please call " + CONFIG.phoneDisplay + " or try again.";
       console.error(error);
@@ -4307,6 +4738,123 @@
       ui.submitting = false;
       render();
     }
+  }
+
+  function buildUrgentDirectPayload() {
+    data.urgentDirectRequest = true;
+    data.urgentCallbackRequested = true;
+    data.callbackConsent = true;
+    data.fullSnapshotRequested = false;
+    data.reportLoaderShown = false;
+
+    var debtTypeLabels = data.urgentDebtTypes.map(function (key) { return getLabel(DEBT_TYPES, key); }).filter(Boolean);
+    var supportedDebtTypes = unique(data.urgentDebtTypes.filter(function (key) { return SUPPORTED_DEBT_KEYS.includes(key); }).map(function (key) { return getLabel(DEBT_TYPES, key); }));
+    var unsupportedDebtTypes = unique(data.urgentDebtTypes.filter(function (key) { return UNSUPPORTED_DEBT_KEYS.includes(key); }).map(function (key) { return getLabel(DEBT_TYPES, key); }));
+    var qualification = getUrgentDirectQualification();
+    var urgentEvents = data.urgentDirectEvents.map(function (key) { return getLabel(URGENT_DIRECT_EVENT_OPTIONS, key); }).filter(Boolean);
+    var amount = getAmountOption(data.urgentDebtAmount).label || "Not sure";
+    var securityLabel = getUrgentSecurityLabel(data.urgentDebtSecurity);
+    var urgencyLevel = urgentEvents.some(function (item) { return /lawsuit|court|garnishment|wages|bank/i.test(item); }) ? "High" : "Moderate";
+
+    return {
+      created_at: new Date().toISOString(),
+      lead_id: data.leadId,
+      snapshot_id: "",
+      widget_version: CONFIG.widgetVersion,
+      page_url: safePageUrl(),
+      referrer: safeReferrer(),
+      entry_path: FLOW_ENTRY.URGENT,
+      urgent_direct_request: "Yes",
+      snapshot_requested: "No",
+      urgent_callback_requested: "Yes",
+      callback_consent: "Yes",
+      urgent_branch: "urgent_direct_callback",
+      urgent_events: urgentEvents.join(", "),
+      situation_type: "Urgent Debt Help Request",
+      quick_summary_text: "",
+      quick_summary_json: "",
+      full_report_text: "",
+      full_report_json: "",
+      risk_flags_json: "",
+      document_checklist_json: "",
+      suggested_next_steps_json: "",
+      common_mistakes_json: "",
+      readiness_helped_json: "",
+      readiness_missing_json: "",
+      collector_call_log_template_included: "No",
+      full_snapshot_requested: "No",
+      full_snapshot_delivery_channel: "",
+      actual_delivery_enabled: CONFIG.actualDeliveryEnabled ? "Yes" : "No",
+      report_loader_shown: "No",
+      report_screen_viewed: "No",
+      call_cta_clicked: data.callCtaClicked ? "Yes" : "No",
+      callback_cta_clicked: data.callbackCtaClicked || data.urgentCallbackRequested ? "Yes" : "No",
+      send_snapshot_cta_clicked: "No",
+      first_name: data.firstName.trim(),
+      last_name: "",
+      phone: phoneForPayload(data.phone),
+      email: "",
+      state: data.state,
+      state_name: getStateName(data.state),
+      zip: "",
+      delivery_channel: "Urgent callback request",
+      follow_up_preference: "Immediate callback",
+      sms_consent: "No",
+      whatsapp_consent: "No",
+      person_type: "",
+      authorized_for_other: "",
+
+      qualification_status: qualification.status,
+      qualification_reasons: qualification.reasons.join("; "),
+      disqualification_reason: qualification.status === "Not a Fit" ? qualification.reasons.join("; ") : "",
+      excluded_state_flag: CONFIG.excludedStates.includes(data.state) ? "Yes" : "No",
+      individual_or_business: "",
+      urgency_score: "",
+      urgency_level: urgencyLevel,
+      readiness_score: "",
+      readiness_level: "",
+      recommended_next_action: "Call now or request an immediate callback so the team can understand what information may matter.",
+
+      debt_count: "",
+      number_of_debts: "",
+      total_estimated_debt: amount,
+      largest_debt_amount: amount,
+      supported_debt_types: supportedDebtTypes.join(", "),
+      unsupported_debt_types: unsupportedDebtTypes.join(", "),
+      debt_types: unique(debtTypeLabels).join(", "),
+      all_debt_types: unique(debtTypeLabels).join(", "),
+      debt_security: securityLabel,
+      debt_stage: urgentEvents.join(", "),
+      lawsuit_or_summons: data.urgentDirectEvents.includes("lawsuit_court_papers") ? "Yes" : "No",
+      deadline_or_court_date: "",
+      default_judgment: "",
+      garnishment: data.urgentDirectEvents.includes("garnishment_threats") ? "Yes" : "No",
+      wages_or_bank_affected: data.urgentDirectEvents.includes("wages_bank_affected") ? "Yes" : "No",
+
+      collector_calls: data.urgentDirectEvents.includes("collector_calls") ? "Yes" : "No",
+      workplace_calls: data.urgentDirectEvents.includes("workplace_family_calls") ? "Yes" : "No",
+      family_or_friend_contact: data.urgentDirectEvents.includes("workplace_family_calls") ? "Yes" : "No",
+      threats_or_abusive_language: "",
+      collector_behaviors: urgentEvents.join(", "),
+      validation_notice_status: "",
+      has_documents: data.urgentDirectEvents.includes("lawsuit_court_papers") || data.urgentDirectEvents.includes("wages_bank_affected") ? "Maybe" : "",
+      upload_intent: "No",
+      collector_names: "",
+      user_description: "",
+      debts_json: JSON.stringify(data.urgentDebtTypes.map(function (key, idx) {
+        return {
+          debt_number: idx + 1,
+          type: getLabel(DEBT_TYPES, key),
+          amount: amount,
+          security: securityLabel,
+          stage: "",
+          auto_repossession_status: "",
+          document_status: "",
+          creditor_name: ""
+        };
+      })),
+      raw_answers_json: JSON.stringify(data)
+    };
   }
 
   function buildPayload() {
@@ -4330,6 +4878,10 @@
       page_url: safePageUrl(),
       referrer: safeReferrer(),
       entry_path: data.entryPath,
+      urgent_direct_request: data.urgentDirectRequest ? "Yes" : "No",
+      snapshot_requested: data.report ? "Yes" : "No",
+      urgent_callback_requested: data.urgentCallbackRequested ? "Yes" : "No",
+      callback_consent: data.callbackConsent ? "Yes" : "No",
       urgent_branch: urgentBranch,
       urgent_events: data.urgentEvents.map(function (key) { return getLabel(URGENT_TRIAGE_OPTIONS, key); }).filter(Boolean).join(", "),
       situation_type: report.situationType,
@@ -4347,6 +4899,7 @@
       full_snapshot_requested: data.fullSnapshotRequested || !!data.deliveryChannel ? "Yes" : "No",
       full_snapshot_delivery_channel: data.deliveryChannel === "sms" ? "sms/text" : data.deliveryChannel,
       actual_delivery_enabled: CONFIG.actualDeliveryEnabled ? "Yes" : "No",
+      report_loader_shown: data.reportLoaderShown ? "Yes" : "No",
       report_screen_viewed: data.reportScreenViewed ? "Yes" : "No",
       call_cta_clicked: data.callCtaClicked ? "Yes" : "No",
       callback_cta_clicked: data.callbackCtaClicked ? "Yes" : "No",
@@ -4485,7 +5038,7 @@
   }
 
   function getEntryPathLabel(key) {
-    if (key === FLOW_ENTRY.URGENT) return "I Need Urgent Debt Help";
+    if (key === FLOW_ENTRY.URGENT) return "Collectors Are Escalating - I Need Urgent Debt Help";
     if (key === FLOW_ENTRY.OPTIONS) return "Check My Debt Defense Options";
     return "";
   }
