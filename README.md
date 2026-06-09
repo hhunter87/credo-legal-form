@@ -220,7 +220,7 @@ Open `credo-debt-defense-widget.html` and edit the `CONFIG` block:
 
 ```js
 var CONFIG = {
-  widgetVersion: "1.5.0",
+  widgetVersion: "1.6.0",
   googleScriptUrl: "PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE",
   phoneDisplay: "(718) 865-8350",
   phoneHref: "tel:+17188658350",
@@ -350,6 +350,8 @@ Important: the widget uses `fetch(..., { mode: "no-cors" })` for Google Apps Scr
 Use `MANUAL_QA_CHECKLIST.md` for the full checklist. Minimum launch smoke tests:
 
 - Mobile and desktop layout.
+- Tablet report layout around 768-900px.
+- Mobile header, forms, delivery capture, report screen, loader, and footer with no horizontal scrolling.
 - Excluded state routes to `Not a Fit`.
 - Business debt routes to `Not a Fit`.
 - Supported unsecured debt routes to `Qualified`.

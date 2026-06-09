@@ -5,7 +5,15 @@ Use this checklist on a staging page before production launch. Record browser, d
 ## Layout And Accessibility
 
 - [ ] Desktop layout renders without overlapping text or controls.
+- [ ] Tablet layout around 768-900px stacks the report hero and side CTA cleanly.
 - [ ] Mobile layout renders without horizontal scrolling.
+- [ ] Mobile header stacks logo and call button cleanly.
+- [ ] Mobile progress label wraps without overlapping the progress bar.
+- [ ] Mobile option cards, debt cards, and form fields stack into one column.
+- [ ] Mobile buttons are full-width or easy to tap, with at least a 44px tap target.
+- [ ] Mobile delivery/contact fields stack into one column.
+- [ ] Mobile Snapshot ID and long collector/debt text wrap instead of pushing the layout wider.
+- [ ] Mobile footer links stack or wrap without clipping.
 - [ ] Header logo or fallback brand renders.
 - [ ] Call button uses the configured phone number.
 - [ ] Keyboard tab order reaches options, fields, Previous, Continue, Submit, and reset controls.
