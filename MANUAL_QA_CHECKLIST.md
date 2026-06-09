@@ -22,8 +22,11 @@ Use this checklist on a staging page before production launch. Record browser, d
 
 ## Entry Gate
 
-- [ ] Clicking `I Need Urgent Debt Help` starts the urgent path with `entry_path = urgent_debt_help`.
-- [ ] Clicking `Check My Debt Defense Options` starts the normal path with `entry_path = debt_defense_options_check`.
+- [ ] First screen label says `Get Your Debt Defense Action Snapshot`.
+- [ ] First screen headline references collector calls, garnishment threats, and court papers.
+- [ ] Clicking `Collectors Are Escalating — I Need Urgent Debt Help` starts the urgent path with `entry_path = urgent_debt_help`.
+- [ ] Clicking `Show Me My Debt Defense Options` starts the normal path with `entry_path = debt_defense_options_check`.
+- [ ] First screen value preview lists priority level, red flags, collector behavior review, document checklist, readiness score, and next steps.
 - [ ] The two entry buttons do not route into the same main step sequence.
 
 ## Eligibility

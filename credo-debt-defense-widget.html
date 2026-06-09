@@ -1,5 +1,5 @@
 <!--
-  Credo Legal - Debt Defense Options Check Widget
+  Credo Legal - Debt Defense Action Snapshot Widget
   Plain HTML/CSS/JS embed. No external dependencies.
 
   Setup:
@@ -232,6 +232,134 @@
     color: var(--cl-muted);
     line-height: 1.45;
     font-size: 14px;
+  }
+
+  #credo-debt-defense-widget .cl-entry-title .cl-title-line {
+    display: block;
+  }
+
+  #credo-debt-defense-widget .cl-entry-grid {
+    margin-top: 24px;
+  }
+
+  #credo-debt-defense-widget .cl-entry-card {
+    border: 0;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    justify-content: space-between;
+    min-height: 172px;
+    padding: 22px;
+  }
+
+  #credo-debt-defense-widget .cl-entry-card .cl-option-title,
+  #credo-debt-defense-widget .cl-entry-card .cl-option-text {
+    color: #fff;
+  }
+
+  #credo-debt-defense-widget .cl-entry-card .cl-option-title {
+    font-size: 19px;
+    line-height: 1.18;
+    margin-bottom: 10px;
+  }
+
+  #credo-debt-defense-widget .cl-entry-card .cl-option-text {
+    font-size: 15px;
+    line-height: 1.45;
+    opacity: 0.92;
+  }
+
+  #credo-debt-defense-widget .cl-entry-card-urgent {
+    background: #c2410c;
+    box-shadow: 0 12px 24px rgba(194, 65, 12, 0.22);
+  }
+
+  #credo-debt-defense-widget .cl-entry-card-urgent:hover {
+    background: #9a3412;
+    border-color: transparent;
+    box-shadow: 0 16px 30px rgba(194, 65, 12, 0.26);
+  }
+
+  #credo-debt-defense-widget .cl-entry-card-options {
+    background: var(--cl-navy);
+    box-shadow: 0 12px 24px rgba(16, 24, 40, 0.20);
+  }
+
+  #credo-debt-defense-widget .cl-entry-card-options:hover {
+    background: #1f2937;
+    border-color: transparent;
+    box-shadow: 0 16px 30px rgba(16, 24, 40, 0.24);
+  }
+
+  #credo-debt-defense-widget .cl-entry-card.is-selected {
+    box-shadow: 0 0 0 4px rgba(185, 31, 45, 0.12), 0 12px 24px rgba(16, 24, 40, 0.18);
+  }
+
+  #credo-debt-defense-widget .cl-entry-card.is-invalid {
+    outline: 3px solid rgba(217, 45, 32, 0.30);
+    outline-offset: 3px;
+  }
+
+  #credo-debt-defense-widget .cl-entry-trust {
+    color: var(--cl-ink);
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 16px 0 0;
+  }
+
+  #credo-debt-defense-widget .cl-entry-value-card {
+    background: #fff;
+    border: 1px solid var(--cl-line);
+    border-radius: var(--cl-radius);
+    box-shadow: 0 14px 34px rgba(16, 24, 40, 0.08);
+    margin-top: 18px;
+    padding: 18px;
+  }
+
+  #credo-debt-defense-widget .cl-entry-value-card h3 {
+    color: var(--cl-navy);
+    font-size: 17px;
+    line-height: 1.3;
+    margin-bottom: 14px;
+  }
+
+  #credo-debt-defense-widget .cl-entry-value-grid {
+    display: grid;
+    gap: 10px 14px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #credo-debt-defense-widget .cl-entry-value-item {
+    align-items: center;
+    color: var(--cl-ink);
+    display: grid;
+    font-size: 14px;
+    font-weight: 750;
+    gap: 10px;
+    grid-template-columns: 24px 1fr;
+    line-height: 1.35;
+  }
+
+  #credo-debt-defense-widget .cl-entry-check {
+    align-items: center;
+    background: var(--cl-green-bg);
+    border: 1px solid rgba(6, 118, 71, 0.16);
+    border-radius: 999px;
+    color: var(--cl-green);
+    display: inline-flex;
+    font-size: 14px;
+    font-weight: 950;
+    height: 24px;
+    justify-content: center;
+    width: 24px;
+  }
+
+  #credo-debt-defense-widget .cl-entry-disclaimer {
+    color: var(--cl-muted);
+    font-size: 12px;
+    line-height: 1.45;
+    margin: 14px 0 0;
   }
 
   #credo-debt-defense-widget .cl-form-grid {
@@ -1097,7 +1225,8 @@
     #credo-debt-defense-widget .cl-report-hero-grid,
     #credo-debt-defense-widget .cl-report-layout,
     #credo-debt-defense-widget .cl-bottom-cta,
-    #credo-debt-defense-widget .cl-preview-list {
+    #credo-debt-defense-widget .cl-preview-list,
+    #credo-debt-defense-widget .cl-entry-value-grid {
       grid-template-columns: 1fr;
     }
 
@@ -1195,6 +1324,8 @@
     }
 
     #credo-debt-defense-widget .cl-option,
+    #credo-debt-defense-widget .cl-entry-card,
+    #credo-debt-defense-widget .cl-entry-value-card,
     #credo-debt-defense-widget .cl-debt-card,
     #credo-debt-defense-widget .cl-report-section-card,
     #credo-debt-defense-widget .cl-side-cta-card,
@@ -1281,7 +1412,7 @@
   "use strict";
 
   var CONFIG = {
-    widgetVersion: "1.6.0",
+    widgetVersion: "1.6.1",
 
     // Replace this with the deployed Google Apps Script Web App URL.
     googleScriptUrl: "PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE",
@@ -2158,15 +2289,27 @@
 
   function renderEntry() {
     return [
-      '<div class="cl-eyebrow">Free intake check</div>',
-      '<h2 class="cl-title">Find out where your debt situation stands.</h2>',
-      '<p class="cl-subtitle">Answer a few questions about your debt, collector activity, documents, and deadlines. You&#39;ll get a priority level, a readiness score, and a recommended next step before you choose how to be contacted.</p>',
-      '<div class="cl-grid cl-grid-2">',
-        entryCard(FLOW_ENTRY.URGENT, "I Need Urgent Debt Help", "I was sued, my wages are being garnished, or collectors are escalating."),
-        entryCard(FLOW_ENTRY.OPTIONS, "Check My Debt Defense Options", "I want to understand where I stand and what options may be available."),
+      '<div class="cl-eyebrow">Get Your Debt Defense Action Snapshot</div>',
+      '<h2 class="cl-title cl-entry-title"><span class="cl-title-line">Collectors calling, threatening garnishment, or sending court papers?</span> <span class="cl-title-line">Find out what your options may be before calls, lawsuits, or garnishment go further.</span></h2>',
+      '<p class="cl-subtitle">Get a Debt Defense Snapshot with your priority level, warning signs, document checklist, and next steps.</p>',
+      '<div class="cl-grid cl-grid-2 cl-entry-grid">',
+        entryCard(FLOW_ENTRY.URGENT, "Collectors Are Escalating — I Need Urgent Debt Help", "I was sued, received papers, face garnishment, or collectors are pressuring me."),
+        entryCard(FLOW_ENTRY.OPTIONS, "Show Me My Debt Defense Options", "I want to understand possible options, risks, documents, and next steps."),
       '</div>',
       fieldError("entryPath"),
-      '<div class="cl-inline-note"><strong>What you&#39;ll receive:</strong> a Debt Defense Priority Level, a Case Readiness Score, and a checklist of what to prepare next.</div>'
+      '<p class="cl-entry-trust">Free to start. No obligation. Snapshot helps you understand what may be happening with your debt, potential risks and next steps.</p>',
+      '<div class="cl-entry-value-card">',
+        '<h3>Your Snapshot may include:</h3>',
+        '<div class="cl-entry-value-grid">',
+          entryValueItem("Debt Defense Priority Level"),
+          entryValueItem("Possible red flags"),
+          entryValueItem("Collector behavior review"),
+          entryValueItem("Document checklist"),
+          entryValueItem("Case readiness score"),
+          entryValueItem("Suggested next steps"),
+        '</div>',
+      '</div>',
+      '<p class="cl-entry-disclaimer">Free to start. No obligation. This is for general intake and informational purposes only and is not legal advice.</p>'
     ].join("");
   }
 
@@ -3439,7 +3582,12 @@
 
   function entryCard(entryPath, title, text) {
     var selected = data.entryPath === entryPath;
-    return '<button type="button" class="cl-option ' + (selected ? 'is-selected' : '') + errorClass("entryPath") + '" data-action="start-flow" data-entry-path="' + h(entryPath) + '" aria-pressed="' + (selected ? 'true' : 'false') + '"><span class="cl-option-title">' + h(title) + '</span><span class="cl-option-text">' + h(text) + '</span></button>';
+    var toneClass = entryPath === FLOW_ENTRY.URGENT ? "cl-entry-card-urgent" : "cl-entry-card-options";
+    return '<button type="button" class="cl-option cl-entry-card ' + toneClass + ' ' + (selected ? 'is-selected' : '') + errorClass("entryPath") + '" data-action="start-flow" data-entry-path="' + h(entryPath) + '" aria-pressed="' + (selected ? 'true' : 'false') + '"><span class="cl-option-title">' + h(title) + '</span><span class="cl-option-text">' + h(text) + '</span></button>';
+  }
+
+  function entryValueItem(label) {
+    return '<div class="cl-entry-value-item"><span class="cl-entry-check" aria-hidden="true">&#10003;</span><span>' + h(label) + '</span></div>';
   }
 
   function toggleCard(field, value, title, text) {

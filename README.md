@@ -1,4 +1,4 @@
-# Credo Legal Debt Defense Options Check Widget
+# Credo Legal Debt Defense Action Snapshot Widget
 
 Plain HTML/CSS/JS embeddable intake widget for Credo Legal, plus a Google Apps Script endpoint that writes lead submissions to Google Sheets.
 
@@ -115,7 +115,7 @@ urgent_debt_help
 ```
 
 1. Entry gate:
-   - `I Need Urgent Debt Help`
+   - `Collectors Are Escalating — I Need Urgent Debt Help`
 2. Basic eligibility gate:
    - State
    - ZIP, optional
@@ -153,7 +153,7 @@ urgent_debt_help
 9. Follow-up preference.
 10. Submit to Google Sheets through Google Apps Script.
 
-### Debt Defense Options Check
+### Normal Debt Defense Options Assessment
 
 Entry path value submitted to Google Sheets:
 
@@ -162,7 +162,7 @@ debt_defense_options_check
 ```
 
 1. Entry gate:
-   - `Check My Debt Defense Options`
+   - `Show Me My Debt Defense Options`
 2. Eligibility:
    - State
    - ZIP, optional
@@ -212,7 +212,7 @@ debt_defense_options_check
    - Email me first
 11. Submit to Google Sheets through Google Apps Script.
 
-If a normal options-check user later selects lawsuit, judgment, garnishment, or bank/wage impact, the urgency score can still become High or Critical. The user remains in the normal assessment path unless a future product decision adds an explicit jump-to-urgent transition.
+If a normal options assessment user later selects lawsuit, judgment, garnishment, or bank/wage impact, the urgency score can still become High or Critical. The user remains in the normal assessment path unless a future product decision adds an explicit jump-to-urgent transition.
 
 ## Configure the Widget
 
@@ -220,7 +220,7 @@ Open `credo-debt-defense-widget.html` and edit the `CONFIG` block:
 
 ```js
 var CONFIG = {
-  widgetVersion: "1.6.0",
+  widgetVersion: "1.6.1",
   googleScriptUrl: "PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE",
   phoneDisplay: "(718) 865-8350",
   phoneHref: "tel:+17188658350",
