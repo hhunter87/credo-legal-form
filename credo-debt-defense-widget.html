@@ -234,87 +234,127 @@
     font-size: 14px;
   }
 
-  #credo-debt-defense-widget .cl-entry-title .cl-title-line {
-    display: block;
-  }
-
-  #credo-debt-defense-widget .cl-entry-grid {
-    margin-top: 24px;
-  }
-
-  #credo-debt-defense-widget .cl-entry-card {
-    border: 0;
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    justify-content: space-between;
-    min-height: 172px;
-    padding: 22px;
-  }
-
-  #credo-debt-defense-widget .cl-entry-card .cl-option-title,
-  #credo-debt-defense-widget .cl-entry-card .cl-option-text {
-    color: #fff;
-  }
-
-  #credo-debt-defense-widget .cl-entry-card .cl-option-title {
-    font-size: 19px;
-    line-height: 1.18;
+  #credo-debt-defense-widget .cl-entry-title {
+    max-width: 820px;
     margin-bottom: 10px;
   }
 
-  #credo-debt-defense-widget .cl-entry-card .cl-option-text {
-    font-size: 15px;
-    line-height: 1.45;
-    opacity: 0.92;
+  #credo-debt-defense-widget .cl-entry-subheadline {
+    color: var(--cl-navy);
+    font-size: 19px;
+    font-weight: 750;
+    line-height: 1.42;
+    margin-bottom: 10px;
+    max-width: 820px;
   }
 
-  #credo-debt-defense-widget .cl-entry-card-urgent {
+  #credo-debt-defense-widget .cl-entry-description {
+    color: var(--cl-muted);
+    font-size: 16px;
+    line-height: 1.55;
+    margin-bottom: 22px;
+    max-width: 760px;
+  }
+
+  #credo-debt-defense-widget .cl-entry-grid {
+    margin-top: 0;
+  }
+
+  #credo-debt-defense-widget .cl-entry-cta-wrap {
+    display: grid;
+    gap: 8px;
+  }
+
+  #credo-debt-defense-widget .cl-entry-cta-button {
+    align-items: center;
+    border: 0;
+    border-radius: var(--cl-radius);
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    font: inherit;
+    font-size: 16px;
+    font-weight: 900;
+    gap: 12px;
+    justify-content: space-between;
+    line-height: 1.24;
+    min-height: 52px;
+    padding: 13px 16px;
+    text-align: left;
+    transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease, filter 160ms ease;
+    width: 100%;
+  }
+
+  #credo-debt-defense-widget .cl-entry-cta-button:hover {
+    transform: translateY(-1px);
+  }
+
+  #credo-debt-defense-widget .cl-entry-cta-button:focus-visible {
+    outline: 3px solid rgba(185, 31, 45, 0.28);
+    outline-offset: 3px;
+  }
+
+  #credo-debt-defense-widget .cl-entry-cta-urgent {
     background: #c2410c;
-    box-shadow: 0 12px 24px rgba(194, 65, 12, 0.22);
+    box-shadow: 0 10px 22px rgba(194, 65, 12, 0.22);
   }
 
-  #credo-debt-defense-widget .cl-entry-card-urgent:hover {
+  #credo-debt-defense-widget .cl-entry-cta-urgent:hover {
     background: #9a3412;
-    border-color: transparent;
-    box-shadow: 0 16px 30px rgba(194, 65, 12, 0.26);
   }
 
-  #credo-debt-defense-widget .cl-entry-card-options {
+  #credo-debt-defense-widget .cl-entry-cta-options {
     background: var(--cl-navy);
-    box-shadow: 0 12px 24px rgba(16, 24, 40, 0.20);
+    box-shadow: 0 10px 22px rgba(16, 24, 40, 0.18);
   }
 
-  #credo-debt-defense-widget .cl-entry-card-options:hover {
-    background: #1f2937;
-    border-color: transparent;
-    box-shadow: 0 16px 30px rgba(16, 24, 40, 0.24);
+  #credo-debt-defense-widget .cl-entry-cta-options:hover {
+    filter: brightness(0.95);
   }
 
-  #credo-debt-defense-widget .cl-entry-card.is-selected {
-    box-shadow: 0 0 0 4px rgba(185, 31, 45, 0.12), 0 12px 24px rgba(16, 24, 40, 0.18);
-  }
-
-  #credo-debt-defense-widget .cl-entry-card.is-invalid {
+  #credo-debt-defense-widget .cl-entry-cta-button.is-invalid {
     outline: 3px solid rgba(217, 45, 32, 0.30);
     outline-offset: 3px;
   }
 
+  #credo-debt-defense-widget .cl-cta-arrow {
+    align-items: center;
+    background: rgba(255, 255, 255, 0.17);
+    border-radius: 999px;
+    display: inline-flex;
+    flex: 0 0 auto;
+    font-size: 18px;
+    font-weight: 950;
+    height: 30px;
+    justify-content: center;
+    width: 30px;
+  }
+
+  #credo-debt-defense-widget .cl-entry-cta-support {
+    color: var(--cl-muted);
+    font-size: 14px;
+    line-height: 1.45;
+    margin: 0;
+    padding: 0 2px;
+  }
+
   #credo-debt-defense-widget .cl-entry-trust {
-    color: var(--cl-ink);
+    background: var(--cl-blue-bg);
+    border: 1px solid #b2ddff;
+    border-radius: var(--cl-radius);
+    color: #184e77;
     font-size: 14px;
     line-height: 1.5;
     margin: 16px 0 0;
+    padding: 12px 14px;
   }
 
   #credo-debt-defense-widget .cl-entry-value-card {
-    background: #fff;
+    background: linear-gradient(180deg, #fff 0%, #fcfcfd 100%);
     border: 1px solid var(--cl-line);
     border-radius: var(--cl-radius);
-    box-shadow: 0 14px 34px rgba(16, 24, 40, 0.08);
-    margin-top: 18px;
-    padding: 18px;
+    margin-top: 16px;
+    padding: 16px;
   }
 
   #credo-debt-defense-widget .cl-entry-value-card h3 {
@@ -326,19 +366,22 @@
 
   #credo-debt-defense-widget .cl-entry-value-grid {
     display: grid;
-    gap: 10px 14px;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   #credo-debt-defense-widget .cl-entry-value-item {
-    align-items: center;
-    color: var(--cl-ink);
-    display: grid;
+    align-items: flex-start;
+    background: #fff;
+    border: 1px solid var(--cl-line);
+    border-radius: var(--cl-radius);
+    color: var(--cl-navy);
+    display: flex;
     font-size: 14px;
     font-weight: 750;
-    gap: 10px;
-    grid-template-columns: 24px 1fr;
-    line-height: 1.35;
+    gap: 8px;
+    line-height: 1.28;
+    padding: 10px 11px;
   }
 
   #credo-debt-defense-widget .cl-entry-check {
@@ -348,11 +391,12 @@
     border-radius: 999px;
     color: var(--cl-green);
     display: inline-flex;
-    font-size: 14px;
+    flex: 0 0 auto;
+    font-size: 13px;
     font-weight: 950;
-    height: 24px;
+    height: 20px;
     justify-content: center;
-    width: 24px;
+    width: 20px;
   }
 
   #credo-debt-defense-widget .cl-entry-disclaimer {
@@ -1490,7 +1534,6 @@
     }
 
     #credo-debt-defense-widget .cl-option,
-    #credo-debt-defense-widget .cl-entry-card,
     #credo-debt-defense-widget .cl-entry-value-card,
     #credo-debt-defense-widget .cl-urgent-hero,
     #credo-debt-defense-widget .cl-urgent-side-card,
@@ -1504,6 +1547,17 @@
     #credo-debt-defense-widget .cl-summary-card,
     #credo-debt-defense-widget .cl-report-card {
       padding: 14px;
+    }
+
+    #credo-debt-defense-widget .cl-entry-subheadline {
+      font-size: 17px;
+      line-height: 1.45;
+    }
+
+    #credo-debt-defense-widget .cl-entry-description,
+    #credo-debt-defense-widget .cl-entry-cta-support {
+      font-size: 14px;
+      line-height: 1.5;
     }
 
     #credo-debt-defense-widget .cl-report-hero,
@@ -1583,7 +1637,7 @@
   "use strict";
 
   var CONFIG = {
-    widgetVersion: "1.7.0",
+    widgetVersion: "1.7.1",
 
     // Replace this with the deployed Google Apps Script Web App URL.
     googleScriptUrl: "PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE",
@@ -2527,11 +2581,12 @@
   function renderEntry() {
     return [
       '<div class="cl-eyebrow">Get Your Debt Defense Action Snapshot</div>',
-      '<h2 class="cl-title cl-entry-title"><span class="cl-title-line">Collectors calling, threatening garnishment, or sending court papers?</span> <span class="cl-title-line">Find out what your options may be before calls, lawsuits, or garnishment go further.</span></h2>',
-      '<p class="cl-subtitle">Get a Debt Defense Snapshot with your priority level, warning signs, document checklist, and next steps.</p>',
+      '<h2 class="cl-title cl-entry-title">Collectors calling, threatening garnishment, or sending court papers?</h2>',
+      '<p class="cl-entry-subheadline">Find out what your options may be before calls, lawsuits, or garnishment go further.</p>',
+      '<p class="cl-entry-description">Get a Debt Defense Snapshot with your priority level, warning signs, document checklist, and next steps.</p>',
       '<div class="cl-grid cl-grid-2 cl-entry-grid">',
         entryCard(FLOW_ENTRY.URGENT, "Collectors Are Escalating — I Need Urgent Debt Help", "I was sued, received papers, face garnishment, or collectors are pressuring me."),
-        entryCard(FLOW_ENTRY.OPTIONS, "Show Me My Debt Defense Options", "I want to understand possible options, risks, documents, and next steps."),
+        entryCard(FLOW_ENTRY.OPTIONS, "Show Me My Debt Defense Options", "I want to understand my debt stage, risks, documents, and possible next steps."),
       '</div>',
       fieldError("entryPath"),
       '<p class="cl-entry-trust">Free to start. No obligation. Snapshot helps you understand what may be happening with your debt, potential risks and next steps.</p>',
@@ -3961,8 +4016,16 @@
 
   function entryCard(entryPath, title, text) {
     var selected = data.entryPath === entryPath;
-    var toneClass = entryPath === FLOW_ENTRY.URGENT ? "cl-entry-card-urgent" : "cl-entry-card-options";
-    return '<button type="button" class="cl-option cl-entry-card ' + toneClass + ' ' + (selected ? 'is-selected' : '') + errorClass("entryPath") + '" data-action="start-flow" data-entry-path="' + h(entryPath) + '" aria-pressed="' + (selected ? 'true' : 'false') + '"><span class="cl-option-title">' + h(title) + '</span><span class="cl-option-text">' + h(text) + '</span></button>';
+    var toneClass = entryPath === FLOW_ENTRY.URGENT ? "cl-entry-cta-urgent" : "cl-entry-cta-options";
+    return [
+      '<div class="cl-entry-cta-wrap">',
+        '<button type="button" class="cl-entry-cta-button ' + toneClass + ' ' + (selected ? 'is-selected' : '') + errorClass("entryPath") + '" data-action="start-flow" data-entry-path="' + h(entryPath) + '" aria-pressed="' + (selected ? 'true' : 'false') + '">',
+          '<span>' + h(title) + '</span>',
+          '<span class="cl-cta-arrow" aria-hidden="true">&rarr;</span>',
+        '</button>',
+        '<p class="cl-entry-cta-support">' + h(text) + '</p>',
+      '</div>'
+    ].join("");
   }
 
   function entryValueItem(label) {

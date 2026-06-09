@@ -23,9 +23,13 @@ Use this checklist on a staging page before production launch. Record browser, d
 ## Entry Gate
 
 - [ ] First screen label says `Get Your Debt Defense Action Snapshot`.
-- [ ] First screen headline references collector calls, garnishment threats, and court papers.
+- [ ] First screen headline is exactly `Collectors calling, threatening garnishment, or sending court papers?`.
+- [ ] First screen subheadline is separate and says `Find out what your options may be before calls, lawsuits, or garnishment go further.`
+- [ ] First screen supporting description says `Get a Debt Defense Snapshot with your priority level, warning signs, document checklist, and next steps.`
 - [ ] Clicking `Collectors Are Escalating — I Need Urgent Debt Help` starts the urgent path with `entry_path = urgent_debt_help`.
 - [ ] Clicking `Show Me My Debt Defense Options` starts the normal path with `entry_path = debt_defense_options_check`.
+- [ ] CTA supporting text appears below each colored CTA button.
+- [ ] Entry CTAs are compact, prominent buttons, not oversized cards.
 - [ ] First screen value preview lists priority level, red flags, collector behavior review, document checklist, readiness score, and next steps.
 - [ ] The two entry buttons do not route into the same main step sequence.
 

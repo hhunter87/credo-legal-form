@@ -201,7 +201,7 @@ Open `credo-debt-defense-widget.html` and edit the `CONFIG` block:
 
 ```js
 var CONFIG = {
-  widgetVersion: "1.7.0",
+  widgetVersion: "1.7.1",
   googleScriptUrl: "PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE",
   phoneDisplay: "(718) 865-8350",
   phoneHref: "tel:+17188658350",
